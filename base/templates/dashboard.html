@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Nutricontrol</title>
+</head>
+<body>
+    <h1>Bienvenido a Nutricontrol</h1>
+
+    {% if user.is_authenticated %}
+        <p>Hola {{ user.username }}</p>
+
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Cerrar sesión</button>
+        </form>
+
+        <p>
+            <a href="{% url 'registro_alimentacion' %}"><button>Registrar alimentación</button></a>
+            <a href="{% url 'resumen_diario' %}"><button>Ver resumen diario</button></a>
+            <a href="{% url 'lista_registros' %}"><button>Ver historial de registros</button></a>
+        </p>
+    
+    {% else %}
+        <a href="{% url 'registro' %}"><button>Registrarse</button></a>
+        <a href="{% url 'login' %}"><button>Iniciar sesión</button></a>
+    {% endif %}
+</body>
+</html>

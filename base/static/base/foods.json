@@ -1,0 +1,702 @@
+[
+  {
+    "nombre": "Manzana",
+    "calorias": 52.0,
+    "proteinas": 0.3,
+    "carbohidratos": 14.0,
+    "grasas": 0.2
+  },
+  {
+    "nombre": "Plátano",
+    "calorias": 89.0,
+    "proteinas": 1.1,
+    "carbohidratos": 23.0,
+    "grasas": 0.3
+  },
+  {
+    "nombre": "Naranja",
+    "calorias": 47.0,
+    "proteinas": 0.9,
+    "carbohidratos": 12.0,
+    "grasas": 0.1
+  },
+  {
+    "nombre": "Pera",
+    "calorias": 57.0,
+    "proteinas": 0.4,
+    "carbohidratos": 15.0,
+    "grasas": 0.1
+  },
+  {
+    "nombre": "Uva",
+    "calorias": 69.0,
+    "proteinas": 0.6,
+    "carbohidratos": 18.0,
+    "grasas": 0.4
+  },
+  {
+    "nombre": "Fresa",
+    "calorias": 32.0,
+    "proteinas": 0.7,
+    "carbohidratos": 8.0,
+    "grasas": 0.3
+  },
+  {
+    "nombre": "Melocotón",
+    "calorias": 39.0,
+    "proteinas": 0.9,
+    "carbohidratos": 10.0,
+    "grasas": 0.3
+  },
+  {
+    "nombre": "Sandía",
+    "calorias": 30.0,
+    "proteinas": 0.6,
+    "carbohidratos": 8.0,
+    "grasas": 0.2
+  },
+  {
+    "nombre": "Melón",
+    "calorias": 34.0,
+    "proteinas": 0.8,
+    "carbohidratos": 8.0,
+    "grasas": 0.2
+  },
+  {
+    "nombre": "Piña",
+    "calorias": 50.0,
+    "proteinas": 0.5,
+    "carbohidratos": 13.0,
+    "grasas": 0.1
+  },
+  {
+    "nombre": "Mango",
+    "calorias": 60.0,
+    "proteinas": 0.8,
+    "carbohidratos": 15.0,
+    "grasas": 0.4
+  },
+  {
+    "nombre": "Kiwi",
+    "calorias": 61.0,
+    "proteinas": 1.1,
+    "carbohidratos": 15.0,
+    "grasas": 0.5
+  },
+  {
+    "nombre": "Cereza",
+    "calorias": 50.0,
+    "proteinas": 1.0,
+    "carbohidratos": 12.0,
+    "grasas": 0.3
+  },
+  {
+    "nombre": "Frambuesa",
+    "calorias": 52.0,
+    "proteinas": 1.2,
+    "carbohidratos": 12.0,
+    "grasas": 0.7
+  },
+  {
+    "nombre": "Arándano",
+    "calorias": 57.0,
+    "proteinas": 0.7,
+    "carbohidratos": 14.0,
+    "grasas": 0.3
+  },
+  {
+    "nombre": "Limón",
+    "calorias": 29.0,
+    "proteinas": 1.1,
+    "carbohidratos": 9.0,
+    "grasas": 0.3
+  },
+  {
+    "nombre": "Pomelo",
+    "calorias": 42.0,
+    "proteinas": 0.8,
+    "carbohidratos": 11.0,
+    "grasas": 0.1
+  },
+  {
+    "nombre": "Aguacate",
+    "calorias": 160.0,
+    "proteinas": 2.0,
+    "carbohidratos": 9.0,
+    "grasas": 15.0
+  },
+  {
+    "nombre": "Tomate",
+    "calorias": 18.0,
+    "proteinas": 0.9,
+    "carbohidratos": 3.9,
+    "grasas": 0.2
+  },
+  {
+    "nombre": "Pepino",
+    "calorias": 15.0,
+    "proteinas": 0.7,
+    "carbohidratos": 3.6,
+    "grasas": 0.1
+  },
+  {
+    "nombre": "Lechuga",
+    "calorias": 15.0,
+    "proteinas": 1.4,
+    "carbohidratos": 2.9,
+    "grasas": 0.2
+  },
+  {
+    "nombre": "Espinaca",
+    "calorias": 23.0,
+    "proteinas": 2.9,
+    "carbohidratos": 3.6,
+    "grasas": 0.4
+  },
+  {
+    "nombre": "Zanahoria",
+    "calorias": 41.0,
+    "proteinas": 0.9,
+    "carbohidratos": 10.0,
+    "grasas": 0.2
+  },
+  {
+    "nombre": "Brócoli",
+    "calorias": 34.0,
+    "proteinas": 2.8,
+    "carbohidratos": 7.0,
+    "grasas": 0.4
+  },
+  {
+    "nombre": "Coliflor",
+    "calorias": 25.0,
+    "proteinas": 2.0,
+    "carbohidratos": 5.0,
+    "grasas": 0.1
+  },
+  {
+    "nombre": "Pimiento",
+    "calorias": 31.0,
+    "proteinas": 1.0,
+    "carbohidratos": 6.0,
+    "grasas": 0.3
+  },
+  {
+    "nombre": "Cebolla",
+    "calorias": 40.0,
+    "proteinas": 1.1,
+    "carbohidratos": 9.0,
+    "grasas": 0.1
+  },
+  {
+    "nombre": "Ajo",
+    "calorias": 149.0,
+    "proteinas": 6.4,
+    "carbohidratos": 33.0,
+    "grasas": 0.5
+  },
+  {
+    "nombre": "Patata",
+    "calorias": 77.0,
+    "proteinas": 2.0,
+    "carbohidratos": 17.0,
+    "grasas": 0.1
+  },
+  {
+    "nombre": "Batata",
+    "calorias": 86.0,
+    "proteinas": 1.6,
+    "carbohidratos": 20.0,
+    "grasas": 0.1
+  },
+  {
+    "nombre": "Maíz",
+    "calorias": 86.0,
+    "proteinas": 3.4,
+    "carbohidratos": 19.0,
+    "grasas": 1.2
+  },
+  {
+    "nombre": "Champiñón",
+    "calorias": 22.0,
+    "proteinas": 3.1,
+    "carbohidratos": 3.3,
+    "grasas": 0.3
+  },
+  {
+    "nombre": "Calabacín",
+    "calorias": 17.0,
+    "proteinas": 1.2,
+    "carbohidratos": 3.1,
+    "grasas": 0.3
+  },
+  {
+    "nombre": "Berenjena",
+    "calorias": 25.0,
+    "proteinas": 1.0,
+    "carbohidratos": 6.0,
+    "grasas": 0.2
+  },
+  {
+    "nombre": "Apio",
+    "calorias": 16.0,
+    "proteinas": 0.7,
+    "carbohidratos": 3.0,
+    "grasas": 0.2
+  },
+  {
+    "nombre": "Guisantes",
+    "calorias": 81.0,
+    "proteinas": 5.4,
+    "carbohidratos": 14.0,
+    "grasas": 0.4
+  },
+  {
+    "nombre": "Judías verdes",
+    "calorias": 31.0,
+    "proteinas": 1.8,
+    "carbohidratos": 7.0,
+    "grasas": 0.2
+  },
+  {
+    "nombre": "Lentejas cocidas",
+    "calorias": 116.0,
+    "proteinas": 9.0,
+    "carbohidratos": 20.0,
+    "grasas": 0.4
+  },
+  {
+    "nombre": "Garbanzos cocidos",
+    "calorias": 164.0,
+    "proteinas": 8.9,
+    "carbohidratos": 27.4,
+    "grasas": 2.6
+  },
+  {
+    "nombre": "Frijoles negros cocidos",
+    "calorias": 132.0,
+    "proteinas": 8.9,
+    "carbohidratos": 23.7,
+    "grasas": 0.5
+  },
+  {
+    "nombre": "Arroz blanco cocido",
+    "calorias": 130.0,
+    "proteinas": 2.7,
+    "carbohidratos": 28.2,
+    "grasas": 0.3
+  },
+  {
+    "nombre": "Arroz integral cocido",
+    "calorias": 123.0,
+    "proteinas": 2.7,
+    "carbohidratos": 25.6,
+    "grasas": 1.0
+  },
+  {
+    "nombre": "Pasta cocida",
+    "calorias": 131.0,
+    "proteinas": 5.0,
+    "carbohidratos": 25.0,
+    "grasas": 1.1
+  },
+  {
+    "nombre": "Pan blanco",
+    "calorias": 265.0,
+    "proteinas": 9.0,
+    "carbohidratos": 49.0,
+    "grasas": 3.2
+  },
+  {
+    "nombre": "Pan integral",
+    "calorias": 247.0,
+    "proteinas": 13.0,
+    "carbohidratos": 41.0,
+    "grasas": 4.2
+  },
+  {
+    "nombre": "Avena cruda",
+    "calorias": 389.0,
+    "proteinas": 17.0,
+    "carbohidratos": 66.0,
+    "grasas": 7.0
+  },
+  {
+    "nombre": "Quinoa cocida",
+    "calorias": 120.0,
+    "proteinas": 4.4,
+    "carbohidratos": 21.3,
+    "grasas": 1.9
+  },
+  {
+    "nombre": "Miel",
+    "calorias": 304.0,
+    "proteinas": 0.3,
+    "carbohidratos": 82.4,
+    "grasas": 0.0
+  },
+  {
+    "nombre": "Azúcar",
+    "calorias": 387.0,
+    "proteinas": 0.0,
+    "carbohidratos": 100.0,
+    "grasas": 0.0
+  },
+  {
+    "nombre": "Aceite de oliva",
+    "calorias": 884.0,
+    "proteinas": 0.0,
+    "carbohidratos": 0.0,
+    "grasas": 100.0
+  },
+  {
+    "nombre": "Mantequilla",
+    "calorias": 717.0,
+    "proteinas": 0.9,
+    "carbohidratos": 0.1,
+    "grasas": 81.0
+  },
+  {
+    "nombre": "Leche entera",
+    "calorias": 61.0,
+    "proteinas": 3.2,
+    "carbohidratos": 4.8,
+    "grasas": 3.3
+  },
+  {
+    "nombre": "Leche semidesnatada",
+    "calorias": 47.0,
+    "proteinas": 3.4,
+    "carbohidratos": 5.0,
+    "grasas": 1.6
+  },
+  {
+    "nombre": "Yogur natural",
+    "calorias": 59.0,
+    "proteinas": 10.0,
+    "carbohidratos": 3.6,
+    "grasas": 0.4
+  },
+  {
+    "nombre": "Queso cheddar",
+    "calorias": 403.0,
+    "proteinas": 25.0,
+    "carbohidratos": 1.3,
+    "grasas": 33.0
+  },
+  {
+    "nombre": "Queso fresco",
+    "calorias": 264.0,
+    "proteinas": 20.0,
+    "carbohidratos": 4.4,
+    "grasas": 20.0
+  },
+  {
+    "nombre": "Huevo de gallina",
+    "calorias": 155.0,
+    "proteinas": 13.0,
+    "carbohidratos": 1.1,
+    "grasas": 11.0
+  },
+  {
+    "nombre": "Pechuga de pollo asada",
+    "calorias": 165.0,
+    "proteinas": 31.0,
+    "carbohidratos": 0.0,
+    "grasas": 3.6
+  },
+  {
+    "nombre": "Carne de res magra cocida",
+    "calorias": 250.0,
+    "proteinas": 26.0,
+    "carbohidratos": 0.0,
+    "grasas": 15.0
+  },
+  {
+    "nombre": "Cerdo magro cocido",
+    "calorias": 242.0,
+    "proteinas": 27.0,
+    "carbohidratos": 0.0,
+    "grasas": 14.0
+  },
+  {
+    "nombre": "Salmón cocido",
+    "calorias": 208.0,
+    "proteinas": 20.0,
+    "carbohidratos": 0.0,
+    "grasas": 13.0
+  },
+  {
+    "nombre": "Atún en agua",
+    "calorias": 116.0,
+    "proteinas": 26.0,
+    "carbohidratos": 0.0,
+    "grasas": 1.0
+  },
+  {
+    "nombre": "Bacalao cocido",
+    "calorias": 105.0,
+    "proteinas": 23.0,
+    "carbohidratos": 0.0,
+    "grasas": 0.9
+  },
+  {
+    "nombre": "Camarón cocido",
+    "calorias": 99.0,
+    "proteinas": 24.0,
+    "carbohidratos": 0.0,
+    "grasas": 0.3
+  },
+  {
+    "nombre": "Mantequilla de cacahuete",
+    "calorias": 588.0,
+    "proteinas": 25.0,
+    "carbohidratos": 20.0,
+    "grasas": 50.0
+  },
+  {
+    "nombre": "Almendras",
+    "calorias": 579.0,
+    "proteinas": 21.0,
+    "carbohidratos": 22.0,
+    "grasas": 50.0
+  },
+  {
+    "nombre": "Nueces",
+    "calorias": 654.0,
+    "proteinas": 15.0,
+    "carbohidratos": 14.0,
+    "grasas": 65.0
+  },
+  {
+    "nombre": "Semillas de chía",
+    "calorias": 486.0,
+    "proteinas": 17.0,
+    "carbohidratos": 42.0,
+    "grasas": 31.0
+  },
+  {
+    "nombre": "Semillas de lino",
+    "calorias": 534.0,
+    "proteinas": 18.3,
+    "carbohidratos": 28.9,
+    "grasas": 42.2
+  },
+  {
+    "nombre": "Semillas de girasol",
+    "calorias": 584.0,
+    "proteinas": 21.0,
+    "carbohidratos": 20.0,
+    "grasas": 51.5
+  },
+  {
+    "nombre": "Chocolate negro (70%)",
+    "calorias": 598.0,
+    "proteinas": 7.8,
+    "carbohidratos": 46.4,
+    "grasas": 42.6
+  },
+  {
+    "nombre": "Chocolate con leche",
+    "calorias": 535.0,
+    "proteinas": 7.7,
+    "carbohidratos": 59.4,
+    "grasas": 30.6
+  },
+  {
+    "nombre": "Helado de vainilla",
+    "calorias": 207.0,
+    "proteinas": 3.5,
+    "carbohidratos": 23.6,
+    "grasas": 11.0
+  },
+  {
+    "nombre": "Café negro",
+    "calorias": 1.0,
+    "proteinas": 0.1,
+    "carbohidratos": 0.0,
+    "grasas": 0.0
+  },
+  {
+    "nombre": "Té negro",
+    "calorias": 1.0,
+    "proteinas": 0.1,
+    "carbohidratos": 0.0,
+    "grasas": 0.0
+  },
+  {
+    "nombre": "Té verde",
+    "calorias": 0.0,
+    "proteinas": 0.0,
+    "carbohidratos": 0.0,
+    "grasas": 0.0
+  },
+  {
+    "nombre": "Cerveza",
+    "calorias": 43.0,
+    "proteinas": 0.5,
+    "carbohidratos": 3.6,
+    "grasas": 0.0
+  },
+  {
+    "nombre": "Vino tinto",
+    "calorias": 85.0,
+    "proteinas": 0.1,
+    "carbohidratos": 2.6,
+    "grasas": 0.0
+  },
+  {
+    "nombre": "Vino blanco",
+    "calorias": 82.0,
+    "proteinas": 0.1,
+    "carbohidratos": 2.6,
+    "grasas": 0.0
+  },
+  {
+    "nombre": "Yogur griego",
+    "calorias": 97.0,
+    "proteinas": 10.0,
+    "carbohidratos": 3.6,
+    "grasas": 5.0
+  },
+  {
+    "nombre": "Arroz salvaje cocido",
+    "calorias": 101.0,
+    "proteinas": 4.0,
+    "carbohidratos": 21.0,
+    "grasas": 0.3
+  },
+  {
+    "nombre": "Pan de centeno",
+    "calorias": 259.0,
+    "proteinas": 8.5,
+    "carbohidratos": 48.3,
+    "grasas": 3.3
+  },
+  {
+    "nombre": "Tortilla de maíz",
+    "calorias": 218.0,
+    "proteinas": 5.7,
+    "carbohidratos": 44.8,
+    "grasas": 2.9
+  },
+  {
+    "nombre": "Tortilla de trigo",
+    "calorias": 237.0,
+    "proteinas": 7.9,
+    "carbohidratos": 43.4,
+    "grasas": 4.3
+  },
+  {
+    "nombre": "Hamburguesa de ternera",
+    "calorias": 295.0,
+    "proteinas": 17.0,
+    "carbohidratos": 0.0,
+    "grasas": 25.0
+  },
+  {
+    "nombre": "Salchicha cocida",
+    "calorias": 301.0,
+    "proteinas": 11.5,
+    "carbohidratos": 2.2,
+    "grasas": 26.1
+  },
+  {
+    "nombre": "Bacon cocido",
+    "calorias": 541.0,
+    "proteinas": 37.0,
+    "carbohidratos": 1.4,
+    "grasas": 42.0
+  },
+  {
+    "nombre": "Pizza margarita",
+    "calorias": 266.0,
+    "proteinas": 11.0,
+    "carbohidratos": 33.0,
+    "grasas": 10.0
+  },
+  {
+    "nombre": "Papas fritas (chips)",
+    "calorias": 536.0,
+    "proteinas": 7.0,
+    "carbohidratos": 49.0,
+    "grasas": 34.0
+  },
+  {
+    "nombre": "Galletas María",
+    "calorias": 489.0,
+    "proteinas": 6.9,
+    "carbohidratos": 72.5,
+    "grasas": 15.0
+  },
+  {
+    "nombre": "Copos de maíz",
+    "calorias": 357.0,
+    "proteinas": 7.2,
+    "carbohidratos": 84.8,
+    "grasas": 3.3
+  },
+  {
+    "nombre": "Café con leche",
+    "calorias": 19.0,
+    "proteinas": 1.7,
+    "carbohidratos": 1.9,
+    "grasas": 0.03
+  },
+  {
+    "nombre": "Smoothie de fresa",
+    "calorias": 50.0,
+    "proteinas": 0.7,
+    "carbohidratos": 12.0,
+    "grasas": 0.3
+  },
+  {
+    "nombre": "Tofu firme",
+    "calorias": 76.0,
+    "proteinas": 8.0,
+    "carbohidratos": 1.9,
+    "grasas": 4.8
+  },
+  {
+    "nombre": "Tempeh",
+    "calorias": 193.0,
+    "proteinas": 20.3,
+    "carbohidratos": 9.4,
+    "grasas": 11.4
+  },
+  {
+    "nombre": "Leche de soja",
+    "calorias": 45.0,
+    "proteinas": 2.9,
+    "carbohidratos": 3.6,
+    "grasas": 1.8
+  },
+  {
+    "nombre": "Leche de almendra",
+    "calorias": 15.0,
+    "proteinas": 0.6,
+    "carbohidratos": 0.3,
+    "grasas": 1.3
+  },
+  {
+    "nombre": "Ensalada mixta",
+    "calorias": 15.0,
+    "proteinas": 1.0,
+    "carbohidratos": 3.0,
+    "grasas": 0.2
+  },
+  {
+    "nombre": "Crema agria",
+    "calorias": 193.0,
+    "proteinas": 2.5,
+    "carbohidratos": 4.6,
+    "grasas": 20.8
+  },
+  {
+    "nombre": "Mayonesa",
+    "calorias": 684.0,
+    "proteinas": 1.4,
+    "carbohidratos": 0.6,
+    "grasas": 75.0
+  }
+]

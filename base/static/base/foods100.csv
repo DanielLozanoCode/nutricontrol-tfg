@@ -1,0 +1,101 @@
+Nombre,Calorias,Proteinas,Carbohidratos,Grasas
+Manzana,52,0.3,14.0,0.2
+Plátano,89,1.1,23.0,0.3
+Naranja,47,0.9,12.0,0.1
+Pera,57,0.4,15.0,0.1
+Uva,69,0.6,18.0,0.4
+Fresa,32,0.7,8.0,0.3
+Melocotón,39,0.9,10.0,0.3
+Sandía,30,0.6,8.0,0.2
+Melón,34,0.8,8.0,0.2
+Piña,50,0.5,13.0,0.1
+Mango,60,0.8,15.0,0.4
+Kiwi,61,1.1,15.0,0.5
+Cereza,50,1.0,12.0,0.3
+Frambuesa,52,1.2,12.0,0.7
+Arándano,57,0.7,14.0,0.3
+Limón,29,1.1,9.0,0.3
+Pomelo,42,0.8,11.0,0.1
+Aguacate,160,2.0,9.0,15.0
+Tomate,18,0.9,3.9,0.2
+Pepino,15,0.7,3.6,0.1
+Lechuga,15,1.4,2.9,0.2
+Espinaca,23,2.9,3.6,0.4
+Zanahoria,41,0.9,10.0,0.2
+Brócoli,34,2.8,7.0,0.4
+Coliflor,25,2.0,5.0,0.1
+Pimiento,31,1.0,6.0,0.3
+Cebolla,40,1.1,9.0,0.1
+Ajo,149,6.4,33.0,0.5
+Patata,77,2.0,17.0,0.1
+Batata,86,1.6,20.0,0.1
+Maíz,86,3.4,19.0,1.2
+Champiñón,22,3.1,3.3,0.3
+Calabacín,17,1.2,3.1,0.3
+Berenjena,25,1.0,6.0,0.2
+Apio,16,0.7,3.0,0.2
+Guisantes,81,5.4,14.0,0.4
+Judías verdes,31,1.8,7.0,0.2
+Lentejas cocidas,116,9.0,20.0,0.4
+Garbanzos cocidos,164,8.9,27.4,2.6
+Frijoles negros cocidos,132,8.9,23.7,0.5
+Arroz blanco cocido,130,2.7,28.2,0.3
+Arroz integral cocido,123,2.7,25.6,1.0
+Pasta cocida,131,5.0,25.0,1.1
+Pan blanco,265,9.0,49.0,3.2
+Pan integral,247,13.0,41.0,4.2
+Avena cruda,389,17.0,66.0,7.0
+Quinoa cocida,120,4.4,21.3,1.9
+Miel,304,0.3,82.4,0.0
+Azúcar,387,0.0,100.0,0.0
+Aceite de oliva,884,0.0,0.0,100.0
+Mantequilla,717,0.9,0.1,81.0
+Leche entera,61,3.2,4.8,3.3
+Leche semidesnatada,47,3.4,5.0,1.6
+Yogur natural,59,10.0,3.6,0.4
+Queso cheddar,403,25.0,1.3,33.0
+Queso fresco,264,20.0,4.4,20.0
+Huevo de gallina,155,13.0,1.1,11.0
+Pechuga de pollo asada,165,31.0,0.0,3.6
+Carne de res magra cocida,250,26.0,0.0,15.0
+Cerdo magro cocido,242,27.0,0.0,14.0
+Salmón cocido,208,20.0,0.0,13.0
+Atún en agua,116,26.0,0.0,1.0
+Bacalao cocido,105,23.0,0.0,0.9
+Camarón cocido,99,24.0,0.0,0.3
+Mantequilla de cacahuete,588,25.0,20.0,50.0
+Almendras,579,21.0,22.0,50.0
+Nueces,654,15.0,14.0,65.0
+Semillas de chía,486,17.0,42.0,31.0
+Semillas de lino,534,18.3,28.9,42.2
+Semillas de girasol,584,21.0,20.0,51.5
+Chocolate negro (70%),598,7.8,46.4,42.6
+Chocolate con leche,535,7.7,59.4,30.6
+Helado de vainilla,207,3.5,23.6,11.0
+Café negro,1,0.1,0.0,0.0
+Té negro,1,0.1,0.0,0.0
+Té verde,0,0.0,0.0,0.0
+Cerveza,43,0.5,3.6,0.0
+Vino tinto,85,0.1,2.6,0.0
+Vino blanco,82,0.1,2.6,0.0
+Yogur griego,97,10.0,3.6,5.0
+Arroz salvaje cocido,101,4.0,21.0,0.3
+Pan de centeno,259,8.5,48.3,3.3
+Tortilla de maíz,218,5.7,44.8,2.9
+Tortilla de trigo,237,7.9,43.4,4.3
+Hamburguesa de ternera,295,17.0,0.0,25.0
+Salchicha cocida,301,11.5,2.2,26.1
+Bacon cocido,541,37.0,1.4,42.0
+Pizza margarita,266,11.0,33.0,10.0
+Papas fritas (chips),536,7.0,49.0,34.0
+Galletas María,489,6.9,72.5,15.0
+Copos de maíz,357,7.2,84.8,3.3
+Café con leche,19,1.7,1.9,0.03
+Smoothie de fresa,50,0.7,12.0,0.3
+Tofu firme,76,8.0,1.9,4.8
+Tempeh,193,20.3,9.4,11.4
+Leche de soja,45,2.9,3.6,1.8
+Leche de almendra,15,0.6,0.3,1.3
+Ensalada mixta,15,1.0,3.0,0.2
+Crema agria,193,2.5,4.6,20.8
+Mayonesa,684,1.4,0.6,75.0

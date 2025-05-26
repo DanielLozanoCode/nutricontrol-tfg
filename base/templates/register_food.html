@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar alimento</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const input = document.getElementById("id_alimento_nombre");
+            const datalist = document.getElementById("sugerencias");
+
+            input.addEventListener("input", async function() {
+                const response = await fetch(`/sugerencias-alimentos/?q=${input.value}`);
+                const datos = await response.json();
+
+                datalist.innerHTML = "";
+                datos.forEach(nombre => {
+                    const option = document.createElement("option");
+                    option.value = nombre;
+                    datalist.appendChild(option);
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <h2>Registro de alimentación</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color: green;">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        <input list="sugerencias" id="id_alimento_nombre" name="alimento_nombre" placeholder="Escribe un alimento..." required>
+        <datalist id="sugerencias"></datalist>
+
+        {{ form.cantidad }}
+
+        <button type="submit">Guardar</button>
+    </form>
+
+    <p><a href="{% url 'dashboard' %}">← Volver al dashboard</a></p>
+</body>
+</html>

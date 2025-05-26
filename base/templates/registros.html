@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis registros</title>
+    <script>
+        function confirmarEliminacion(event, nombreAlimento) {
+            if (!confirm("¿Estás seguro de que deseas eliminar el registro de " + nombreAlimento + "?")) {
+                event.preventDefault(); // Cancela el enlace si no se confirma
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>Todos tus registros</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color: green;">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    {% if registros %}
+        <table border="1">
+            <tr>
+                <th>Fecha</th>
+                <th>Alimento</th>
+                <th>Cantidad (g)</th>
+                <th>Calorías</th>
+                <th>Acciones</th>
+            </tr>
+            {% for r in registros %}
+                <tr>
+                    <td>{{ r.fecha }}</td>
+                    <td>{{ r.alimento.nombre }}</td>
+                    <td>{{ r.cantidad }}</td>
+                    <td>{{ r.calorias_totales|floatformat:2 }}</td>
+                    <td>
+                        <a href="{% url 'editar_registro' r.pk %}">Editar</a> |
+                        <a href="{% url 'eliminar_registro' r.pk %}" onclick="confirmarEliminacion(event, '{{ r.alimento.nombre }}')">Eliminar</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No has registrado ningún alimento aún.</p>
+    {% endif %}
+
+    <p><a href="{% url 'dashboard' %}">← Volver al dashboard</a></p>
+</body>
+</html>

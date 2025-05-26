@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Resumen diario</title>
+</head>
+<body>
+    <h2>Resumen del día: {{ fecha }}</h2>
+
+    {% if registros %}
+        <table border="1">
+            <tr>
+                <th>Alimento</th>
+                <th>Cantidad (g)</th>
+                <th>Calorías</th>
+                <th>Proteínas</th>
+                <th>Grasas</th>
+                <th>Carbohidratos</th>
+            </tr>
+            {% for r in registros %}
+                <tr>
+                    <td>{{ r.alimento.nombre }}</td>
+                    <td>{{ r.cantidad }}</td>
+                    <td>{{ r.calorias_totales|floatformat:2 }}</td>
+                    <td>{{ r.alimento.proteinas|floatformat:2 }}</td>
+                    <td>{{ r.alimento.grasas|floatformat:2 }}</td>
+                    <td>{{ r.alimento.carbohidratos|floatformat:2 }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <h3>Totales del día:</h3>
+        <ul>
+            <li>Calorías: {{ total_calorias|floatformat:2 }} kcal</li>
+            <li>Proteínas: {{ total_proteinas|floatformat:2 }} g</li>
+            <li>Grasas: {{ total_grasas|floatformat:2 }} g</li>
+            <li>Carbohidratos: {{ total_carbohidratos|floatformat:2 }} g</li>
+        </ul>
+    {% else %}
+        <p>No has registrado alimentos hoy.</p>
+    {% endif %}
+
+    <p><a href="{% url 'dashboard' %}">← Volver al dashboard</a></p>
+</body>
+</html>
