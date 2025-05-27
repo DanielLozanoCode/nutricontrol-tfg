@@ -76,6 +76,7 @@
       cursor: pointer;
       padding: 12px 20px;
       text-decoration: none;
+      font-size: 1em; 
     }
     .logout-form button:hover,
     .logout-form a:hover {
@@ -99,26 +100,36 @@
         flex-direction: column;
         align-items: flex-start;
         background-color: #0070dd;
-        padding-left: 20px;
+        padding-left: 20px; /* Reajustado de 0 a 20px como lo tenías */
       }
       .navbar-bottom.active {
         display: flex;
       }
       .navbar-bottom a {
-        padding: 12px 0;
+        padding: 12px 0; /* Reajustado de 12px 20px para menú vertical */
         width: 100%;
+        text-align: left; /* Ya estaba */
+        /* border-bottom: 1px solid #005bb5; /* Lo quito para que coincida con tu original */
       }
+      /* .navbar-bottom a:last-child { */
+        /* border-bottom: none; */
+      /* } */
       .logout-form {
         width: 100%;
         flex-direction: column;
         margin: 0;
+        gap: 0; /* Reajustado */
       }
       .logout-form button,
       .logout-form a {
         width: 100%;
         text-align: left;
-        padding: 12px 0;
+        padding: 12px 0; /* Reajustado */
+        /* border-bottom: 1px solid #005bb5; /* Lo quito para que coincida con tu original */
       }
+       /* .logout-form a:last-child, .logout-form button:last-child { */
+           /* border-bottom: none; */
+       /* } */
     }
   </style>
   {% block extra_head %}{% endblock %}
@@ -144,7 +155,7 @@
     {% else %}
       <div class="logout-form">
         <a href="{% url 'login' %}">{% trans "INICIAR SESIÓN" %}</a>
-        <a href="{% url 'registro' %}">{% trans "REGISTRARSE" %}</a>
+        <a href="{% url 'registration_welcome' %}">{% trans "REGISTRARSE" %}</a> {# CORREGIDO #}
       </div>
     {% endif %}
   </div>
@@ -188,7 +199,7 @@
         </select>
       </div>
     </div>
-    <p>© 2025 NutriControl. {% trans "Proyecto académico desarrollado con fines educativos." %}</p>
+    <p>© {% now "Y" %} NutriControl. {% trans "Proyecto académico desarrollado con fines educativos." %}</p>
   </div>
 </footer>
 

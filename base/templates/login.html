@@ -6,6 +6,7 @@
     <title>{% trans "Inicio de sesión" %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        /* ... (Todo tu CSS para login.html permanece igual que en la versión anterior que te di) ... */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: #f0f2f5;
@@ -35,15 +36,10 @@
             font-weight: 600;
         }
 
-        .form-field-wrapper { /* Contenedor para cada campo del formulario de Django */
-            margin-bottom: 15px; /* Espacio entre username y password */
+        .form-field-wrapper { 
+            margin-bottom: 15px; 
         }
-        .form-field-wrapper:last-of-type { /* Quitar margen del último campo si es necesario */
-            /* margin-bottom: 20px; */ /* Ajustado por .forgot-password */
-        }
-
-        /* Estilos para los inputs generados por Django {{ form.username }} y {{ form.password }} */
-        /* Django envuelve los campos en <p> y los inputs tienen su propio id/name */
+        
         input[name="username"], input[name="password"] {
             width: 100%;
             padding: 14px 16px;
@@ -51,30 +47,29 @@
             border: 1px solid #dddfe2;
             border-radius: 6px;
             box-sizing: border-box;
-            outline-color: #007bff; /* Color de Nutricontrol para el borde al hacer foco */
+            outline-color: #007bff; 
         }
         input[name="username"]::placeholder, input[name="password"]::placeholder {
             color: #8a8d91;
         }
         
-        /* Contenedor específico para la contraseña para el icono de mostrar/ocultar */
         .password-wrapper {
             position: relative;
             display: flex;
             align-items: center;
         }
-        .password-wrapper input[name="password"] { /* Asegurar que el input de contraseña ocupe el espacio correcto */
-            padding-right: 45px; /* Espacio para el icono */
+        .password-wrapper input[name="password"] { 
+            padding-right: 45px; 
         }
         .toggle-password {
             position: absolute;
-            right: 1px; /* Ajustar para que quede dentro del borde del input */
+            right: 1px; 
             top: 1px;
             bottom: 1px;
-            width: 40px; /* Ancho del área clickeable del botón */
+            width: 40px; 
             background: none;
             border: none;
-            border-left: 1px solid #dddfe2; /* Separador visual opcional */
+            border-left: 1px solid #dddfe2; 
             cursor: pointer;
             padding: 0;
             display: flex;
@@ -91,7 +86,7 @@
         .forgot-password {
             display: block;
             text-align: right;
-            margin-top: 8px; /* Reducido para acercar */
+            margin-top: 8px; 
             margin-bottom: 20px;
             font-size: 0.9em;
         }
@@ -156,25 +151,24 @@
             background-color: #0056b3;
         }
 
-        .mensaje-error { /* Para errores generales del formulario */
-            color: #D8000C; /* Rojo error */
-            background-color: #FFD2D2; /* Fondo rojo claro */
+        .mensaje-error { 
+            color: #D8000C; 
+            background-color: #FFD2D2; 
             border: 1px solid #D8000C;
             border-radius: 6px;
             padding: 10px;
             margin-bottom: 15px;
             font-size: 0.9em;
-            text-align: left; /* Mejor para listas de errores */
+            text-align: left; 
         }
          .mensaje-error p {
             margin: 0;
             padding: 2px 0;
         }
 
-        .form-field-wrapper .mensaje-error { /* Para errores específicos de campo */
+        .form-field-wrapper .mensaje-error { 
              font-size: 0.8em; padding: 5px; margin-top: 5px; text-align:left;
         }
-
 
         .register-link-container {
             margin-top: 25px;
@@ -192,12 +186,9 @@
             text-decoration: underline;
         }
         
-        /* Django AuthenticationForm envuelve los campos en <p><label></label>{{field}}<ul class="errorlist"></ul></p> */
-        /* Ocultamos el <label> y el <ul class="errorlist"> por defecto porque manejamos errores de forma personalizada */
         form label, form ul.errorlist { 
             display: none;
         }
-
     </style>
 </head>
 <body>
@@ -239,8 +230,6 @@
             </div>
 
             <div class="forgot-password">
-                {# Deberás crear una URL y vista para 'password_reset' si quieres esta funcionalidad #}
-                {# <a href="{% url 'password_reset' %}">{% trans "¿Olvidaste la contraseña?" %}</a> #}
                  <a href="#">{% trans "¿Olvidaste la contraseña?" %}</a>
             </div>
 
@@ -256,19 +245,20 @@
         </form>
 
         <div class="register-link-container">
-            <p>{% trans "¿Todavía no eres usuario?" %} <a href="{% url 'registro' %}">{% trans "¡Regístrate ahora!" %}</a></p>
+            {# ----- CORRECCIÓN AQUÍ ----- #}
+            <p>{% trans "¿Todavía no eres usuario?" %} <a href="{% url 'registration_welcome' %}">{% trans "¡Regístrate ahora!" %}</a></p>
         </div>
     </div>
 
     <script>
-        const passwordInput = document.querySelector('input[name="password"]'); // Asume que el campo de contraseña se llama 'password'
+        const passwordInput = document.querySelector('input[name="password"]'); 
         const togglePasswordButton = document.getElementById('togglePassword');
         
         const eyeOpenSVG = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>';
         const eyeClosedSVG = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.44-4.75C20.27 9.61 16.55 6.5 12 6.5c-1.03 0-2.03.2-2.94.55L10.17 8.2C10.74 7.55 11.35 7 12 7zm-3.09 7.06l2.92 2.92C11.26 17.87 10.65 18 10 18c-2.76 0-5-2.24-5-5 0-.65.13-1.26.36-1.83L1 4.27l1.41-1.41L21.59 20l-1.41 1.41L9.17 14.5c-.05.16-.08.33-.08.5zm11.36-6.01C20.27 9.61 16.55 6.5 12 6.5c-.75 0-1.47.11-2.15.32L12 9.17V9c1.66 0 3 1.34 3 3 0 .25-.03.48-.08.71l2.59 2.59c.05-.23.08-.46.08-.71 0-2.76-2.24-5-5-5z"/></svg>';
 
         if (passwordInput && togglePasswordButton) {
-            togglePasswordButton.innerHTML = eyeClosedSVG; // Iniciar con ojo cerrado (contraseña oculta)
+            togglePasswordButton.innerHTML = eyeClosedSVG; 
             togglePasswordButton.addEventListener('click', function () {
                 const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
                 passwordInput.setAttribute('type', type);

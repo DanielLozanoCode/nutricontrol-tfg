@@ -1,0 +1,147 @@
+{% extends "base.html" %} {# O una plantilla base más simple si prefieres menos navegación aquí #}
+{% load static i18n %}
+
+{% block title %}{% trans "Bienvenido a NutriControl - Comienza tu Viaje" %}{% endblock %}
+
+{% block extra_head %}
+<style>
+    .welcome-container {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 20px;
+        text-align: center;
+    }
+    .welcome-container h1 {
+        font-size: 2.5em;
+        color: #333;
+        margin-bottom: 15px;
+    }
+    .welcome-container .welcome-subtitle {
+        font-size: 1.2em;
+        color: #555;
+        margin-bottom: 40px;
+    }
+    .features-grid {
+    display: flex;
+    justify-content: space-around;
+    /* align-items: flex-start; */ /* Comenta o elimina esta línea */
+    align-items: stretch; /* NUEVO o MODIFICADO: Hace que todos los items flex se estiren a la altura del más alto en la línea */
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+.feature-card {
+    flex-basis: calc(33.333% - 40px);
+    min-width: 250px;
+    max-width: 280px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    overflow: hidden;
+    text-align: center;
+    display: flex; /* NUEVO: Convierte la tarjeta en un contenedor flex */
+    flex-direction: column; /* NUEVO: Apila los hijos (imagen y contenido) verticalmente */
+}
+
+.feature-card img { /* Sin cambios aquí, ya estaba bien */
+    width: 100%;
+    height: 180px; 
+    object-fit: cover;
+    display: block;
+}
+
+.feature-card-content {
+    padding: 20px;
+    display: flex; /* NUEVO: Para controlar el crecimiento interno si es necesario */
+    flex-direction: column; /* NUEVO: Apilar h4 y p */
+    flex-grow: 1; /* NUEVO: Permite que esta sección crezca para llenar el espacio vertical de la tarjeta */
+}
+
+.feature-card-content h4 {
+    font-size: 1.2em;
+    color: #007bff;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.feature-card-content p {
+    font-size: 0.95em;
+    color: #555;
+    line-height: 1.5;
+    flex-grow: 1; /* NUEVO (Opcional): Si quieres que el párrafo intente ocupar espacio extra dentro del content */
+                  /* Podrías necesitar ajustar esto o añadir un div espaciador si tienes un botón al final de la tarjeta, etc. */
+}
+    .btn-continue {
+        display: inline-block;
+        padding: 14px 40px;
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    .btn-continue:hover {
+        background-color: #0056b3;
+    }
+
+    @media (max-width: 992px) {
+        .feature-card {
+            flex-basis: calc(50% - 30px);
+        }
+    }
+    @media (max-width: 600px) {
+        .feature-card {
+            flex-basis: 100%;
+        }
+        .welcome-container h1 {
+            font-size: 2em;
+        }
+        .btn-continue {
+            padding: 12px 30px;
+            font-size: 1.1em;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="welcome-container">
+    <h1>{% trans "Te damos la bienvenida a NutriControl" %}</h1>
+    <p class="welcome-subtitle">{% trans "Tu compañero ideal para alcanzar tus objetivos de salud y bienestar." %}</p>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <img src="{% static 'base/feature_track.jpg' %}" alt="{% trans 'Registra tus datos fácilmente' %}">
+            {# Reemplaza 'feature_track.jpg' con una imagen tuya adecuada #}
+            <div class="feature-card-content">
+                <h4>{% trans "¿Quieres probar el sabor de la victoria?" %}</h4>
+                <p>{% trans "Registra tus datos, tus comidas y tu ejercicio. ¡Es súper fácil y efectivo!" %}</p>
+            </div>
+        </div>
+        <div class="feature-card">
+            <img src="{% static 'base/feature_discover.jpg' %}" alt="{% trans 'Descubre cómo influyes en tu cuerpo' %}">
+            {# Reemplaza 'feature_discover.jpg' con una imagen tuya adecuada #}
+            <div class="feature-card-content">
+                <h4>{% trans "Descubre cómo influyes en tu cuerpo" %}</h4>
+                <p>{% trans "Entiende el impacto de tu alimentación y estado físico en tu bienestar general." %}</p>
+            </div>
+        </div>
+        <div class="feature-card">
+            <img src="{% static 'base/feature_habit.jpg' %}" alt="{% trans 'Crea hábitos saludables' %}">
+            {# Reemplaza 'feature_habit.jpg' con una imagen tuya adecuada #}
+            <div class="feature-card-content">
+                <h4>{% trans "Convierte la alimentación consciente en un hábito" %}</h4>
+                <p>{% trans "Te ayudamos a tomar decisiones informadas para un estilo de vida más saludable y duradero." %}</p>
+            </div>
+        </div>
+    </div>
+
+    <a href="{% url 'registration_wizard' %}" class="btn-continue">{% trans "CONTINUAR" %}</a>
+    {# Este enlace asume que la URL del wizard se llamará 'registration_wizard' #}
+</div>
+{% endblock %}

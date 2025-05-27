@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block title %}{% block wizard_title %}{% trans "Registro - Completando tu perfil" %}{% endblock wizard_title %} - NutriControl{% endblock %}
+
+{% block extra_head %}
+<style>
+    .wizard-outer-container {
+        background-color: #f0f2f5;
+        padding: 40px 20px; /* Padding del contenedor exterior */
+        min-height: calc(100vh - 100px); 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start; 
+    }
+    .wizard-card {
+        background-color: #ffffff;
+        padding: 50px; /* AUMENTADO padding general de la tarjeta */
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 600px; 
+        text-align: center;
+        margin-top: 20px;
+        margin-bottom: 40px; /* Añadido margen inferior a la tarjeta */
+    }
+
+    .progress-bar-container {
+        width: 100%;
+        background-color: #e9ecef;
+        border-radius: 20px;
+        margin-bottom: 40px; /* AUMENTADO margen inferior */
+        overflow: hidden;
+        height: 12px;
+    }
+    .progress-bar {
+        background-color: #007bff;
+        height: 100%;
+        border-radius: 20px;
+        text-align: center;
+        line-height: 12px;
+        color: white;
+        font-size: 0.8em;
+        transition: width 0.4s ease-in-out;
+    }
+
+    .wizard-form h3.step-title {
+        font-size: 1.8em;
+        color: #1c1e21;
+        margin-bottom: 20px; /* AUMENTADO margen inferior */
+        font-weight: 600;
+    }
+    .wizard-form p.step-description {
+        font-size: 1.05em;
+        color: #606770;
+        margin-bottom: 40px; /* AUMENTADO margen inferior */
+    }
+
+    .wizard-form .form-field {
+        margin-bottom: 30px; /* AUMENTADO margen entre campos */
+        text-align: left;
+    }
+    .wizard-form .form-field label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #495057;
+    }
+    .wizard-form .form-field input[type="text"],
+    .wizard-form .form-field input[type="email"],
+    .wizard-form .form-field input[type="password"],
+    .wizard-form .form-field input[type="number"],
+    .wizard-form .form-field select,
+    .wizard-form .form-field textarea {
+        width: 100%;
+        padding: 14px 18px;
+        font-size: 1em;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        box-sizing: border-box;
+        transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    .wizard-form .form-field input:focus,
+    .wizard-form .form-field select:focus,
+    .wizard-form .form-field textarea:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        outline: none;
+    }
+    .wizard-form .form-field .helptext {
+        font-size: 0.85em;
+        color: #6c757d;
+        margin-top: 6px;
+        display: block;
+    }
+    .wizard-form .errorlist {
+        color: #dc3545;
+        font-size: 0.85em;
+        list-style-type: none;
+        padding: 0;
+        margin-top: 6px;
+    }
+
+    .form-field-choices ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px; 
+    }
+    .form-field-choices ul li {
+        margin: 0;
+    }
+    .form-field-choices label {
+        display: block;
+        padding: 14px 18px;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        text-align: center;
+        font-weight: 500;
+        background-color: #f8f9fa;
+        color: #333;
+    }
+    .form-field-choices input[type="radio"] {
+        display: none;
+    }
+    .form-field-choices input[type="radio"]:checked + label {
+        background-color: #007bff;
+        color: white;
+        border-color: #007bff;
+        font-weight: bold;
+    }
+    .form-field-choices label:hover:not(.form-field-choices input[type="radio"]:checked + label) {
+        border-color: #007bff;
+        background-color: #e7f3ff;
+    }
+
+    .wizard-form hr { /* Estilo para la línea separadora */
+        margin-top: 40px; /* AUMENTADO */
+        margin-bottom: 30px; /* AUMENTADO */
+        border: 0;
+        border-top: 1px solid #eee;
+    }
+
+    .wizard-buttons {
+        margin-top: 40px; /* AUMENTADO */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .wizard-buttons button, .wizard-buttons a.btn-wizard-nav {
+        padding: 14px 30px;
+        font-size: 1.05em;
+        font-weight: bold;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+    .btn-wizard-prev {
+        background-color: transparent;
+        color: #007bff;
+        border: 1px solid #007bff;
+    }
+    .btn-wizard-prev:hover {
+        background-color: #e7f3ff;
+    }
+    .btn-wizard-next {
+        background-color: #007bff;
+        color: #fff;
+        border: 1px solid #007bff;
+    }
+    .btn-wizard-next:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+    
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="wizard-outer-container">
+    <div class="wizard-card">
+        {% if wizard.steps.count > 1 %}
+        <div class="progress-bar-container" role="progressbar" aria-valuenow="{{ progress_percentage }}" aria-valuemin="0" aria-valuemax="100" aria-label="{% trans 'Progreso del registro' %}">
+            <div class="progress-bar" style="width: {{ progress_percentage }}%;">
+            </div>
+        </div>
+        {% endif %}
+
+        <form action="" method="post" class="wizard-form">
+            {% csrf_token %}
+            {{ wizard.management_form }}
+
+    <h3 class="step-title">{% block wizard_step_title %}{{ step_title_from_view|default_if_none:""|safe }}{% endblock wizard_step_title %}</h3>
+            
+            {% block wizard_step_description_container %}
+            <p class="step-description">{% block wizard_step_description %}{{ step_description_from_view|default_if_none:""|safe }}{% endblock wizard_step_description %}</p>
+            {% endblock wizard_step_description_container %}
+
+            {% block wizard_form_fields %}
+                {{ wizard.form.as_p }}
+            {% endblock wizard_form_fields %}
+            
+            <hr> {# La línea separadora ahora tiene estilos CSS arriba #}
+
+            <div class="wizard-buttons">
+                {% if wizard.steps.prev %}
+                    <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}" class="btn-wizard-prev">
+                        {% trans "Volver" %}
+                    </button>
+                {% else %}
+                    <span></span> 
+                {% endif %}
+                
+                <button type="submit" class="btn-wizard-next">
+                    {% if wizard.steps.current == wizard.steps.last %}
+                        {% trans "Finalizar y Crear Cuenta" %}
+                    {% else %}
+                        {% trans "Siguiente" %}
+                    {% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

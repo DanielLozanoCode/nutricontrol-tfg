@@ -1,0 +1,87 @@
+{% extends "registration_wizard/wizard_base.html" %}
+{% load static i18n %}
+
+{% block wizard_title %}{% trans "Tus Detalles Físicos" %}{% endblock wizard_title %}
+
+{% block wizard_step_title %}
+    {% trans "Cuéntanos un poco más sobre ti" %}
+{% endblock wizard_step_title %}
+
+{% block wizard_step_description %}
+    <p>{% trans "Esta información nos ayuda a calcular tus necesidades y personalizar tu plan." %}</p>
+{% endblock wizard_step_description %}
+
+{% block wizard_form_fields %}
+    {# wizard.form se refiere al formulario del paso actual (Paso2DetallesFisicosForm) #}
+
+    {# Campo Edad #}
+    <div class="form-field">
+        <label for="{{ wizard.form.edad.id_for_label }}">{{ wizard.form.edad.label }}</label>
+        {{ wizard.form.edad }}
+        {% if wizard.form.edad.help_text %}
+            <small class="helptext">{{ wizard.form.edad.help_text|safe }}</small>
+        {% endif %}
+        {% if wizard.form.edad.errors %}
+            <div class="errorlist">
+                {% for error in wizard.form.edad.errors %}{{ error }}{% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    {# Campo Peso #}
+    <div class="form-field" style="margin-top: 20px;">
+        <label for="{{ wizard.form.peso.id_for_label }}">{{ wizard.form.peso.label }}</label>
+        {{ wizard.form.peso }}
+        {% if wizard.form.peso.help_text %}
+            <small class="helptext">{{ wizard.form.peso.help_text|safe }}</small>
+        {% endif %}
+        {% if wizard.form.peso.errors %}
+            <div class="errorlist">
+                {% for error in wizard.form.peso.errors %}{{ error }}{% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    {# Campo Altura #}
+    <div class="form-field" style="margin-top: 20px;">
+        <label for="{{ wizard.form.altura.id_for_label }}">{{ wizard.form.altura.label }}</label>
+        {{ wizard.form.altura }}
+        {% if wizard.form.altura.help_text %}
+            <small class="helptext">{{ wizard.form.altura.help_text|safe }}</small>
+        {% endif %}
+        {% if wizard.form.altura.errors %}
+            <div class="errorlist">
+                {% for error in wizard.form.altura.errors %}{{ error }}{% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    {# Campo Sexo - Renderizado personalizado para RadioSelect como botones #}
+    <div class="form-field form-field-choices" style="margin-top: 20px;">
+        <label>{{ wizard.form.sexo.label }}</label> {# Etiqueta principal del campo #}
+        
+        <ul> {# El widget RadioSelect renderiza como <ul><li><label><input></label></li>...</ul> #}
+            {% for radio in wizard.form.sexo %}
+            <li>
+                <label for="{{ radio.id_for_label }}">
+                    {{ radio.tag }} {# Esto renderiza el <input type="radio"> (que estará oculto por CSS) #}
+                    {{ radio.choice_label }} {# El texto de la opción #}
+                </label>
+            </li>
+            {% endfor %}
+        </ul>
+        
+        {% if wizard.form.sexo.help_text %}
+            <small class="helptext" style="text-align: center; display: block; margin-top:10px;">{{ wizard.form.sexo.help_text|safe }}</small>
+        {% endif %}
+        
+        {% if wizard.form.sexo.errors %}
+            <div class="errorlist">
+                {% for error in wizard.form.sexo.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock wizard_form_fields %}

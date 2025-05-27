@@ -1,0 +1,82 @@
+{% extends "registration_wizard/wizard_base.html" %}
+{% load static i18n %}
+
+{% block wizard_title %}{% trans "Crea tu Cuenta" %}{% endblock wizard_title %}
+
+{% block wizard_step_title %}
+    {% trans "¡Casi listo! Solo necesitamos tus datos de acceso." %}
+{% endblock wizard_step_title %}
+
+{% block wizard_step_description %}
+    <p>{% trans "Elige un nombre de usuario y una contraseña segura para tu cuenta NutriControl." %}</p>
+{% endblock wizard_step_description %}
+
+{% block wizard_form_fields %}
+    {# wizard.form se refiere al formulario del paso actual (Paso3CredencialesForm) #}
+
+    {# Mostrar errores generales del formulario (ej. si la validación clean() del form falla globalmente) #}
+    {% if wizard.form.non_field_errors %}
+        <div class="errorlist nonfield">
+            {% for error in wizard.form.non_field_errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {# Campo Nombre de Usuario #}
+    <div class="form-field">
+        <label for="{{ wizard.form.username.id_for_label }}">{{ wizard.form.username.label }}</label>
+        {{ wizard.form.username }}
+        {% if wizard.form.username.help_text %}
+            <small class="helptext">{{ wizard.form.username.help_text|safe }}</small>
+        {% endif %}
+        {% if wizard.form.username.errors %}
+            <div class="errorlist">
+                {% for error in wizard.form.username.errors %}{{ error }}{% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    {# Campo Correo Electrónico #}
+    <div class="form-field" style="margin-top: 20px;">
+        <label for="{{ wizard.form.email.id_for_label }}">{{ wizard.form.email.label }}</label>
+        {{ wizard.form.email }}
+        {% if wizard.form.email.help_text %}
+            <small class="helptext">{{ wizard.form.email.help_text|safe }}</small>
+        {% endif %}
+        {% if wizard.form.email.errors %}
+            <div class="errorlist">
+                {% for error in wizard.form.email.errors %}{{ error }}{% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    {# Campo Contraseña #}
+    <div class="form-field" style="margin-top: 20px;">
+        <label for="{{ wizard.form.password.id_for_label }}">{{ wizard.form.password.label }}</label>
+        {{ wizard.form.password }}
+        {% if wizard.form.password.help_text %}
+            <small class="helptext">{{ wizard.form.password.help_text|safe }}</small>
+        {% endif %}
+        {% if wizard.form.password.errors %}
+            <div class="errorlist">
+                {% for error in wizard.form.password.errors %}{{ error }}{% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    {# Campo Confirmar Contraseña #}
+    <div class="form-field" style="margin-top: 20px;">
+        <label for="{{ wizard.form.confirm_password.id_for_label }}">{{ wizard.form.confirm_password.label }}</label>
+        {{ wizard.form.confirm_password }}
+        {% if wizard.form.confirm_password.help_text %}
+            <small class="helptext">{{ wizard.form.confirm_password.help_text|safe }}</small>
+        {% endif %}
+        {% if wizard.form.confirm_password.errors %}
+            <div class="errorlist">
+                {% for error in wizard.form.confirm_password.errors %}{{ error }}{% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock wizard_form_fields %}

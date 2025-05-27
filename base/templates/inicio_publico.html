@@ -175,7 +175,6 @@
         text-align: center;
         background-color: #fff; /* Fondo para cada testimonio */
         border-radius: 8px; /* Bordes redondeados si es un solo item visible */
-        /* Si es un carrusel continuo, el fondo y borde van en el contenedor */
     }
     .testimonio img {
         width: 100px; /* Ligeramente más pequeño */
@@ -245,21 +244,21 @@
     }
     .recipe-card img.recipe-image {
         width: 100%;
-        height: 180px; /* Ajustado */
+        height: 180px;
         object-fit: cover;
-        display: block; /* Evitar espacio extra debajo de la imagen */
+        display: block;
     }
     .recipe-card-content {
         padding: 20px;
     }
     .recipe-card-content h4 {
-        font-size: 1.15em; /* Ajustado */
-        margin-top: 0; /* Asegurar que no haya margen extra arriba */
+        font-size: 1.15em;
+        margin-top: 0;
         margin-bottom: 10px;
         line-height: 1.3;
     }
     .recipe-card-content p {
-        font-size: 0.9em; /* Ligeramente más pequeño */
+        font-size: 0.9em;
         color: #555;
         margin-bottom: 15px;
     }
@@ -274,8 +273,8 @@
     }
     @media (max-width: 768px) { /* Móviles grandes */
         .hero-section, .food-db-section {
-            flex-direction: column; /* Ya tenías column-reverse, lo mantengo si es intencional */
-             padding-left: 10px; padding-right: 10px; /* Menos padding lateral en móvil */
+            flex-direction: column-reverse; 
+             padding-left: 10px; padding-right: 10px;
         }
          .hero-section .hero-text, .hero-section .hero-image,
          .food-db-section .food-db-text, .food-db-section .food-db-image {
@@ -283,8 +282,8 @@
             max-width: 100%;
         }
         .tool-item, .recipe-card {
-            flex-basis: calc(100% - 20px); /* Ligeramente menos para que no toque los bordes si hay padding en el contenedor */
-            max-width: 400px; /* Evitar que se hagan demasiado anchos en pantallas intermedias */
+            flex-basis: calc(100% - 20px);
+            max-width: 400px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -302,7 +301,7 @@
         <div class="hero-text">
             <h1>{% trans "Una buena salud empieza por una buena alimentación." %}</h1>
             <p class="hero-subtext">{% trans "¿Quieres prestar más atención a tu alimentación y estado físico? Nutricontrol te ofrece las herramientas y el apoyo que necesitas para alcanzar tus objetivos de bienestar." %}</p>
-            <a href="{% url 'registro' %}" class="btn">{% trans "EMPIEZA GRATIS" %}</a>
+            <a href="{% url 'registration_welcome' %}" class="btn">{% trans "EMPIEZA GRATIS" %}</a>  {# CORREGIDO #}
         </div>
         <div class="hero-image">
             <img src="{% static 'base/hero_bowl.png' %}" alt="{% trans 'Bol de desayuno saludable' %}">
@@ -320,29 +319,28 @@
     </section>
 
     <section class="section-container tools-section">
-  <h2>{% trans "Las herramientas para tus objetivos" %}</h2>
-  <p class="sub-headline">
-    {% trans "¿Quieres perder peso, tonificarte, mejorar tu IMC o estar en tu mejor forma general? Te ofrecemos las funciones que necesitas para conseguirlo." %}
-  </p>
-  <div class="tools-grid">
-    <div class="tool-item">
-      <img src="{% static 'base/diary.e6e4c438.svg' %}" alt="{% trans 'Icono de Aprender, Registrar, Mejorar' %}" class="icon">
-      <h4>{% trans "Aprende. Registra. Mejora." %}</h4>
-      <p>{% trans "Mantente en diario sin cambios: los miembros que registran regularmente tienden a alcanzar sus objetivos más rápido y mantenerlos que aquellos que no lo hacen." %}</p>
-    </div>
-    <div class="tool-item">
-      <img src="{% static 'base/barcode.18277ae4.svg' %}" alt="{% trans 'Icono de Registro Simplificado' %}" class="icon">
-      <h4>{% trans "Registro simplificado." %}</h4>
-      <p>{% trans "Con las sugerencias inteligentes y la opción de guardar comidas, nuestro sistema de registro te permite anotar los alimentos de forma rápida y sencilla." %}</p>
-    </div>
-    <div class="tool-item">
-      <img src="{% static 'base/shoeblue.28e2684f.svg' %}" alt="{% trans 'Icono de Motivación' %}" class="icon">
-      <h4>{% trans "Mantén la motivación." %}</h4>
-      <p>{% trans "Únete a la futura comunidad de Nutricontrol para encontrar ánimo, consejos e inspiración. Comparte tus avances y ayuda a otros en su camino." %}</p>
-    </div>
-  </div>
-</section>
-
+        <h2>{% trans "Las herramientas para tus objetivos" %}</h2>
+        <p class="sub-headline">
+        {% trans "¿Quieres perder peso, tonificarte, mejorar tu IMC o estar en tu mejor forma general? Te ofrecemos las funciones que necesitas para conseguirlo." %}
+        </p>
+        <div class="tools-grid">
+            <div class="tool-item">
+                <img src="{% static 'base/diary.e6e4c438.svg' %}" alt="{% trans 'Icono de Aprender, Registrar, Mejorar' %}" class="icon">
+                <h4>{% trans "Aprende. Registra. Mejora." %}</h4>
+                <p>{% trans "Mantente en diario sin cambios: los miembros que registran regularmente tienden a alcanzar sus objetivos más rápido y mantenerlos que aquellos que no lo hacen." %}</p>
+            </div>
+            <div class="tool-item">
+                <img src="{% static 'base/barcode.18277ae4.svg' %}" alt="{% trans 'Icono de Registro Simplificado' %}" class="icon">
+                <h4>{% trans "Registro simplificado." %}</h4>
+                <p>{% trans "Con las sugerencias inteligentes y la opción de guardar comidas, nuestro sistema de registro te permite anotar los alimentos de forma rápida y sencilla." %}</p>
+            </div>
+            <div class="tool-item">
+                <img src="{% static 'base/shoeblue.28e2684f.svg' %}" alt="{% trans 'Icono de Motivación' %}" class="icon">
+                <h4>{% trans "Mantén la motivación." %}</h4>
+                <p>{% trans "Únete a la futura comunidad de Nutricontrol para encontrar ánimo, consejos e inspiración. Comparte tus avances y ayuda a otros en su camino." %}</p>
+            </div>
+        </div>
+    </section>
 
     <section class="section-container success-stories-section">
         <h2>{% trans "Historias de éxito" %}</h2>
@@ -365,7 +363,7 @@
                 <button onclick="moverCarruselPublic(1)">→</button>
             </div>
         </div>
-        <a href="{% url 'registro' %}" class="btn">{% trans "INICIA HOY TU VIAJE" %}</a>
+        <a href="{% url 'registration_welcome' %}" class="btn">{% trans "INICIA HOY TU VIAJE" %}</a> {# CORREGIDO #}
     </section>
 
     <section class="section-container recipes-section">
@@ -412,15 +410,5 @@
         publicCarouselIndex = (publicCarouselIndex + direccion + totalSlides) % totalSlides;
         carrusel.style.transform = `translateX(-${publicCarouselIndex * 100}%)`;
     }
-
-    // Script anterior que modificaba la navbar (asegúrate que esté comentado o eliminado si no lo necesitas)
-    /*
-    document.addEventListener("DOMContentLoaded", function() {
-      const navLinks = document.querySelectorAll('.navbar-bottom a');
-      navLinks.forEach(link => {
-        link.setAttribute('href', '{% url "login" %}');
-      });
-    });
-    */
 </script>
 {% endblock %}

@@ -1,0 +1,40 @@
+{% extends "registration_wizard/wizard_base.html" %}
+{% load static i18n %}
+
+{# Define el título específico para este paso del wizard (título de la pestaña del navegador) #}
+{% block wizard_title %}{% trans "Tu Nombre" %}{% endblock wizard_title %}
+
+{# Define el título que se mostrará dentro de la tarjeta del wizard #}
+{% block wizard_step_title %}
+    {% trans "¿Cuál es tu nombre?" %}
+{% endblock wizard_step_title %}
+
+{# Descripción o subtítulo para este paso #}
+{% block wizard_step_description %}
+    <p>{% trans "Nos alegra que estés aquí. Vamos a conocerte un poco." %}</p>
+    <br>
+{% endblock wizard_step_description %}
+
+{# Campos del formulario para este paso #}
+{% block wizard_form_fields %}
+    <div class="form-field">
+        {# El <br> ya fue eliminado. El espaciado se controla con CSS. #}
+        {{ wizard.form.first_name }} {# Renderiza el input del nombre #}
+        
+        {% if wizard.form.first_name.help_text %}
+            <small class="helptext">{{ wizard.form.first_name.help_text|safe }}</small>
+        {% endif %}
+        
+        {% if wizard.form.first_name.errors %}
+            <div class="errorlist">
+                {% for error in wizard.form.first_name.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    {# Si tuvieras más campos en Paso0NombreForm, los renderizarías aquí de forma similar #}
+{% endblock wizard_form_fields %}
+
+{# El bloque wizard_buttons ya no se sobreescribe aquí; se hereda de wizard_base.html #}

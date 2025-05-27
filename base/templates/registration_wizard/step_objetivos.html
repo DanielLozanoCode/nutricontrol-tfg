@@ -1,0 +1,49 @@
+{% extends "registration_wizard/wizard_base.html" %}
+{% load static i18n %}
+
+{% block wizard_title %}{% trans "Tus Objetivos" %}{% endblock wizard_title %}
+
+{% block wizard_step_title %}
+    {{ step_title_from_view|safe }}
+{% endblock wizard_step_title %}
+
+{% block wizard_step_description %}
+    <p>{{ step_description_from_view|safe }}</p>
+{% endblock wizard_step_description %}
+
+{% block wizard_form_fields %}
+    {# wizard.form se refiere al formulario del paso actual (Paso1ObjetivosForm) #}
+
+    {# Contenedor para las opciones de objetivo con un margen superior adicional #}
+    <div class="form-field form-field-choices" style="margin-top: 20px;"> 
+        {# ^^^ AÑADIDO style="margin-top: 20px;" o el valor que prefieras ^^^ #}
+        {# Puedes ajustar "20px" a un valor mayor como "30px" o "40px" si quieres más espacio #}
+        
+        <ul class="objective-list"> 
+            {% for radio_option in wizard.form.objetivo %}
+            <li class="objective-item"> 
+                {{ radio_option.tag }} 
+                <label for="{{ radio_option.id_for_label }}" class="objective-button-label">
+                    <span class="objective-text">{{ radio_option.choice_label }}</span> 
+                </label>
+            </li>
+            {% endfor %}
+        </ul>
+        
+        {% if wizard.form.objetivo.errors %}
+            <div class="errorlist" style="text-align: center; margin-top: 15px;">
+                {% for error in wizard.form.objetivo.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if wizard.form.objetivo.help_text %}
+            <small class="helptext" style="text-align: center; display: block; margin-top:15px;">
+                {{ wizard.form.objetivo.help_text|safe }}
+            </small>
+        {% endif %}
+    </div>
+
+    {# El campo 'actividad_fisica' se asume eliminado de Paso1ObjetivosForm y de esta plantilla. #}
+{% endblock wizard_form_fields %}
