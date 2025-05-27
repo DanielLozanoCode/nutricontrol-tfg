@@ -1,0 +1,426 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block title %}{% trans "Nutricontrol | Tu aliado en nutrición y ejercicio" %}{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* Reset básico y estilos generales para el contenido de esta página */
+    .public-landing-content * {
+        box-sizing: border-box;
+    }
+
+    .public-landing-content {
+        font-family: Arial, sans-serif;
+        color: #333;
+        line-height: 1.6;
+    }
+
+    .section-container {
+        padding: 60px 20px; /* Aumentado el padding vertical */
+        max-width: 1200px;
+        margin: 0 auto;
+        text-align: center;
+    }
+    .section-container:nth-child(odd) { /* Alternar colores de fondo suavemente */
+        background-color: #f8f9fa;
+    }
+
+    .section-container h2 {
+        font-size: 2.4em; /* Ligeramente ajustado */
+        margin-bottom: 20px;
+        color: #333;
+        font-weight: bold;
+    }
+
+    .section-container .sub-headline {
+        font-size: 1.15em; /* Ligeramente ajustado */
+        color: #555;
+        max-width: 750px; /* Un poco más de ancho para el subtítulo */
+        margin: 0 auto 40px auto;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 14px 35px; /* Botones un poco más grandes */
+        font-size: 1.1em;
+        font-weight: bold;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        text-align: center;
+    }
+    .btn:hover {
+        background-color: #0056b3;
+        transform: translateY(-2px); /* Efecto sutil al pasar el mouse */
+    }
+
+    /* Hero Section */
+    .hero-section {
+        display: flex;
+        align-items: center;
+        justify-content: space-around; /* Cambiado para mejor distribución */
+        flex-wrap: wrap-reverse;
+        gap: 30px; /* Espacio entre texto e imagen */
+        padding-top: 40px; /* Ajuste de padding */
+        padding-bottom: 40px;
+    }
+    .hero-text {
+        flex: 1;
+        max-width: 550px; /* Limitar ancho del texto */
+        min-width: 300px;
+        text-align: left;
+    }
+    .hero-text h1 {
+        font-size: 2.7em; /* Ajustado */
+        font-weight: bold;
+        line-height: 1.25;
+        margin-bottom: 20px;
+        color: #222; /* Un negro más suave */
+    }
+    .hero-text .hero-subtext {
+        font-size: 1.1em;
+        margin-bottom: 30px;
+    }
+    .hero-image {
+        flex: 1;
+        max-width: 500px; /* Limitar ancho de la imagen */
+        min-width: 300px;
+        text-align: center;
+    }
+    .hero-image img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+
+    /* Food Database Section */
+    .food-db-section {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        gap: 30px;
+    }
+    .food-db-image {
+        flex: 1;
+        max-width: 450px;
+        min-width: 300px;
+        text-align: center;
+    }
+    .food-db-image img {
+        max-width: 90%;
+        height: auto;
+        border-radius: 8px;
+    }
+    .food-db-text {
+        flex: 1;
+        max-width: 550px;
+        min-width: 300px;
+        text-align: left;
+    }
+
+    /* Tools Section */
+    .tools-grid {
+        display: flex;
+        justify-content: center; /* Centrar los items si no llenan todo el espacio */
+        flex-wrap: wrap;
+        gap: 25px;
+        margin-top: 30px;
+    }
+    .tool-item {
+        flex-basis: calc(33.333% - 30px); /* Ajuste para el gap */
+        min-width: 270px; /* Ligeramente más pequeño */
+        max-width: 350px; /* Máximo para que no se estiren demasiado */
+        background-color: #fff;
+        padding: 30px 25px; /* Más padding vertical */
+        border-radius: 8px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.07); /* Sombra más suave */
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .tool-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    .tool-item img.icon {
+        width: 50px; /* Ajustado */
+        height: 50px;
+        margin-bottom: 20px; /* Más espacio */
+    }
+    .tool-item h4 {
+        font-size: 1.3em; /* Ajustado */
+        margin-bottom: 10px;
+        color: #007bff;
+    }
+
+    /* Success Stories (Carrusel) */
+    .carrusel-container {
+        max-width: 900px;
+        margin: 40px auto;
+        overflow: hidden;  /* MUY IMPORTANTE para el carrusel */
+        position: relative; /* MUY IMPORTANTE para los controles del carrusel */
+    }
+    .carrusel {
+        display: flex;
+        transition: transform 0.5s ease-in-out; /* Transición más suave */
+    }
+    .testimonio {
+        min-width: 100%;
+        box-sizing: border-box;
+        padding: 30px 20px;
+        text-align: center;
+        background-color: #fff; /* Fondo para cada testimonio */
+        border-radius: 8px; /* Bordes redondeados si es un solo item visible */
+        /* Si es un carrusel continuo, el fondo y borde van en el contenedor */
+    }
+    .testimonio img {
+        width: 100px; /* Ligeramente más pequeño */
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 15px;
+        border: 3px solid #eee; /* Borde opcional */
+    }
+    .testimonio h3 {
+        margin-top: 10px;
+        font-size: 1.2em;
+        color: #007bff;
+    }
+    .testimonio p {
+        font-size: 1em;
+        color: #555;
+        font-style: italic;
+        max-width: 600px;
+        margin: 0 auto; /* Centrar el párrafo del testimonio */
+    }
+    .carrusel-controles {
+        text-align: center;
+        margin-top: 20px; /* Más espacio */
+    }
+    .carrusel-controles button {
+        background-color: #007bff;
+        border: none;
+        color: white;
+        padding: 10px 18px; /* Botones un poco más grandes */
+        margin: 0 8px;
+        cursor: pointer;
+        border-radius: 50%; /* Botones redondos */
+        font-size: 1.2em; /* Iconos de flecha más grandes */
+        line-height: 1;
+        transition: background-color 0.3s ease;
+    }
+    .carrusel-controles button:hover {
+        background-color: #0056b3;
+    }
+    .success-stories-section .btn {
+        margin-top: 40px; /* Más espacio para el botón principal */
+    }
+
+    /* Recipes Section */
+    .recipes-grid {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 25px;
+        margin-top: 30px;
+    }
+    .recipe-card {
+        flex-basis: calc(33.333% - 30px);
+        min-width: 270px;
+        max-width: 350px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+        overflow: hidden;
+        text-align: left;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .recipe-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    .recipe-card img.recipe-image {
+        width: 100%;
+        height: 180px; /* Ajustado */
+        object-fit: cover;
+        display: block; /* Evitar espacio extra debajo de la imagen */
+    }
+    .recipe-card-content {
+        padding: 20px;
+    }
+    .recipe-card-content h4 {
+        font-size: 1.15em; /* Ajustado */
+        margin-top: 0; /* Asegurar que no haya margen extra arriba */
+        margin-bottom: 10px;
+        line-height: 1.3;
+    }
+    .recipe-card-content p {
+        font-size: 0.9em; /* Ligeramente más pequeño */
+        color: #555;
+        margin-bottom: 15px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 992px) { /* Tablets */
+        .hero-text h1 { font-size: 2.2em; }
+        .section-container h2 { font-size: 2em; }
+        .tool-item, .recipe-card {
+            flex-basis: calc(50% - 25px);
+        }
+    }
+    @media (max-width: 768px) { /* Móviles grandes */
+        .hero-section, .food-db-section {
+            flex-direction: column; /* Ya tenías column-reverse, lo mantengo si es intencional */
+             padding-left: 10px; padding-right: 10px; /* Menos padding lateral en móvil */
+        }
+         .hero-section .hero-text, .hero-section .hero-image,
+         .food-db-section .food-db-text, .food-db-section .food-db-image {
+            text-align: center;
+            max-width: 100%;
+        }
+        .tool-item, .recipe-card {
+            flex-basis: calc(100% - 20px); /* Ligeramente menos para que no toque los bordes si hay padding en el contenedor */
+            max-width: 400px; /* Evitar que se hagan demasiado anchos en pantallas intermedias */
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .section-container{
+            padding: 40px 15px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="public-landing-content">
+
+    <section class="section-container hero-section">
+        <div class="hero-text">
+            <h1>{% trans "Una buena salud empieza por una buena alimentación." %}</h1>
+            <p class="hero-subtext">{% trans "¿Quieres prestar más atención a tu alimentación y estado físico? Nutricontrol te ofrece las herramientas y el apoyo que necesitas para alcanzar tus objetivos de bienestar." %}</p>
+            <a href="{% url 'registro' %}" class="btn">{% trans "EMPIEZA GRATIS" %}</a>
+        </div>
+        <div class="hero-image">
+            <img src="{% static 'base/hero_bowl.png' %}" alt="{% trans 'Bol de desayuno saludable' %}">
+        </div>
+    </section>
+
+    <section class="section-container food-db-section">
+        <div class="food-db-image">
+            <img src="{% static 'base/blueberries_feature.png' %}" alt="{% trans 'Base de datos de alimentos' %}">
+        </div>
+        <div class="food-db-text">
+            <h2>{% blocktrans %}Elige entre miles de alimentos para llevar tu registro.{% endblocktrans %}</h2>
+            <p class="sub-headline">{% blocktrans %}Accede a un desglose calórico y de nutrientes, guarda tus comidas frecuentes y revisa tu historial. Con Nutricontrol, tomar decisiones conscientes sobre tu dieta es más fácil que nunca.{% endblocktrans %}</p>
+        </div>
+    </section>
+
+    <section class="section-container tools-section">
+  <h2>{% trans "Las herramientas para tus objetivos" %}</h2>
+  <p class="sub-headline">
+    {% trans "¿Quieres perder peso, tonificarte, mejorar tu IMC o estar en tu mejor forma general? Te ofrecemos las funciones que necesitas para conseguirlo." %}
+  </p>
+  <div class="tools-grid">
+    <div class="tool-item">
+      <img src="{% static 'base/diary.e6e4c438.svg' %}" alt="{% trans 'Icono de Aprender, Registrar, Mejorar' %}" class="icon">
+      <h4>{% trans "Aprende. Registra. Mejora." %}</h4>
+      <p>{% trans "Mantente en diario sin cambios: los miembros que registran regularmente tienden a alcanzar sus objetivos más rápido y mantenerlos que aquellos que no lo hacen." %}</p>
+    </div>
+    <div class="tool-item">
+      <img src="{% static 'base/barcode.18277ae4.svg' %}" alt="{% trans 'Icono de Registro Simplificado' %}" class="icon">
+      <h4>{% trans "Registro simplificado." %}</h4>
+      <p>{% trans "Con las sugerencias inteligentes y la opción de guardar comidas, nuestro sistema de registro te permite anotar los alimentos de forma rápida y sencilla." %}</p>
+    </div>
+    <div class="tool-item">
+      <img src="{% static 'base/shoeblue.28e2684f.svg' %}" alt="{% trans 'Icono de Motivación' %}" class="icon">
+      <h4>{% trans "Mantén la motivación." %}</h4>
+      <p>{% trans "Únete a la futura comunidad de Nutricontrol para encontrar ánimo, consejos e inspiración. Comparte tus avances y ayuda a otros en su camino." %}</p>
+    </div>
+  </div>
+</section>
+
+
+    <section class="section-container success-stories-section">
+        <h2>{% trans "Historias de éxito" %}</h2>
+        <p class="sub-headline">{% trans "Descubre cómo Nutricontrol ha ayudado a otros a transformar sus vidas. Inspírate para el viaje que tienes por delante." %}</p>
+        <div class="carrusel-container">
+            <div class="carrusel" id="carruselHistoriasPublic">
+                <div class="testimonio">
+                    <img src="{% static 'base/testimonio1.jpg' %}" alt="Stephanie">
+                    <p>“{% trans "Gracias a Nutricontrol he logrado organizar mi alimentación y sentirme con más energía cada día." %}”</p>
+                    <h3>Stephanie</h3>
+                </div>
+                <div class="testimonio">
+                    <img src="{% static 'base/testimonio2.jpg' %}" alt="Eric">
+                    <p>“{% trans "Perdí 6kg en 3 meses y ahora entiendo mejor qué y cómo debo comer." %}”</p>
+                    <h3>Eric</h3>
+                </div>
+            </div>
+            <div class="carrusel-controles">
+                <button onclick="moverCarruselPublic(-1)">←</button>
+                <button onclick="moverCarruselPublic(1)">→</button>
+            </div>
+        </div>
+        <a href="{% url 'registro' %}" class="btn">{% trans "INICIA HOY TU VIAJE" %}</a>
+    </section>
+
+    <section class="section-container recipes-section">
+        <h2>{% trans "Recetas e inspiración" %}</h2>
+        <p class="sub-headline">{% trans "Consigue consejos de alimentación y ejercicio de la mano de nuestros expertos para ayudarte a alcanzar tus objetivos (próximamente)." %}</p>
+        <div class="recipes-grid">
+            <div class="recipe-card">
+                <img src="{% static 'base/recipe_placeholder_1.jpg' %}" alt="{% trans 'Receta saludable 1' %}" class="recipe-image">
+                <div class="recipe-card-content">
+                    <h4>{% trans "Desayunos energéticos para empezar el día" %}</h4>
+                    <p>{% trans "Ideas rápidas y nutritivas." %}</p>
+                </div>
+            </div>
+            <div class="recipe-card">
+                <img src="{% static 'base/recipe_placeholder_2.jpg' %}" alt="{% trans 'Snacks inteligentes 1' %}" class="recipe-image">
+                <div class="recipe-card-content">
+                    <h4>{% trans "Snacks inteligentes entre horas" %}</h4>
+                    <p>{% trans "Mantén el hambre a raya de forma saludable." %}</p>
+                </div>
+            </div>
+            <div class="recipe-card">
+                <img src="{% static 'base/exercise_placeholder_1.jpg' %}" alt="{% trans 'Rutina de ejercicio 1' %}" class="recipe-image">
+                <div class="recipe-card-content">
+                    <h4>{% trans "Ejercicios efectivos en casa" %}</h4>
+                    <p>{% trans "Ponte en forma sin necesidad de gimnasio." %}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script>
+    // Carrusel para la página pública
+    let publicCarouselIndex = 0;
+    function moverCarruselPublic(direccion) {
+        const carrusel = document.getElementById('carruselHistoriasPublic');
+        if (!carrusel || !carrusel.children || carrusel.children.length === 0) {
+            // console.warn("Elemento del carrusel no encontrado o vacío: carruselHistoriasPublic");
+            return;
+        }
+        const totalSlides = carrusel.children.length;
+        publicCarouselIndex = (publicCarouselIndex + direccion + totalSlides) % totalSlides;
+        carrusel.style.transform = `translateX(-${publicCarouselIndex * 100}%)`;
+    }
+
+    // Script anterior que modificaba la navbar (asegúrate que esté comentado o eliminado si no lo necesitas)
+    /*
+    document.addEventListener("DOMContentLoaded", function() {
+      const navLinks = document.querySelectorAll('.navbar-bottom a');
+      navLinks.forEach(link => {
+        link.setAttribute('href', '{% url "login" %}');
+      });
+    });
+    */
+</script>
+{% endblock %}

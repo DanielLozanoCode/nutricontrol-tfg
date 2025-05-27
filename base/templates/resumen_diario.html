@@ -1,45 +1,106 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Resumen diario</title>
-</head>
-<body>
-    <h2>Resumen del día: {{ fecha }}</h2>
+{% extends "base.html" %}
+{% block title %}Resumen diario{% endblock %}
 
-    {% if registros %}
-        <table border="1">
-            <tr>
-                <th>Alimento</th>
-                <th>Cantidad (g)</th>
-                <th>Calorías</th>
-                <th>Proteínas</th>
-                <th>Grasas</th>
-                <th>Carbohidratos</th>
-            </tr>
-            {% for r in registros %}
-                <tr>
-                    <td>{{ r.alimento.nombre }}</td>
-                    <td>{{ r.cantidad }}</td>
-                    <td>{{ r.calorias_totales|floatformat:2 }}</td>
-                    <td>{{ r.alimento.proteinas|floatformat:2 }}</td>
-                    <td>{{ r.alimento.grasas|floatformat:2 }}</td>
-                    <td>{{ r.alimento.carbohidratos|floatformat:2 }}</td>
-                </tr>
-            {% endfor %}
-        </table>
+{% block extra_head %}
+<style>
+  h2, h3 {
+    text-align: center;
+    margin-top: 30px;
+  }
 
-        <h3>Totales del día:</h3>
-        <ul>
-            <li>Calorías: {{ total_calorias|floatformat:2 }} kcal</li>
-            <li>Proteínas: {{ total_proteinas|floatformat:2 }} g</li>
-            <li>Grasas: {{ total_grasas|floatformat:2 }} g</li>
-            <li>Carbohidratos: {{ total_carbohidratos|floatformat:2 }} g</li>
-        </ul>
-    {% else %}
-        <p>No has registrado alimentos hoy.</p>
-    {% endif %}
+  table {
+    width: 100%;
+    max-width: 900px;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 6px;
+    overflow: hidden;
+  }
 
-    <p><a href="{% url 'dashboard' %}">← Volver al dashboard</a></p>
-</body>
-</html>
+  th, td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #1a73e8;
+    color: white;
+  }
+
+  ul {
+    max-width: 400px;
+    margin: 20px auto;
+    list-style: none;
+    padding: 0;
+    font-weight: bold;
+    background-color: #f1f1f1;
+    border-radius: 6px;
+    padding: 20px;
+  }
+
+  ul li {
+    margin-bottom: 10px;
+  }
+
+  .volver {
+    text-align: center;
+    margin-top: 30px;
+  }
+
+  .volver a {
+    text-decoration: none;
+    background-color: #1a73e8;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+  }
+
+  .volver a:hover {
+    background-color: #0c54b8;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+  <h2>Resumen del día: {{ fecha }}</h2>
+
+  {% if registros %}
+    <table>
+      <tr>
+        <th>Alimento</th>
+        <th>Cantidad (g)</th>
+        <th>Calorías</th>
+        <th>Proteínas</th>
+        <th>Grasas</th>
+        <th>Carbohidratos</th>
+      </tr>
+      {% for r in registros %}
+        <tr>
+          <td>{{ r.alimento.nombre }}</td>
+          <td>{{ r.cantidad }}</td>
+          <td>{{ r.calorias_totales|floatformat:2 }}</td>
+          <td>{{ r.alimento.proteinas|floatformat:2 }}</td>
+          <td>{{ r.alimento.grasas|floatformat:2 }}</td>
+          <td>{{ r.alimento.carbohidratos|floatformat:2 }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+
+    <h3>Totales del día</h3>
+    <ul>
+      <li>Calorías: {{ total_calorias|floatformat:2 }} kcal</li>
+      <li>Proteínas: {{ total_proteinas|floatformat:2 }} g</li>
+      <li>Grasas: {{ total_grasas|floatformat:2 }} g</li>
+      <li>Carbohidratos: {{ total_carbohidratos|floatformat:2 }} g</li>
+    </ul>
+  {% else %}
+    <p style="text-align:center;">No has registrado alimentos hoy.</p>
+  {% endif %}
+
+  <div class="volver">
+    <a href="{% url 'dashboard' %}">← Volver al dashboard</a>
+  </div>
+{% endblock %}

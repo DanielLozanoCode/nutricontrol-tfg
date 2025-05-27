@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-uk)_$@154*c#jzuwd$rz71bbc7@he9o%_nosjhet)lz-=hpmta
 DEBUG = True
 
 ALLOWED_HOSTS = []
+STATICFILES_DIRS = [ BASE_DIR / 'base' / 'static' ]
 
 
 # Application definition
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
 
 ]
 LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/login/'
 LOGOUT_REDIRECT_URL = '/'
 
 MIDDLEWARE = [
@@ -108,19 +110,24 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es'
+LANGUAGES = [
+    ('es', 'Español'),
+    ('en', 'English'),
+]
 
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
 USE_TZ = True
+LOCALE_PATHS = [BASE_DIR / 'locale']
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

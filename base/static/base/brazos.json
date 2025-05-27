@@ -1,0 +1,80 @@
+{
+  "grupo": "Brazos",
+  "ejercicios": [
+    {
+      "nombre": "Curl con barra",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video": "https://www.youtube.com/watch?v=a9hli15uWiA"
+    },
+    {
+      "nombre": "Curl martillo",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video": "https://www.youtube.com/watch?v=zC3nLlEvin4"
+    },
+    {
+      "nombre": "Fondos de tríceps",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video": "https://www.youtube.com/watch?v=6kALZikXxLc"
+    },
+    {
+      "nombre": "Extensiones de tríceps en polea",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video": "https://www.youtube.com/watch?v=2-LAMcpzODU"
+    },
+    {
+      "nombre": "Curl concentrado",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video": "https://www.youtube.com/watch?v=0AUGkch3tzc"
+    },
+    {
+      "nombre": "Press cerrado",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video": "https://www.youtube.com/watch?v=6JtP6ju0IMw"
+    },
+    {
+      "nombre": "Curl predicador",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video": "https://www.youtube.com/watch?v=d_KZxkY_0cM"
+    },
+    {
+      "nombre": "Patada de tríceps",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video": "https://www.youtube.com/watch?v=6SS6K3lAwZ8"
+    },
+    {
+      "nombre": "Curl en banco inclinado",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video": "https://www.youtube.com/watch?v=soxrZlIl35U"
+    },
+    {
+      "nombre": "Curl con polea baja",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video": "https://www.youtube.com/watch?v=KTKpz7xJ9Y4"
+    },
+    {
+      "nombre": "Extensión de tríceps en banco",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video": "https://www.youtube.com/watch?v=hK1tT-l5hZ8"
+    },
+    {
+      "nombre": "Dominadas supinas",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video": "https://www.youtube.com/watch?v=bEv6CCg2BC8"
+    },
+    {
+      "nombre": "Flexiones diamante",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video": "https://www.youtube.com/watch?v=J0DnG1_S92I"
+    },
+    {
+      "nombre": "Zottman curl",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video": "https://www.youtube.com/watch?v=U8dD1jv0yWQ"
+    },
+    {
+      "nombre": "Curl inverso",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video": "https://www.youtube.com/watch?v=0AUGkch3tzc"
+    }
+  ]
+}

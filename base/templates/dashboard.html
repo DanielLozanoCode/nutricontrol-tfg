@@ -1,29 +1,106 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Nutricontrol</title>
-</head>
-<body>
-    <h1>Bienvenido a Nutricontrol</h1>
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans "Inicio | Nutricontrol" %}{% endblock %}
 
-    {% if user.is_authenticated %}
-        <p>Hola {{ user.username }}</p>
+{% block extra_head %}
+<style>
+  .carrusel-container {
+    max-width: 1000px;
+    margin: 50px auto;
+    overflow: hidden;
+    position: relative;
+  }
 
-        <form method="post" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button type="submit">Cerrar sesión</button>
-        </form>
+  .carrusel {
+    display: flex;
+    transition: transform 0.4s ease-in-out;
+  }
 
-        <p>
-            <a href="{% url 'registro_alimentacion' %}"><button>Registrar alimentación</button></a>
-            <a href="{% url 'resumen_diario' %}"><button>Ver resumen diario</button></a>
-            <a href="{% url 'lista_registros' %}"><button>Ver historial de registros</button></a>
-        </p>
-    
-    {% else %}
-        <a href="{% url 'registro' %}"><button>Registrarse</button></a>
-        <a href="{% url 'login' %}"><button>Iniciar sesión</button></a>
-    {% endif %}
-</body>
-</html>
+  .testimonio {
+    min-width: 100%;
+    box-sizing: border-box;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .testimonio img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+  }
+
+  .testimonio h3 {
+    margin-top: 10px;
+    color: #1a73e8;
+  }
+
+  .testimonio p {
+    font-size: 16px;
+    color: #555;
+  }
+
+  .carrusel-controles {
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .carrusel-controles button {
+    background-color: #1a73e8;
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    margin: 0 5px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .carrusel-controles button:hover {
+    background-color: #0c54b8;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+  <h1 style="text-align: center; margin-bottom: 30px;">{% trans "Bienvenido a Nutricontrol" %}</h1>
+
+  <div style="text-align: center;">
+    <a href="{% url 'registro_alimentacion' %}"><button>{% trans "Registrar alimentación" %}</button></a>
+    <a href="{% url 'resumen_diario' %}"><button>{% trans "Ver resumen diario" %}</button></a>
+    <a href="{% url 'lista_registros' %}"><button>{% trans "Ver historial de registros" %}</button></a>
+    <a href="{% url 'ver_ejercicios' %}"><button>{% trans "Ver ejercicios" %}</button></a>
+  </div>
+
+  <div class="carrusel-container">
+    <div class="carrusel" id="carruselHistorias">
+      <div class="testimonio">
+        <img src="{% static 'base/testimonio1.jpg' %}" alt="Stephanie">
+        <p>“{% trans "Gracias a Nutricontrol he logrado organizar mi alimentación y sentirme con más energía cada día." %}”</p>
+        <h3>Stephanie</h3>
+      </div>
+      <div class="testimonio">
+        <img src="{% static 'base/testimonio2.jpg' %}" alt="Eric">
+        <p>“{% trans "Perdí 6kg en 3 meses y ahora entiendo mejor qué y cómo debo comer." %}”</p>
+        <h3>Eric</h3>
+      </div>
+    </div>
+    <div class="carrusel-controles">
+      <button onclick="moverCarrusel(-1)">←</button>
+      <button onclick="moverCarrusel(1)">→</button>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_script %}
+<script>
+  let index = 0;
+
+  function moverCarrusel(direccion) {
+    const carrusel = document.getElementById('carruselHistorias');
+    const totalSlides = carrusel.children.length;
+    index = (index + direccion + totalSlides) % totalSlides;
+    carrusel.style.transform = `translateX(-${index * 100}%)`;
+  }
+</script>
+{% endblock %}

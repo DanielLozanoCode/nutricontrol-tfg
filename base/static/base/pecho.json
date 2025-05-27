@@ -1,0 +1,80 @@
+{
+  "grupo": "Pecho",
+  "ejercicios": [
+    {
+      "nombre": "Press de banca con barra",
+      "descripcion": "Ejercicio clásico de pecho.",
+      "video": "https://www.youtube.com/watch?v=jlFl7WJ1TzI"
+    },
+    {
+      "nombre": "Press inclinado con mancuernas",
+      "descripcion": "Ejercicio clásico de pecho.",
+      "video": "https://www.youtube.com/watch?v=sL6xN9EVDfE"
+    },
+    {
+      "nombre": "Aperturas con mancuernas",
+      "descripcion": "Ejercicio clásico de pecho.",
+      "video": "https://www.youtube.com/watch?v=xyHdY99F640"
+    },
+    {
+      "nombre": "Press declinado",
+      "descripcion": "Ejercicio clásico de pecho.",
+      "video": "https://www.youtube.com/watch?v=NNz3_wUMrvI"
+    },
+    {
+      "nombre": "Flexiones clásicas",
+      "descripcion": "Ejercicio clásico de pecho.",
+      "video": "https://www.youtube.com/watch?v=VsiEATZdNQw"
+    },
+    {
+      "nombre": "Flexiones con palmada",
+      "descripcion": "Ejercicio clásico de pecho.",
+      "video": "https://www.youtube.com/watch?v=pFqDpa5KhPo"
+    },
+    {
+      "nombre": "Press en máquina",
+      "descripcion": "Ejercicio clásico de pecho.",
+      "video": "https://www.youtube.com/watch?v=N7DjfGB8-xY"
+    },
+    {
+      "nombre": "Press con agarre cerrado",
+      "descripcion": "Ejercicio clásico de pecho.",
+      "video": "https://www.youtube.com/watch?v=ZUyebllQ0VU"
+    },
+    {
+      "nombre": "Crossover con poleas",
+      "descripcion": "Ejercicio clásico de pecho.",
+      "video": "https://www.youtube.com/watch?v=HLh-Vqp6lPM"
+    },
+    {
+      "nombre": "Pullover con mancuerna",
+      "descripcion": "Ejercicio clásico de pecho.",
+      "video": "https://www.youtube.com/watch?v=qRhCDkJH8Ck"
+    },
+    {
+      "nombre": "Press en multipower",
+      "descripcion": "Ejercicio clásico de pecho.",
+      "video": "https://www.youtube.com/watch?v=DWMJt_H_Afw"
+    },
+    {
+      "nombre": "Flexiones inclinadas",
+      "descripcion": "Ejercicio clásico de pecho.",
+      "video": "https://www.youtube.com/watch?v=oKrqpvZd6hI"
+    },
+    {
+      "nombre": "Press con mancuernas en banco plano",
+      "descripcion": "Ejercicio clásico de pecho.",
+      "video": "https://www.youtube.com/watch?v=2XtuyTKBU5A"
+    },
+    {
+      "nombre": "Crossover bajo con poleas",
+      "descripcion": "Ejercicio clásico de pecho.",
+      "video": "https://www.youtube.com/watch?v=j7VvOk7buL8"
+    },
+    {
+      "nombre": "Flexiones con peso",
+      "descripcion": "Ejercicio clásico de pecho.",
+      "video": "https://www.youtube.com/watch?v=Y94iLBtYCzw"
+    }
+  ]
+}

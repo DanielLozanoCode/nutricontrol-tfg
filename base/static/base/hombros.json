@@ -1,0 +1,80 @@
+{
+  "grupo": "Hombros",
+  "ejercicios": [
+    {
+      "nombre": "Press militar",
+      "descripcion": "Ejercicio clásico de hombros.",
+      "video": "https://www.youtube.com/watch?v=o5M9RZ-vWrc"
+    },
+    {
+      "nombre": "Elevaciones laterales",
+      "descripcion": "Ejercicio clásico de hombros.",
+      "video": "https://www.youtube.com/watch?v=hgLpdwMtEEs"
+    },
+    {
+      "nombre": "Press Arnold",
+      "descripcion": "Ejercicio clásico de hombros.",
+      "video": "https://www.youtube.com/watch?v=0ioGGhO0anE"
+    },
+    {
+      "nombre": "Elevaciones frontales",
+      "descripcion": "Ejercicio clásico de hombros.",
+      "video": "https://www.youtube.com/watch?v=GELRUlUSxeI"
+    },
+    {
+      "nombre": "Encogimientos de hombros",
+      "descripcion": "Ejercicio clásico de hombros.",
+      "video": "https://www.youtube.com/watch?v=6n4Zp8VtbnU"
+    },
+    {
+      "nombre": "Pájaros con mancuernas",
+      "descripcion": "Ejercicio clásico de hombros.",
+      "video": "https://www.youtube.com/watch?v=UXjj1G7c0F8"
+    },
+    {
+      "nombre": "Press tras nuca",
+      "descripcion": "Ejercicio clásico de hombros.",
+      "video": "https://www.youtube.com/watch?v=ZSPZob_1TOk"
+    },
+    {
+      "nombre": "Elevaciones en polea",
+      "descripcion": "Ejercicio clásico de hombros.",
+      "video": "https://www.youtube.com/watch?v=HKBzjrb1TkM"
+    },
+    {
+      "nombre": "Press con mancuernas sentado",
+      "descripcion": "Ejercicio clásico de hombros.",
+      "video": "https://www.youtube.com/watch?v=B-aVuyhvLHU"
+    },
+    {
+      "nombre": "Face pull",
+      "descripcion": "Ejercicio clásico de hombros.",
+      "video": "https://www.youtube.com/watch?v=rep-qVOkqgk"
+    },
+    {
+      "nombre": "Press en máquina",
+      "descripcion": "Ejercicio clásico de hombros.",
+      "video": "https://www.youtube.com/watch?v=GYmwYni9sZk"
+    },
+    {
+      "nombre": "Elevaciones inclinadas",
+      "descripcion": "Ejercicio clásico de hombros.",
+      "video": "https://www.youtube.com/watch?v=hnWDbjcr0f4"
+    },
+    {
+      "nombre": "Press de hombros alterno",
+      "descripcion": "Ejercicio clásico de hombros.",
+      "video": "https://www.youtube.com/watch?v=qN5x2vquMyg"
+    },
+    {
+      "nombre": "Elevaciones con disco",
+      "descripcion": "Ejercicio clásico de hombros.",
+      "video": "https://www.youtube.com/watch?v=QlH1uD6Q6hE"
+    },
+    {
+      "nombre": "Press Z",
+      "descripcion": "Ejercicio clásico de hombros.",
+      "video": "https://www.youtube.com/watch?v=tTZyZbXllD8"
+    }
+  ]
+}

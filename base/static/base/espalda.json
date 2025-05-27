@@ -1,0 +1,75 @@
+{
+  "grupo": "Espalda",
+  "ejercicios": [
+    {
+      "nombre": "Dominadas",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=Odgd_kd-_-8"
+    },
+    {
+      "nombre": "Remo con barra",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=P_kNA_HElgA"
+    },
+    {
+      "nombre": "Jalón al pecho",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=1JiNvChA0_Q"
+    },
+    {
+      "nombre": "Remo con mancuerna",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=l4n26ss5oe0"
+    },
+    {
+      "nombre": "Remo en máquina",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=lIU61aCwEGo"
+    },
+    {
+      "nombre": "Peso muerto",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=0XL4cZR2Ink"
+    },
+    {
+      "nombre": "Remo T-bar",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=2anoS6A5DrU"
+    },
+    {
+      "nombre": "Pullover en polea",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=9YQ1YXKko8s"
+    },
+    {
+      "nombre": "Remo invertido",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=Qnf19U2GPUA"
+    },
+    {
+      "nombre": "Jalón tras nuca",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=CCKWD3FZzzM"
+    },
+    {
+      "nombre": "Peso muerto rumano",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=UgqrPwoTick"
+    },
+    {
+      "nombre": "Remo con agarre supino",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=Ag6kIw2cT-s"
+    },
+    {
+      "nombre": "Hiperextensiones",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=PicwGUbAjb4"
+    },
+    {
+      "nombre": "Remo en punta",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=AtkeTkxlxZg"
+    }
+  ]
+}

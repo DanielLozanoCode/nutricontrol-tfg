@@ -1,0 +1,485 @@
+{
+  "muscle_groups": [
+    {
+      "grupo": "Pecho",
+      "ejercicios": [
+        {
+    "nombre": "Press de banca con barra",
+    "descripcion": "Ejercicio clásico de pecho.",
+    "video": "https://www.youtube.com/watch?v=jlFl7WJ1TzI"
+  },
+  {
+    "nombre": "Press inclinado con mancuernas",
+    "descripcion": "Ejercicio clásico de pecho.",
+    "video": "https://www.youtube.com/watch?v=sL6xN9EVDfE"
+  },
+  {
+    "nombre": "Aperturas con mancuernas",
+    "descripcion": "Ejercicio clásico de pecho.",
+    "video": "https://www.youtube.com/watch?v=xyHdY99F640"
+  },
+  {
+    "nombre": "Press declinado",
+    "descripcion": "Ejercicio clásico de pecho.",
+    "video": "https://www.youtube.com/watch?v=NNz3_wUMrvI"
+  },
+  {
+    "nombre": "Flexiones clásicas",
+    "descripcion": "Ejercicio clásico de pecho.",
+    "video": "https://www.youtube.com/watch?v=VsiEATZdNQw"
+  },
+  {
+    "nombre": "Flexiones con palmada",
+    "descripcion": "Ejercicio clásico de pecho.",
+    "video": "https://www.youtube.com/watch?v=pFqDpa5KhPo"
+  },
+  {
+    "nombre": "Press en máquina",
+    "descripcion": "Ejercicio clásico de pecho.",
+    "video": "https://www.youtube.com/watch?v=N7DjfGB8-xY"
+  },
+  {
+    "nombre": "Press con agarre cerrado",
+    "descripcion": "Ejercicio clásico de pecho.",
+    "video": "https://www.youtube.com/watch?v=ZUyebllQ0VU"
+  },
+  {
+    "nombre": "Crossover con poleas",
+    "descripcion": "Ejercicio clásico de pecho.",
+    "video": "https://www.youtube.com/watch?v=HLh-Vqp6lPM"
+  },
+  {
+    "nombre": "Pullover con mancuerna",
+    "descripcion": "Ejercicio clásico de pecho.",
+    "video": "https://www.youtube.com/watch?v=qRhCDkJH8Ck"
+  },
+  {
+    "nombre": "Press en multipower",
+    "descripcion": "Ejercicio clásico de pecho.",
+    "video": "https://www.youtube.com/watch?v=DWMJt_H_Afw"
+  },
+  {
+    "nombre": "Flexiones inclinadas",
+    "descripcion": "Ejercicio clásico de pecho.",
+    "video": "https://www.youtube.com/watch?v=oKrqpvZd6hI"
+  },
+  {
+    "nombre": "Press con mancuernas en banco plano",
+    "descripcion": "Ejercicio clásico de pecho.",
+    "video": "https://www.youtube.com/watch?v=2XtuyTKBU5A"
+  },
+  {
+    "nombre": "Crossover bajo con poleas",
+    "descripcion": "Ejercicio clásico de pecho.",
+    "video": "https://www.youtube.com/watch?v=j7VvOk7buL8"
+  },
+  {
+    "nombre": "Flexiones con peso",
+    "descripcion": "Ejercicio clásico de pecho.",
+    "video": "https://www.youtube.com/watch?v=Y94iLBtYCzw"
+  }
+      ]
+    },
+    {
+  "grupo": "Espalda",
+  "ejercicios": [
+    {
+      "nombre": "Dominadas",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=Odgd_kd-_-8"
+    },
+    {
+      "nombre": "Remo con barra",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=P_kNA_HElgA"
+    },
+    {
+      "nombre": "Jalón al pecho",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=1JiNvChA0_Q"
+    },
+    {
+      "nombre": "Remo con mancuerna",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=l4n26ss5oe0"
+    },
+    {
+      "nombre": "Remo en máquina",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=lIU61aCwEGo"
+    },
+    {
+      "nombre": "Peso muerto",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=0XL4cZR2Ink"
+    },
+    {
+      "nombre": "Remo T-bar",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=2anoS6A5DrU"
+    },
+    {
+      "nombre": "Pullover en polea",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=9YQ1YXKko8s"
+    },
+    {
+      "nombre": "Remo invertido",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=Qnf19U2GPUA"
+    },
+    {
+      "nombre": "Jalón tras nuca",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=CCKWD3FZzzM"
+    },
+    {
+      "nombre": "Encogimientos en polea",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=ApF7r5xcp4Q"
+    },
+    {
+      "nombre": "Peso muerto rumano",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=UgqrPwoTick"
+    },
+    {
+      "nombre": "Remo con agarre supino",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=Ag6kIw2cT-s"
+    },
+    {
+      "nombre": "Hiperextensiones",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=PicwGUbAjb4"
+    },
+    {
+      "nombre": "Remo en punta",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video": "https://www.youtube.com/watch?v=AtkeTkxlxZg"
+    }
+  ]
+}
+,
+    {
+      "grupo": "Piernas",
+      "ejercicios": [
+        {
+          "nombre": "Sentadilla libre",
+          "descripcion": "Ejercicio clásico de piernas.",
+          "video": "https://www.youtube.com/watch?v=UXJrBgI2RxA"
+        },
+        {
+          "nombre": "Prensa de piernas",
+          "descripcion": "Ejercicio clásico de piernas.",
+          "video": "https://www.youtube.com/watch?v=IZxyjW7MPJQ"
+        },
+        {
+          "nombre": "Zancadas con mancuernas",
+          "descripcion": "Ejercicio clásico de piernas.",
+          "video": "https://www.youtube.com/watch?v=wrwwXE_x-pQ"
+        },
+        {
+          "nombre": "Curl femoral",
+          "descripcion": "Ejercicio clásico de piernas.",
+          "video": "https://www.youtube.com/watch?v=1Tq3QdYUuHs"
+        },
+        {
+          "nombre": "Extensión de cuádriceps",
+          "descripcion": "Ejercicio clásico de piernas.",
+          "video": "https://www.youtube.com/watch?v=YyvSfVjQeL0"
+        },
+        {
+          "nombre": "Sentadilla hack",
+          "descripcion": "Ejercicio clásico de piernas.",
+          "video": "https://www.youtube.com/watch?v=FLcUQeH7Oug"
+        },
+        {
+          "nombre": "Peso muerto rumano",
+          "descripcion": "Ejercicio clásico de piernas.",
+          "video": "https://www.youtube.com/watch?v=8jJIxz2xM2A"
+        },
+        {
+          "nombre": "Step up con mancuernas",
+          "descripcion": "Ejercicio clásico de piernas.",
+          "video": "https://www.youtube.com/watch?v=EXJQ56OAtqo"
+        },
+        {
+          "nombre": "Hip thrust",
+          "descripcion": "Ejercicio clásico de piernas.",
+          "video": "https://www.youtube.com/watch?v=LM8XHLYJoYs"
+        },
+        {
+          "nombre": "Sentadilla búlgara",
+          "descripcion": "Ejercicio clásico de piernas.",
+          "video": "https://www.youtube.com/watch?v=2C-uNgKwPLE"
+        },
+        {
+          "nombre": "Sissy squat",
+          "descripcion": "Ejercicio clásico de piernas.",
+          "video": "https://www.youtube.com/watch?v=nSg0Kd4mnn4"
+        },
+        {
+          "nombre": "Curl femoral sentado",
+          "descripcion": "Ejercicio clásico de piernas.",
+          "video": "https://www.youtube.com/watch?v=ljO4jkwv8wU"
+        },
+        {
+          "nombre": "Sentadilla frontal",
+          "descripcion": "Ejercicio clásico de piernas.",
+          "video": "https://www.youtube.com/watch?v=UxvQ76C-Gx8"
+        },
+        {
+          "nombre": "Good mornings",
+          "descripcion": "Ejercicio clásico de piernas.",
+          "video": "https://www.youtube.com/watch?v=vKPGe7UOq1E"
+        },
+        {
+          "nombre": "Zancada con barra",
+          "descripcion": "Ejercicio clásico de piernas.",
+          "video": "https://www.youtube.com/watch?v=D7KaRcUTQeE"
+        }
+      ]
+    },
+    {
+      "grupo": "Hombros",
+      "ejercicios": [
+        {
+          "nombre": "Press militar",
+          "descripcion": "Ejercicio clásico de hombros.",
+          "video": "https://www.youtube.com/watch?v=qEwKCR5JCog"
+        },
+        {
+          "nombre": "Elevaciones laterales",
+          "descripcion": "Ejercicio clásico de hombros.",
+          "video": "https://www.youtube.com/watch?v=3VcKaXpzqRo"
+        },
+        {
+          "nombre": "Press Arnold",
+          "descripcion": "Ejercicio clásico de hombros.",
+          "video": "https://www.youtube.com/watch?v=vj2w851ZHRM"
+        },
+        {
+          "nombre": "Elevaciones frontales",
+          "descripcion": "Ejercicio clásico de hombros.",
+          "video": "https://www.youtube.com/watch?v=-t7fuZ0KhDA"
+        },
+        {
+          "nombre": "Encogimientos de hombros",
+          "descripcion": "Ejercicio clásico de hombros.",
+          "video": "https://www.youtube.com/watch?v=6n4Zp8VtbnU"
+        },
+        {
+          "nombre": "Pájaros con mancuernas",
+          "descripcion": "Ejercicio clásico de hombros.",
+          "video": "https://www.youtube.com/watch?v=UXjj1G7c0F8"
+        },
+        {
+          "nombre": "Press tras nuca",
+          "descripcion": "Ejercicio clásico de hombros.",
+          "video": "https://www.youtube.com/watch?v=ZSPZob_1TOk"
+        },
+        {
+          "nombre": "Elevaciones en polea",
+          "descripcion": "Ejercicio clásico de hombros.",
+          "video": "https://www.youtube.com/watch?v=HKBzjrb1TkM"
+        },
+        {
+          "nombre": "Press con mancuernas sentado",
+          "descripcion": "Ejercicio clásico de hombros.",
+          "video": "https://www.youtube.com/watch?v=B-aVuyhvLHU"
+        },
+        {
+          "nombre": "Face pull",
+          "descripcion": "Ejercicio clásico de hombros.",
+          "video": "https://www.youtube.com/watch?v=rep-qVOkqgk"
+        },
+        {
+          "nombre": "Press en máquina",
+          "descripcion": "Ejercicio clásico de hombros.",
+          "video": "https://www.youtube.com/watch?v=GYmwYni9sZk"
+        },
+        {
+          "nombre": "Elevaciones inclinadas",
+          "descripcion": "Ejercicio clásico de hombros.",
+          "video": "https://www.youtube.com/watch?v=hnWDbjcr0f4"
+        },
+        {
+          "nombre": "Press de hombros alterno",
+          "descripcion": "Ejercicio clásico de hombros.",
+          "video": "https://www.youtube.com/watch?v=qN5x2vquMyg"
+        },
+        {
+          "nombre": "Elevaciones con disco",
+          "descripcion": "Ejercicio clásico de hombros.",
+          "video": "https://www.youtube.com/watch?v=QlH1uD6Q6hE"
+        },
+        {
+          "nombre": "Press Z",
+          "descripcion": "Ejercicio clásico de hombros.",
+          "video": "https://www.youtube.com/watch?v=tTZyZbXllD8"
+        }
+      ]
+    },
+    {
+      "grupo": "Brazos",
+      "ejercicios": [
+        {
+          "nombre": "Curl con barra",
+          "descripcion": "Ejercicio clásico de brazos.",
+          "video": "https://www.youtube.com/watch?v=kwG2ipFRgfo"
+        },
+        {
+          "nombre": "Curl martillo",
+          "descripcion": "Ejercicio clásico de brazos.",
+          "video": "https://www.youtube.com/watch?v=zC3nLlEvin4"
+        },
+        {
+          "nombre": "Fondos de tríceps",
+          "descripcion": "Ejercicio clásico de brazos.",
+          "video": "https://www.youtube.com/watch?v=6kALZikXxLc"
+        },
+        {
+          "nombre": "Extensiones de tríceps en polea",
+          "descripcion": "Ejercicio clásico de brazos.",
+          "video": "https://www.youtube.com/watch?v=2-LAMcpzODU"
+        },
+        {
+          "nombre": "Curl concentrado",
+          "descripcion": "Ejercicio clásico de brazos.",
+          "video": "https://www.youtube.com/watch?v=0AUGkch3tzc"
+        },
+        {
+          "nombre": "Press cerrado",
+          "descripcion": "Ejercicio clásico de brazos.",
+          "video": "https://www.youtube.com/watch?v=6JtP6ju0IMw"
+        },
+        {
+          "nombre": "Curl predicador",
+          "descripcion": "Ejercicio clásico de brazos.",
+          "video": "https://www.youtube.com/watch?v=d_KZxkY_0cM"
+        },
+        {
+          "nombre": "Patada de tríceps",
+          "descripcion": "Ejercicio clásico de brazos.",
+          "video": "https://www.youtube.com/watch?v=6SS6K3lAwZ8"
+        },
+        {
+          "nombre": "Curl en banco inclinado",
+          "descripcion": "Ejercicio clásico de brazos.",
+          "video": "https://www.youtube.com/watch?v=soxrZlIl35U"
+        },
+        {
+          "nombre": "Curl con polea baja",
+          "descripcion": "Ejercicio clásico de brazos.",
+          "video": "https://www.youtube.com/watch?v=KTKpz7xJ9Y4"
+        },
+        {
+          "nombre": "Extensión de tríceps en banco",
+          "descripcion": "Ejercicio clásico de brazos.",
+          "video": "https://www.youtube.com/watch?v=hK1tT-l5hZ8"
+        },
+        {
+          "nombre": "Dominadas supinas",
+          "descripcion": "Ejercicio clásico de brazos.",
+          "video": "https://www.youtube.com/watch?v=bEv6CCg2BC8"
+        },
+        {
+          "nombre": "Flexiones diamante",
+          "descripcion": "Ejercicio clásico de brazos.",
+          "video": "https://www.youtube.com/watch?v=J0DnG1_S92I"
+        },
+        {
+          "nombre": "Zottman curl",
+          "descripcion": "Ejercicio clásico de brazos.",
+          "video": "https://www.youtube.com/watch?v=U8dD1jv0yWQ"
+        },
+        {
+          "nombre": "Curl inverso",
+          "descripcion": "Ejercicio clásico de brazos.",
+          "video": "https://www.youtube.com/watch?v=0AUGkch3tzc"
+        }
+      ]
+    },
+    {
+      "grupo": "Abdominales",
+      "ejercicios": [
+        {
+          "nombre": "Crunch abdominal",
+          "descripcion": "Ejercicio clásico de abdominales.",
+          "video": "https://www.youtube.com/watch?v=Xyd_fa5zoEU"
+        },
+        {
+          "nombre": "Elevaciones de piernas",
+          "descripcion": "Ejercicio clásico de abdominales.",
+          "video": "https://www.youtube.com/watch?v=JB2oyawG9KI"
+        },
+        {
+          "nombre": "Plancha abdominal",
+          "descripcion": "Ejercicio clásico de abdominales.",
+          "video": "https://www.youtube.com/watch?v=pSHjTRCQxIw"
+        },
+        {
+          "nombre": "Bicicleta en el aire",
+          "descripcion": "Ejercicio clásico de abdominales.",
+          "video": "https://www.youtube.com/watch?v=9FGilxCbdz8"
+        },
+        {
+          "nombre": "Toques a talón",
+          "descripcion": "Ejercicio clásico de abdominales.",
+          "video": "https://www.youtube.com/watch?v=QK0vmuQkM1o"
+        },
+        {
+          "nombre": "Crunch inverso",
+          "descripcion": "Ejercicio clásico de abdominales.",
+          "video": "https://www.youtube.com/watch?v=JB2oyawG9KI"
+        },
+        {
+          "nombre": "V-ups",
+          "descripcion": "Ejercicio clásico de abdominales.",
+          "video": "https://www.youtube.com/watch?v=1fbU_MkV7NE"
+        },
+        {
+          "nombre": "Mountain climbers",
+          "descripcion": "Ejercicio clásico de abdominales.",
+          "video": "https://www.youtube.com/watch?v=nmwgirgXLYM"
+        },
+        {
+          "nombre": "Plancha lateral",
+          "descripcion": "Ejercicio clásico de abdominales.",
+          "video": "https://www.youtube.com/watch?v=K2VljzCC16g"
+        },
+        {
+          "nombre": "Ab wheel rollout",
+          "descripcion": "Ejercicio clásico de abdominales.",
+          "video": "https://www.youtube.com/watch?v=Q3YcZqzEJmI"
+        },
+        {
+          "nombre": "Elevaciones en barra",
+          "descripcion": "Ejercicio clásico de abdominales.",
+          "video": "https://www.youtube.com/watch?v=8QcDb7Qqa14"
+        },
+        {
+          "nombre": "Crunch en máquina",
+          "descripcion": "Ejercicio clásico de abdominales.",
+          "video": "https://www.youtube.com/watch?v=GJoR4YvPNSA"
+        },
+        {
+          "nombre": "Tijeras",
+          "descripcion": "Ejercicio clásico de abdominales.",
+          "video": "https://www.youtube.com/watch?v=3cWg5vpeFco"
+        },
+        {
+          "nombre": "Escalador cruzado",
+          "descripcion": "Ejercicio clásico de abdominales.",
+          "video": "https://www.youtube.com/watch?v=4QZrxFgbGcM"
+        },
+        {
+          "nombre": "Russian twist",
+          "descripcion": "Ejercicio clásico de abdominales.",
+          "video": "https://www.youtube.com/watch?v=wkD8rjkodUI"
+        }
+      ]
+    }
+  ]
+}

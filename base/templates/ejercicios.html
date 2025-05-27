@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Ejercicios por grupo muscular{% endblock %}
+
+{% block extra_head %}
+<style>
+  .contenedor-ejercicios {
+    max-width: 600px;
+    margin: 40px auto;
+    text-align: center;
+  }
+
+  .grupo-btn {
+    display: block;
+    padding: 12px 20px;
+    margin: 10px auto;
+    background-color: #1a73e8;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    width: fit-content;
+  }
+
+  .grupo-btn:hover {
+    background-color: #0c54b8;
+  }
+
+  .volver-dashboard {
+    display: block;
+    margin-top: 30px;
+    text-align: center;
+  }
+
+  .volver-dashboard a {
+    text-decoration: none;
+    background-color: #1a73e8;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+  }
+
+  .volver-dashboard a:hover {
+    background-color: #0c54b8;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="contenedor-ejercicios">
+  <h1>Selecciona un grupo muscular</h1>
+
+  <a href="{% url 'vista_pecho' %}" class="grupo-btn">Pecho</a>
+  <a href="{% url 'vista_espalda' %}" class="grupo-btn">Espalda</a>
+  <a href="{% url 'vista_piernas' %}" class="grupo-btn">Piernas</a>
+  <a href="{% url 'vista_hombros' %}" class="grupo-btn">Hombros</a>
+  <a href="{% url 'vista_brazos' %}" class="grupo-btn">Brazos</a>
+  <a href="{% url 'vista_abdominales' %}" class="grupo-btn">Abdominales</a>
+
+  <div class="volver-dashboard">
+    <a href="{% url 'dashboard' %}">← Volver al dashboard</a>
+  </div>
+</div>
+{% endblock %}

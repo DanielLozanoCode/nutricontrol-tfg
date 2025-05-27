@@ -1,0 +1,201 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}{% trans "Nutricontrol" %}{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .navbar-container {
+      background-color: #0070dd;
+      color: white;
+    }
+    .navbar-top {
+      background-color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      flex-wrap: wrap;
+    }
+    .navbar-top img.logo {
+      height: 40px;
+      max-width: 100%;
+    }
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+    }
+    .bar {
+      width: 25px;
+      height: 3px;
+      background-color: #0070dd;
+      margin: 4px 0;
+    }
+    .navbar-bottom {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      background-color: #0070dd;
+      position: relative;
+    }
+    .navbar-bottom a {
+      color: white;
+      padding: 12px 20px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .navbar-bottom a:hover {
+      background-color: #005bb5;
+    }
+    .logout-form {
+      margin-left: auto;
+      margin-right: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    .logout-form button,
+    .logout-form a {
+      background: none;
+      border: none;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      padding: 12px 20px;
+      text-decoration: none;
+    }
+    .logout-form button:hover,
+    .logout-form a:hover {
+      background-color: #005bb5;
+    }
+    @media (max-width: 768px) {
+      .navbar-top {
+        flex-direction: column;
+        align-items: center;
+      }
+      .navbar-top img.logo {
+        height: auto;
+        max-height: 40px;
+        margin-bottom: 10px;
+      }
+      .menu-toggle {
+        display: flex;
+      }
+      .navbar-bottom {
+        display: none;
+        flex-direction: column;
+        align-items: flex-start;
+        background-color: #0070dd;
+        padding-left: 20px;
+      }
+      .navbar-bottom.active {
+        display: flex;
+      }
+      .navbar-bottom a {
+        padding: 12px 0;
+        width: 100%;
+      }
+      .logout-form {
+        width: 100%;
+        flex-direction: column;
+        margin: 0;
+      }
+      .logout-form button,
+      .logout-form a {
+        width: 100%;
+        text-align: left;
+        padding: 12px 0;
+      }
+    }
+  </style>
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+<div class="navbar-container">
+  <div class="navbar-top">
+    <img src="{% static 'base/NutriControlLogo.png' %}" alt="{% trans 'Nutricontrol' %}" class="logo">
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+    </div>
+  </div>
+  <div class="navbar-bottom" id="navbarMenu">
+    <a href="{% url 'dashboard' %}">{% trans "MI PÁGINA DE INICIO" %}</a>
+    <a href="{% url 'registro_alimentacion' %}">{% trans "ALIMENTOS" %}</a>
+    <a href="{% url 'ver_ejercicios' %}">{% trans "EJERCICIO" %}</a>
+    <a href="{% url 'lista_registros' %}">{% trans "INFORMES" %}</a>
+    {% if user.is_authenticated %}
+      <form method="post" action="{% url 'logout' %}" class="logout-form">
+        {% csrf_token %}
+        <button type="submit">{% trans "CERRAR SESIÓN" %}</button>
+      </form>
+    {% else %}
+      <div class="logout-form">
+        <a href="{% url 'login' %}">{% trans "INICIAR SESIÓN" %}</a>
+        <a href="{% url 'registro' %}">{% trans "REGISTRARSE" %}</a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<div style="padding: 20px;">
+  {% block content %}{% endblock %}
+</div>
+
+{% block extra_script %}{% endblock %}
+<script>
+  function toggleMenu() {
+    const menu = document.getElementById('navbarMenu');
+    menu.classList.toggle('active');
+  }
+</script>
+
+<footer style="background-color: #f8f8f8; padding: 40px 20px; text-align: center; font-size: 14px; color: #333;">
+  <div style="max-width: 1000px; margin: auto;">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-around; margin-bottom: 20px;">
+      <div>
+        <h4>{% trans "Acerca de" %}</h4>
+        <p><a href="#">{% trans "Sobre NutriControl" %}</a></p>
+        <p><a href="#">{% trans "Contacto" %}</a></p>
+      </div>
+      <div>
+        <h4>{% trans "Recursos" %}</h4>
+        <p><a href="#">{% trans "Educación nutricional" %}</a></p>
+        <p><a href="#">{% trans "Consejos saludables" %}</a></p>
+      </div>
+      <div>
+        <h4>{% trans "Legal" %}</h4>
+        <p><a href="#">{% trans "Términos y condiciones" %}</a></p>
+        <p><a href="#">{% trans "Política de privacidad" %}</a></p>
+      </div>
+      <div>
+        <h4>{% trans "Idioma" %}</h4>
+        <select onchange="cambiarIdioma(this.value)">
+          <option value="es">Español</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+    </div>
+    <p>© 2025 NutriControl. {% trans "Proyecto académico desarrollado con fines educativos." %}</p>
+  </div>
+</footer>
+
+<script>
+  function cambiarIdioma(lang) {
+    alert("{% trans 'Esta función aún no está implementada.' %} " + lang);
+  }
+</script>
+</body>
+</html>

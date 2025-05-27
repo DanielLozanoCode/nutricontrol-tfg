@@ -1,0 +1,80 @@
+{
+  "grupo": "Abdominales",
+  "ejercicios": [
+    {
+      "nombre": "Crunch abdominal",
+      "descripcion": "Ejercicio clásico de abdominales.",
+      "video": "https://www.youtube.com/watch?v=OsUz898onTE"
+    },
+    {
+      "nombre": "Elevaciones de piernas",
+      "descripcion": "Ejercicio clásico de abdominales.",
+      "video": "https://www.youtube.com/watch?v=4oYU_1HjbtM"
+    },
+    {
+      "nombre": "Plancha abdominal",
+      "descripcion": "Ejercicio clásico de abdominales.",
+      "video": "https://www.youtube.com/watch?v=Bsof_3XO2Tg"
+    },
+    {
+      "nombre": "Bicicleta en el aire",
+      "descripcion": "Ejercicio clásico de abdominales.",
+      "video": "https://www.youtube.com/watch?v=QGfnO-nyKck"
+    },
+    {
+      "nombre": "Toques a talón",
+      "descripcion": "Ejercicio clásico de abdominales.",
+      "video": "https://www.youtube.com/watch?v=OO2a0rg1vu4"
+    },
+    {
+      "nombre": "Crunch inverso",
+      "descripcion": "Ejercicio clásico de abdominales.",
+      "video": "https://www.youtube.com/watch?v=TqLDIDatbhE"
+    },
+    {
+      "nombre": "V-ups",
+      "descripcion": "Ejercicio clásico de abdominales.",
+      "video": "https://www.youtube.com/watch?v=DqxWfOnhVO8"
+    },
+    {
+      "nombre": "Mountain climbers",
+      "descripcion": "Ejercicio clásico de abdominales.",
+      "video": "https://www.youtube.com/watch?v=mHg0OEUnLhw"
+    },
+    {
+      "nombre": "Plancha lateral",
+      "descripcion": "Ejercicio clásico de abdominales.",
+      "video": "https://www.youtube.com/watch?v=bRivOELQVOs"
+    },
+    {
+      "nombre": "Ab wheel rollout",
+      "descripcion": "Ejercicio clásico de abdominales.",
+      "video": "https://www.youtube.com/watch?v=THLI7g16ti0"
+    },
+    {
+      "nombre": "Elevaciones en barra",
+      "descripcion": "Ejercicio clásico de abdominales.",
+      "video": "https://www.youtube.com/watch?v=8QcDb7Qqa14"
+    },
+    {
+      "nombre": "Crunch en máquina",
+      "descripcion": "Ejercicio clásico de abdominales.",
+      "video": "https://www.youtube.com/watch?v=fw9GTl1qeHE"
+    },
+    {
+      "nombre": "Tijeras",
+      "descripcion": "Ejercicio clásico de abdominales.",
+      "video": "https://www.youtube.com/watch?v=7a-s00S2Htk"
+    },
+    {
+      "nombre": "Escalador cruzado",
+      "descripcion": "Ejercicio clásico de abdominales.",
+      "video": "https://www.youtube.com/watch?v=SMs2N1_ce7g"
+    },
+    {
+      "nombre": "Russian twist",
+      "descripcion": "Ejercicio clásico de abdominales.",
+      "video": "https://www.youtube.com/watch?v=zxeb00EIRg8"
+    }
+  ]
+}

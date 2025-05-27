@@ -1,52 +1,106 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Editar registro</title>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const input = document.getElementById("id_alimento_nombre");
-            const datalist = document.getElementById("sugerencias");
+{% extends "base.html" %}
+{% block title %}Editar registro{% endblock %}
 
-            input.addEventListener("input", async function() {
-                const q = encodeURIComponent(input.value);
-                const response = await fetch(`/sugerencias-alimentos/?q=${q}`);
-                const datos = await response.json();
+{% block extra_head %}
+<style>
+  form {
+    max-width: 500px;
+    margin: 30px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
 
-                datalist.innerHTML = "";
-                datos.forEach(nombre => {
-                    const option = document.createElement("option");
-                    option.value = nombre;
-                    datalist.appendChild(option);
-                });
-            });
-        });
-    </script>
-</head>
-<body>
-    <h2>Editar registro de alimentación</h2>
+  input, select, button {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
 
-    {% if messages %}
-        {% for message in messages %}
-            <p style="color: green;">{{ message }}</p>
-        {% endfor %}
-    {% endif %}
+  button {
+    background-color: #1a73e8;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
 
-    <form method="POST">
-        {% csrf_token %}
-        <input list="sugerencias"
-               id="id_alimento_nombre"
-               name="alimento_nombre"
-               placeholder="Escribe un alimento..."
-               value="{{ form.alimento_nombre.value }}"
-               required>
-        <datalist id="sugerencias"></datalist>
+  button:hover {
+    background-color: #0c54b8;
+  }
 
-        {{ form.cantidad }}
+  .mensaje {
+    color: green;
+    text-align: center;
+    margin-top: 10px;
+  }
 
-        <button type="submit">Guardar cambios</button>
-    </form>
+  .volver {
+    text-align: center;
+    margin-top: 30px;
+  }
 
-    <p><a href="{% url 'lista_registros' %}">← Volver a mis registros</a></p>
-</body>
-</html>
+  .volver a {
+    text-decoration: none;
+    background-color: #1a73e8;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+  }
+
+  .volver a:hover {
+    background-color: #0c54b8;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+  <h2 style="text-align:center; margin-top:30px;">Editar registro de alimentación</h2>
+
+  {% if messages %}
+    {% for message in messages %}
+      <p class="mensaje">{{ message }}</p>
+    {% endfor %}
+  {% endif %}
+
+  <form method="POST">
+    {% csrf_token %}
+    <input list="sugerencias"
+           id="id_alimento_nombre"
+           name="alimento_nombre"
+           placeholder="Escribe un alimento..."
+           value="{{ form.alimento_nombre.value }}"
+           required>
+    <datalist id="sugerencias"></datalist>
+
+    {{ form.cantidad }}
+
+    <button type="submit">Guardar cambios</button>
+  </form>
+
+  <div class="volver">
+    <a href="{% url 'lista_registros' %}">← Volver a mis registros</a>
+  </div>
+{% endblock %}
+
+{% block extra_script %}
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const input = document.getElementById("id_alimento_nombre");
+    const datalist = document.getElementById("sugerencias");
+
+    input.addEventListener("input", async function() {
+      const q = encodeURIComponent(input.value);
+      const response = await fetch(`/sugerencias-alimentos/?q=${q}`);
+      const datos = await response.json();
+
+      datalist.innerHTML = "";
+      datos.forEach(nombre => {
+        const option = document.createElement("option");
+        option.value = nombre;
+        datalist.appendChild(option);
+      });
+    });
+  });
+</script>
+{% endblock %}

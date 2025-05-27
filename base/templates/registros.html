@@ -1,51 +1,116 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Mis registros</title>
-    <script>
-        function confirmarEliminacion(event, nombreAlimento) {
-            if (!confirm("¿Estás seguro de que deseas eliminar el registro de " + nombreAlimento + "?")) {
-                event.preventDefault(); // Cancela el enlace si no se confirma
-            }
-        }
-    </script>
-</head>
-<body>
-    <h2>Todos tus registros</h2>
+{% extends "base.html" %}
+{% block title %}Mis registros{% endblock %}
 
-    {% if messages %}
-        {% for message in messages %}
-            <p style="color: green;">{{ message }}</p>
-        {% endfor %}
-    {% endif %}
+{% block extra_head %}
+<style>
+  h2 {
+    text-align: center;
+    margin: 30px 0 20px;
+  }
 
-    {% if registros %}
-        <table border="1">
-            <tr>
-                <th>Fecha</th>
-                <th>Alimento</th>
-                <th>Cantidad (g)</th>
-                <th>Calorías</th>
-                <th>Acciones</th>
-            </tr>
-            {% for r in registros %}
-                <tr>
-                    <td>{{ r.fecha }}</td>
-                    <td>{{ r.alimento.nombre }}</td>
-                    <td>{{ r.cantidad }}</td>
-                    <td>{{ r.calorias_totales|floatformat:2 }}</td>
-                    <td>
-                        <a href="{% url 'editar_registro' r.pk %}">Editar</a> |
-                        <a href="{% url 'eliminar_registro' r.pk %}" onclick="confirmarEliminacion(event, '{{ r.alimento.nombre }}')">Eliminar</a>
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
-    {% else %}
-        <p>No has registrado ningún alimento aún.</p>
-    {% endif %}
+  table {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 6px;
+    overflow: hidden;
+  }
 
-    <p><a href="{% url 'dashboard' %}">← Volver al dashboard</a></p>
-</body>
-</html>
+  th, td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #1a73e8;
+    color: white;
+  }
+
+  td a {
+    color: #1a73e8;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  td a:hover {
+    text-decoration: underline;
+  }
+
+  .mensaje {
+    text-align: center;
+    color: green;
+    margin: 10px 0;
+  }
+
+  .volver {
+    text-align: center;
+    margin-top: 30px;
+  }
+
+  .volver a {
+    text-decoration: none;
+    background-color: #1a73e8;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+  }
+
+  .volver a:hover {
+    background-color: #0c54b8;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+  <h2>Todos tus registros</h2>
+
+  {% if messages %}
+    {% for message in messages %}
+      <p class="mensaje">{{ message }}</p>
+    {% endfor %}
+  {% endif %}
+
+  {% if registros %}
+    <table>
+      <tr>
+        <th>Fecha</th>
+        <th>Alimento</th>
+        <th>Cantidad (g)</th>
+        <th>Calorías</th>
+        <th>Acciones</th>
+      </tr>
+      {% for r in registros %}
+        <tr>
+          <td>{{ r.fecha }}</td>
+          <td>{{ r.alimento.nombre }}</td>
+          <td>{{ r.cantidad }}</td>
+          <td>{{ r.calorias_totales|floatformat:2 }}</td>
+          <td>
+            <a href="{% url 'editar_registro' r.pk %}">Editar</a> |
+            <a href="{% url 'eliminar_registro' r.pk %}" onclick="confirmarEliminacion(event, '{{ r.alimento.nombre }}')">Eliminar</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    <p style="text-align:center;">No has registrado ningún alimento aún.</p>
+  {% endif %}
+
+  <div class="volver">
+    <a href="{% url 'dashboard' %}">← Volver al dashboard</a>
+  </div>
+{% endblock %}
+
+{% block extra_script %}
+<script>
+  function confirmarEliminacion(event, nombreAlimento) {
+    if (!confirm("¿Estás seguro de que deseas eliminar el registro de " + nombreAlimento + "?")) {
+      event.preventDefault();
+    }
+  }
+</script>
+{% endblock %}
