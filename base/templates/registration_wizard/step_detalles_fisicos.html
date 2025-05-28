@@ -4,16 +4,16 @@
 {% block wizard_title %}{% trans "Tus Detalles Físicos" %}{% endblock wizard_title %}
 
 {% block wizard_step_title %}
-    {% trans "Cuéntanos un poco más sobre ti" %}
+    {{ step_title_from_view|safe }} {# Asume que step_title_from_view se pasa desde get_context_data #}
 {% endblock wizard_step_title %}
 
 {% block wizard_step_description %}
-    <p>{% trans "Esta información nos ayuda a calcular tus necesidades y personalizar tu plan." %}</p>
+    <p>{{ step_description_from_view|safe }}</p> {# Asume que step_description_from_view se pasa desde get_context_data #}
 {% endblock wizard_step_description %}
 
 {% block wizard_form_fields %}
     {# wizard.form se refiere al formulario del paso actual (Paso2DetallesFisicosForm) #}
-
+<br>
     {# Campo Edad #}
     <div class="form-field">
         <label for="{{ wizard.form.edad.id_for_label }}">{{ wizard.form.edad.label }}</label>
@@ -23,7 +23,7 @@
         {% endif %}
         {% if wizard.form.edad.errors %}
             <div class="errorlist">
-                {% for error in wizard.form.edad.errors %}{{ error }}{% endfor %}
+                {% for error in wizard.form.edad.errors %}<p>{{ error }}</p>{% endfor %}
             </div>
         {% endif %}
     </div>
@@ -37,7 +37,7 @@
         {% endif %}
         {% if wizard.form.peso.errors %}
             <div class="errorlist">
-                {% for error in wizard.form.peso.errors %}{{ error }}{% endfor %}
+                {% for error in wizard.form.peso.errors %}<p>{{ error }}</p>{% endfor %}
             </div>
         {% endif %}
     </div>
@@ -51,34 +51,36 @@
         {% endif %}
         {% if wizard.form.altura.errors %}
             <div class="errorlist">
-                {% for error in wizard.form.altura.errors %}{{ error }}{% endfor %}
+                {% for error in wizard.form.altura.errors %}<p>{{ error }}</p>{% endfor %}
             </div>
         {% endif %}
     </div>
 
     {# Campo Sexo - Renderizado personalizado para RadioSelect como botones #}
-    <div class="form-field form-field-choices" style="margin-top: 20px;">
-        <label>{{ wizard.form.sexo.label }}</label> {# Etiqueta principal del campo #}
+    <div class="form-field" style="margin-top: 20px;"> {# Contenedor general para el campo Sexo #}
+        <label>{{ wizard.form.sexo.label }}</label> {# Esta es la etiqueta principal "Sexo biológico", usará estilos de .form-field label #}
         
-        <ul> {# El widget RadioSelect renderiza como <ul><li><label><input></label></li>...</ul> #}
-            {% for radio in wizard.form.sexo %}
-            <li>
-                <label for="{{ radio.id_for_label }}">
-                    {{ radio.tag }} {# Esto renderiza el <input type="radio"> (que estará oculto por CSS) #}
-                    {{ radio.choice_label }} {# El texto de la opción #}
-                </label>
-            </li>
-            {% endfor %}
-        </ul>
+        <div class="form-field-choices" style="margin-top: 8px;"> {# Contenedor específico para las opciones-botones #}
+            <ul> 
+                {% for radio_option in wizard.form.sexo %}
+                <li>
+                    {{ radio_option.tag }} {# Renderiza <input type="radio" ... id="{{ radio_option.id_for_label }}"> #}
+                    <label for="{{ radio_option.id_for_label }}" class="sexo-option-button-label"> {# Label para el botón visual, aplicarle .form-field-choices label indirectamente o copiar estilos #}
+                        <span class="objective-text">{{ radio_option.choice_label }}</span>
+                    </label>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
         
         {% if wizard.form.sexo.help_text %}
             <small class="helptext" style="text-align: center; display: block; margin-top:10px;">{{ wizard.form.sexo.help_text|safe }}</small>
         {% endif %}
         
         {% if wizard.form.sexo.errors %}
-            <div class="errorlist">
+            <div class="errorlist" style="text-align: center; margin-top: 15px;">
                 {% for error in wizard.form.sexo.errors %}
-                    {{ error }}
+                   <p>{{ error }}</p>
                 {% endfor %}
             </div>
         {% endif %}

@@ -1,63 +1,82 @@
 {% extends "base.html" %}
-{% block title %}Ejercicios por grupo muscular{% endblock %}
+{% load static i18n %} {# Añadido load static i18n #}
+
+{% block title %}{% trans "Ejercicios por Grupo Muscular" %}{% endblock %}
+
+{# --- ITEMS PARA EL DESPLEGABLE DE ESCRITORIO DE EJERCICIO --- #}
+{% block ejercicio_dropdown_items %}
+    {# Debes crear la URL 'ejercicios_basedatos' y su vista/plantilla #}
+    <li><a href="#">{% trans "Base de Datos (Ejercicios)" %}</a></li>
+    {# Podrías añadir un enlace a la página actual si tiene sentido #}
+    <li><a href="{% url 'ver_ejercicios' %}">{% trans "Ver por Grupos" %}</a></li>
+{% endblock ejercicio_dropdown_items %}
+
+{# --- ITEMS PARA EL DESPLEGABLE DE EJERCICIO EN MÓVIL --- #}
+{% block mobile_ejercicio_dropdown_items %}
+    <a href="#" class="mobile-dropdown-link">↳ {% trans "Base de Datos (Ejercicios)" %}</a>
+    <a href="{% url 'ver_ejercicios' %}" class="mobile-dropdown-link">↳ {% trans "Ver por Grupos" %}</a>
+{% endblock mobile_ejercicio_dropdown_items %}
 
 {% block extra_head %}
+{{ block.super }}
 <style>
   .contenedor-ejercicios {
     max-width: 600px;
     margin: 40px auto;
     text-align: center;
   }
-
+  .contenedor-ejercicios h1 { /* Añadido estilo para el h1 */
+    margin-bottom: 30px;
+    font-size: 2em;
+  }
   .grupo-btn {
     display: block;
-    padding: 12px 20px;
-    margin: 10px auto;
-    background-color: #1a73e8;
+    padding: 12px 25px; /* Un poco más de padding */
+    margin: 12px auto; /* Un poco más de margen */
+    background-color: #007bff; /* Usando el azul primario de los botones */
     color: white;
     text-decoration: none;
     border-radius: 5px;
     font-weight: bold;
     width: fit-content;
+    min-width: 200px; /* Ancho mínimo para consistencia */
+    transition: background-color 0.2s ease;
   }
-
   .grupo-btn:hover {
-    background-color: #0c54b8;
+    background-color: #0056b3; /* Oscurecer al pasar el mouse */
   }
-
   .volver-dashboard {
     display: block;
-    margin-top: 30px;
+    margin-top: 40px; /* Más margen */
     text-align: center;
   }
-
   .volver-dashboard a {
     text-decoration: none;
-    background-color: #1a73e8;
+    background-color: #6c757d; /* Un gris para diferenciarlo de los botones de acción */
     color: white;
     padding: 10px 20px;
     border-radius: 5px;
+    transition: background-color 0.2s ease;
   }
-
   .volver-dashboard a:hover {
-    background-color: #0c54b8;
+    background-color: #5a6268;
   }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="contenedor-ejercicios">
-  <h1>Selecciona un grupo muscular</h1>
+  <h1>{% trans "Selecciona un grupo muscular" %}</h1>
 
-  <a href="{% url 'vista_pecho' %}" class="grupo-btn">Pecho</a>
-  <a href="{% url 'vista_espalda' %}" class="grupo-btn">Espalda</a>
-  <a href="{% url 'vista_piernas' %}" class="grupo-btn">Piernas</a>
-  <a href="{% url 'vista_hombros' %}" class="grupo-btn">Hombros</a>
-  <a href="{% url 'vista_brazos' %}" class="grupo-btn">Brazos</a>
-  <a href="{% url 'vista_abdominales' %}" class="grupo-btn">Abdominales</a>
+  <a href="{% url 'vista_pecho' %}" class="grupo-btn">{% trans "Pecho" %}</a>
+  <a href="{% url 'vista_espalda' %}" class="grupo-btn">{% trans "Espalda" %}</a>
+  <a href="{% url 'vista_piernas' %}" class="grupo-btn">{% trans "Piernas" %}</a>
+  <a href="{% url 'vista_hombros' %}" class="grupo-btn">{% trans "Hombros" %}</a>
+  <a href="{% url 'vista_brazos' %}" class="grupo-btn">{% trans "Brazos" %}</a>
+  <a href="{% url 'vista_abdominales' %}" class="grupo-btn">{% trans "Abdominales" %}</a>
 
   <div class="volver-dashboard">
-    <a href="{% url 'dashboard' %}">← Volver al dashboard</a>
+    <a href="{% url 'dashboard' %}">← {% trans "Volver al dashboard" %}</a>
   </div>
 </div>
 {% endblock %}

@@ -4,17 +4,58 @@
 {% block wizard_title %}{% trans "Crea tu Cuenta" %}{% endblock wizard_title %}
 
 {% block wizard_step_title %}
-    {% trans "¡Casi listo! Solo necesitamos tus datos de acceso." %}
+    {{ step_title_from_view|safe }}
 {% endblock wizard_step_title %}
 
 {% block wizard_step_description %}
-    <p>{% trans "Elige un nombre de usuario y una contraseña segura para tu cuenta NutriControl." %}</p>
+    <p>{{ step_description_from_view|safe }}</p>
 {% endblock wizard_step_description %}
+
+{% block extra_head %}
+{{ block.super }}
+<style>
+    .password-input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+    .password-input-wrapper input[type="password"],
+    .password-input-wrapper input[type="text"] {
+        padding-right: 45px !important; 
+    }
+    .toggle-password-button {
+        position: absolute;
+        right: 1px; 
+        top: 1px;
+        bottom: 1px;
+        width: 40px; 
+        background: none;
+        border: none;
+        border-left: 1px solid #ced4da; 
+        cursor: pointer;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #606770; 
+        background-color: #fff; 
+        border-top-right-radius: 6px; 
+        border-bottom-right-radius: 6px;
+    }
+    .toggle-password-button:hover {
+        color: #007bff;
+    }
+    .toggle-password-button svg {
+        width: 20px;
+        height: 20px;
+        fill: currentColor;
+    }
+</style>
+{% endblock %}
 
 {% block wizard_form_fields %}
     {# wizard.form se refiere al formulario del paso actual (Paso3CredencialesForm) #}
 
-    {# Mostrar errores generales del formulario (ej. si la validación clean() del form falla globalmente) #}
     {% if wizard.form.non_field_errors %}
         <div class="errorlist nonfield">
             {% for error in wizard.form.non_field_errors %}
@@ -23,7 +64,6 @@
         </div>
     {% endif %}
 
-    {# Campo Nombre de Usuario #}
     <div class="form-field">
         <label for="{{ wizard.form.username.id_for_label }}">{{ wizard.form.username.label }}</label>
         {{ wizard.form.username }}
@@ -32,12 +72,11 @@
         {% endif %}
         {% if wizard.form.username.errors %}
             <div class="errorlist">
-                {% for error in wizard.form.username.errors %}{{ error }}{% endfor %}
+                {% for error in wizard.form.username.errors %}<p>{{ error }}</p>{% endfor %}
             </div>
         {% endif %}
     </div>
 
-    {# Campo Correo Electrónico #}
     <div class="form-field" style="margin-top: 20px;">
         <label for="{{ wizard.form.email.id_for_label }}">{{ wizard.form.email.label }}</label>
         {{ wizard.form.email }}
@@ -46,37 +85,82 @@
         {% endif %}
         {% if wizard.form.email.errors %}
             <div class="errorlist">
-                {% for error in wizard.form.email.errors %}{{ error }}{% endfor %}
+                {% for error in wizard.form.email.errors %}<p>{{ error }}</p>{% endfor %}
             </div>
         {% endif %}
     </div>
 
-    {# Campo Contraseña #}
     <div class="form-field" style="margin-top: 20px;">
         <label for="{{ wizard.form.password.id_for_label }}">{{ wizard.form.password.label }}</label>
-        {{ wizard.form.password }}
+        <div class="password-input-wrapper">
+            {{ wizard.form.password }} {# Esto generará <input type="password" name="X-password" id="id_X-password"> donde X es el nombre del paso #}
+            <button type="button" class="toggle-password-button" id="togglePassword1" aria-label="{% trans 'Mostrar/ocultar contraseña' %}">
+                {# El SVG se establecerá con JavaScript #}
+            </button>
+        </div>
         {% if wizard.form.password.help_text %}
             <small class="helptext">{{ wizard.form.password.help_text|safe }}</small>
         {% endif %}
         {% if wizard.form.password.errors %}
             <div class="errorlist">
-                {% for error in wizard.form.password.errors %}{{ error }}{% endfor %}
+                {% for error in wizard.form.password.errors %}<p>{{ error }}</p>{% endfor %}
             </div>
         {% endif %}
     </div>
 
-    {# Campo Confirmar Contraseña #}
     <div class="form-field" style="margin-top: 20px;">
         <label for="{{ wizard.form.confirm_password.id_for_label }}">{{ wizard.form.confirm_password.label }}</label>
-        {{ wizard.form.confirm_password }}
+        <div class="password-input-wrapper">
+            {{ wizard.form.confirm_password }} {# Esto generará <input type="password" name="X-confirm_password" id="id_X-confirm_password"> #}
+            <button type="button" class="toggle-password-button" id="togglePassword2" aria-label="{% trans 'Mostrar/ocultar confirmación de contraseña' %}">
+                {# El SVG se establecerá con JavaScript #}
+            </button>
+        </div>
         {% if wizard.form.confirm_password.help_text %}
             <small class="helptext">{{ wizard.form.confirm_password.help_text|safe }}</small>
         {% endif %}
         {% if wizard.form.confirm_password.errors %}
             <div class="errorlist">
-                {% for error in wizard.form.confirm_password.errors %}{{ error }}{% endfor %}
+                {% for error in wizard.form.confirm_password.errors %}<p>{{ error }}</p>{% endfor %}
             </div>
         {% endif %}
     </div>
 
 {% endblock wizard_form_fields %}
+
+{% block extra_script %}
+{{ block.super }}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const eyeOpenSVG = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>';
+    const eyeClosedSVG = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.44-4.75C20.27 9.61 16.55 6.5 12 6.5c-1.03 0-2.03.2-2.94.55L10.17 8.2C10.74 7.55 11.35 7 12 7zm-3.09 7.06l2.92 2.92C11.26 17.87 10.65 18 10 18c-2.76 0-5-2.24-5-5 0-.65.13-1.26.36-1.83L1 4.27l1.41-1.41L21.59 20l-1.41 1.41L9.17 14.5c-.05.16-.08.33-.08.5zm11.36-6.01C20.27 9.61 16.55 6.5 12 6.5c-.75 0-1.47.11-2.15.32L12 9.17V9c1.66 0 3 1.34 3 3 0 .25-.03.48-.08.71l2.59 2.59c.05-.23.08-.46.08-.71 0-2.76-2.24-5-5-5z"/></svg>';
+
+    function setupPasswordToggle(passwordInputId, toggleButtonId) {
+        const passwordField = document.getElementById(passwordInputId); // Usamos el ID completo que Django genera
+        const toggleButton = document.getElementById(toggleButtonId);
+
+        if (passwordField && toggleButton) {
+            toggleButton.innerHTML = eyeClosedSVG; // Iniciar con ojo cerrado
+            toggleButton.addEventListener('click', function () {
+                const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordField.setAttribute('type', type);
+                this.innerHTML = type === 'password' ? eyeClosedSVG : eyeOpenSVG;
+            });
+        } else {
+            if (!passwordField) {
+                // console.warn("Campo de contraseña no encontrado con ID:", passwordInputId);
+            }
+            if (!toggleButton) {
+                // console.warn("Botón de toggle no encontrado con ID:", toggleButtonId);
+            }
+        }
+    }
+
+    // Llamamos a la función para cada campo de contraseña, usando el ID que Django genera.
+    // {{ wizard.form.password.id_for_label }} dará algo como "id_credenciales-password"
+    // {{ wizard.form.confirm_password.id_for_label }} dará algo como "id_credenciales-confirm_password"
+    setupPasswordToggle('{{ wizard.form.password.id_for_label }}', 'togglePassword1');
+    setupPasswordToggle('{{ wizard.form.confirm_password.id_for_label }}', 'togglePassword2');
+});
+</script>
+{% endblock %}

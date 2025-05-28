@@ -1,106 +1,75 @@
 {% extends "base.html" %}
 {% load static i18n %}
-{% block title %}{% trans "Inicio | Nutricontrol" %}{% endblock %}
 
-{% block extra_head %}
-<style>
-  .carrusel-container {
-    max-width: 1000px;
-    margin: 50px auto;
-    overflow: hidden;
-    position: relative;
-  }
+{% block title %}{% trans "Dashboard | Nutricontrol" %}{% endblock %}
 
-  .carrusel {
-    display: flex;
-    transition: transform 0.4s ease-in-out;
-  }
+{# --- ITEMS PARA EL DESPLEGABLE DE ESCRITORIO DEL DASHBOARD --- #}
+{% block dashboard_dropdown_items %}
+    {# <li><a href="{% url 'dashboard' %}">{% trans "Inicio (Resumen)" %}</a></li> ELIMINADO POR REDUNDANCIA #}
+    <li><a href="#">{% trans "Mis Objetivos" %}</a></li> {# Placeholder URL #}
+    <li><a href="#">{% trans "Registrar Medidas" %}</a></li> {# Placeholder URL #}
+    <li><a href="#">{% trans "Mi Perfil" %}</a></li> {# Placeholder URL #}
+{% endblock dashboard_dropdown_items %}
 
-  .testimonio {
-    min-width: 100%;
-    box-sizing: border-box;
-    padding: 40px 20px;
-    text-align: center;
-  }
-
-  .testimonio img {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 15px;
-  }
-
-  .testimonio h3 {
-    margin-top: 10px;
-    color: #1a73e8;
-  }
-
-  .testimonio p {
-    font-size: 16px;
-    color: #555;
-  }
-
-  .carrusel-controles {
-    text-align: center;
-    margin-top: 10px;
-  }
-
-  .carrusel-controles button {
-    background-color: #1a73e8;
-    border: none;
-    color: white;
-    padding: 8px 15px;
-    margin: 0 5px;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-
-  .carrusel-controles button:hover {
-    background-color: #0c54b8;
-  }
-</style>
-{% endblock %}
+{# --- ITEMS PARA EL DESPLEGABLE DEL DASHBOARD EN MÓVIL --- #}
+{% block mobile_dashboard_dropdown_items %}
+    {# <a href="{% url 'dashboard' %}" class="mobile-dropdown-link">↳ {% trans "Inicio (Resumen)" %}</a> ELIMINADO POR REDUNDANCIA #}
+    <a href="#" class="mobile-dropdown-link">↳ {% trans "Mis Objetivos" %}</a> {# Placeholder URL #}
+    <a href="#" class="mobile-dropdown-link">↳ {% trans "Registrar Medidas" %}</a> {# Placeholder URL #}
+    <a href="#" class="mobile-dropdown-link">↳ {% trans "Mi Perfil" %}</a> {# Placeholder URL #}
+{% endblock mobile_dashboard_dropdown_items %}
 
 {% block content %}
-  <h1 style="text-align: center; margin-bottom: 30px;">{% trans "Bienvenido a Nutricontrol" %}</h1>
-
-  <div style="text-align: center;">
-    <a href="{% url 'registro_alimentacion' %}"><button>{% trans "Registrar alimentación" %}</button></a>
-    <a href="{% url 'resumen_diario' %}"><button>{% trans "Ver resumen diario" %}</button></a>
-    <a href="{% url 'lista_registros' %}"><button>{% trans "Ver historial de registros" %}</button></a>
-    <a href="{% url 'ver_ejercicios' %}"><button>{% trans "Ver ejercicios" %}</button></a>
-  </div>
-
-  <div class="carrusel-container">
-    <div class="carrusel" id="carruselHistorias">
-      <div class="testimonio">
-        <img src="{% static 'base/testimonio1.jpg' %}" alt="Stephanie">
-        <p>“{% trans "Gracias a Nutricontrol he logrado organizar mi alimentación y sentirme con más energía cada día." %}”</p>
-        <h3>Stephanie</h3>
-      </div>
-      <div class="testimonio">
-        <img src="{% static 'base/testimonio2.jpg' %}" alt="Eric">
-        <p>“{% trans "Perdí 6kg en 3 meses y ahora entiendo mejor qué y cómo debo comer." %}”</p>
-        <h3>Eric</h3>
-      </div>
+    <h1 style="text-align: center; margin-bottom: 30px;">
+        {% trans "Bienvenido al Dashboard Principal" %}
+    </h1>
+    <p style="text-align:center;">Este es el contenido de la sección "Inicio (Resumen)" del dashboard.</p>
+    
+    <div class="carrusel-container" style="margin-top: 40px;">
+        <div class="carrusel" id="carruselDashboard">
+            <div class="testimonio">
+                <img src="{% static 'base/testimonio1.jpg' %}" alt="Stephanie">
+                <p>“{% trans "Testimonio específico del dashboard 1." %}”</p>
+                <h3>Stephanie</h3>
+            </div>
+            <div class="testimonio">
+                <img src="{% static 'base/testimonio2.jpg' %}" alt="Eric">
+                <p>“{% trans "Testimonio específico del dashboard 2." %}”</p>
+                <h3>Eric</h3>
+            </div>
+        </div>
+        <div class="carrusel-controles">
+            <button onclick="moverCarruselDashboard(-1)">←</button>
+            <button onclick="moverCarruselDashboard(1)">→</button>
+        </div>
     </div>
-    <div class="carrusel-controles">
-      <button onclick="moverCarrusel(-1)">←</button>
-      <button onclick="moverCarrusel(1)">→</button>
-    </div>
-  </div>
+{% endblock %}
+
+{% block extra_head %}
+    {{ block.super }} {# Importante si base.html tiene contenido en extra_head #}
+    <style>
+    .carrusel-container { max-width: 1000px; margin: 50px auto; overflow: hidden; position: relative; }
+    .carrusel { display: flex; transition: transform 0.4s ease-in-out; }
+    .testimonio { min-width: 100%; box-sizing: border-box; padding: 40px 20px; text-align: center; }
+    .testimonio img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; }
+    .testimonio h3 { margin-top: 10px; color: #1a73e8; }
+    .testimonio p { font-size: 16px; color: #555; }
+    .carrusel-controles { text-align: center; margin-top: 10px; }
+    .carrusel-controles button { background-color: #1a73e8; border: none; color: white; padding: 8px 15px; margin: 0 5px; cursor: pointer; border-radius: 5px; }
+    .carrusel-controles button:hover { background-color: #0c54b8; }
+    </style>
 {% endblock %}
 
 {% block extra_script %}
-<script>
-  let index = 0;
-
-  function moverCarrusel(direccion) {
-    const carrusel = document.getElementById('carruselHistorias');
-    const totalSlides = carrusel.children.length;
-    index = (index + direccion + totalSlides) % totalSlides;
-    carrusel.style.transform = `translateX(-${index * 100}%)`;
-  }
-</script>
+    {{ block.super }} {# Importante si base.html tiene contenido en extra_script #}
+    <script>
+    let dashboardCarouselIndex = 0;
+    function moverCarruselDashboard(direccion) {
+        const carrusel = document.getElementById('carruselDashboard');
+        if (!carrusel || !carrusel.children || carrusel.children.length === 0) return;
+        const totalSlides = carrusel.children.length;
+        dashboardCarouselIndex = (dashboardCarouselIndex + direccion + totalSlides) % totalSlides;
+        carrusel.style.transform = `translateX(-${dashboardCarouselIndex * 100}%)`;
+    }
+    </script>
 {% endblock %}

@@ -1,13 +1,29 @@
 {% extends "base.html" %}
-{% block title %}Registrar alimento{% endblock %}
+{% load static i18n %} {# Añadido load static i18n por si se usa static aquí directamente #}
+
+{% block title %}{% trans "Registrar Alimento" %}{% endblock %}
+
+{# --- ITEMS PARA EL DESPLEGABLE DE ESCRITORIO DE ALIMENTOS --- #}
+{% block alimentos_dropdown_items %}
+    {# Debes crear la URL 'alimentos_basedatos' y su vista/plantilla #}
+    <li><a href="#">{% trans "Base de Datos" %}</a></li> 
+    {# Podrías añadir un enlace a la página actual si tiene sentido #}
+    <li><a href="{% url 'registro_alimentacion' %}">{% trans "Registrar Nuevo Alimento" %}</a></li>
+{% endblock alimentos_dropdown_items %}
+
+{# --- ITEMS PARA EL DESPLEGABLE DE ALIMENTOS EN MÓVIL --- #}
+{% block mobile_alimentos_dropdown_items %}
+    <a href="#" class="mobile-dropdown-link">↳ {% trans "Base de Datos" %}</a>
+    <a href="{% url 'registro_alimentacion' %}" class="mobile-dropdown-link">↳ {% trans "Registrar Nuevo Alimento" %}</a>
+{% endblock mobile_alimentos_dropdown_items %}
 
 {% block extra_head %}
+{{ block.super }}
 <style>
   h2 {
     text-align: center;
     margin: 30px 0 20px;
   }
-
   form {
     max-width: 500px;
     margin: 0 auto;
@@ -15,43 +31,38 @@
     flex-direction: column;
     gap: 15px;
   }
-
-  input, select, button {
+  input, select, button { /* Estilo más específico para evitar afectar botones de navbar si se usa !important */
     padding: 10px;
     font-size: 16px;
     border-radius: 5px;
     border: 1px solid #ccc;
   }
-
-  button {
+  form button[type="submit"] { /* Más específico para el botón del formulario */
     background-color: #1a73e8;
     color: white;
     border: none;
     cursor: pointer;
   }
-
-  button:hover {
+  form button[type="submit"]:hover {
     background-color: #0c54b8;
   }
-
   .mensaje {
     color: green;
     text-align: center;
+    margin: 10px 0; /* Añadido margen vertical */
   }
-
   .volver {
     text-align: center;
     margin-top: 30px;
   }
-
   .volver a {
     text-decoration: none;
     background-color: #1a73e8;
     color: white;
     padding: 10px 20px;
     border-radius: 5px;
+    transition: background-color 0.2s ease;
   }
-
   .volver a:hover {
     background-color: #0c54b8;
   }
@@ -59,7 +70,7 @@
 {% endblock %}
 
 {% block content %}
-  <h2>Registro de alimentación</h2>
+  <h2>{% trans "Registro de alimentación" %}</h2>
 
   {% if messages %}
     {% for message in messages %}
@@ -72,37 +83,55 @@
     <input list="sugerencias"
            id="id_alimento_nombre"
            name="alimento_nombre"
-           placeholder="Escribe un alimento..."
+           placeholder="{% trans 'Escribe un alimento...' %}"
            required>
     <datalist id="sugerencias"></datalist>
 
-    {{ form.cantidad }}
+    {{ form.cantidad }} {# Asume que el widget ya tiene placeholder desde forms.py #}
 
-    <button type="submit">Guardar</button>
+    <button type="submit">{% trans "Guardar" %}</button>
   </form>
 
   <div class="volver">
-    <a href="{% url 'dashboard' %}">← Volver al dashboard</a>
+    <a href="{% url 'dashboard' %}">← {% trans "Volver al dashboard" %}</a>
   </div>
 {% endblock %}
 
 {% block extra_script %}
+{{ block.super }}
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const input = document.getElementById("id_alimento_nombre");
-    const datalist = document.getElementById("sugerencias");
+document.addEventListener("DOMContentLoaded", function() {
+  const input = document.getElementById("id_alimento_nombre");
+  const datalist = document.getElementById("sugerencias");
 
+  if (input && datalist) { // Verificar que los elementos existan
     input.addEventListener("input", async function() {
-      const response = await fetch(`/sugerencias-alimentos/?q=${input.value}`);
-      const datos = await response.json();
+      const query = encodeURIComponent(input.value); // Asegurar que la query está codificada
+      if (query.length < 2) { // Opcional: no buscar si es muy corto
+          datalist.innerHTML = "";
+          return;
+      }
+      try {
+        const response = await fetch(`/sugerencias-alimentos/?q=${query}`);
+        if (!response.ok) {
+            console.error("Error en la respuesta de sugerencias:", response.status);
+            return;
+        }
+        const datos = await response.json();
 
-      datalist.innerHTML = "";
-      datos.forEach(nombre => {
-        const option = document.createElement("option");
-        option.value = nombre;
-        datalist.appendChild(option);
-      });
+        datalist.innerHTML = "";
+        if (Array.isArray(datos)) {
+            datos.forEach(item => { // Asumiendo que 'datos' es [{nombre: '...'}, ...] o [nombre1, nombre2]
+                const option = document.createElement("option");
+                option.value = typeof item === 'object' && item.nombre ? item.nombre : item;
+                datalist.appendChild(option);
+            });
+        }
+      } catch (error) {
+          console.error("Error al obtener sugerencias de alimentos:", error);
+      }
     });
-  });
+  }
+});
 </script>
 {% endblock %}

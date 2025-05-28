@@ -5,9 +5,10 @@
 
 {% block extra_head %}
 <style>
+    /* ... (Todo tu CSS de wizard_base.html que ya ajustamos para espaciado permanece igual) ... */
     .wizard-outer-container {
         background-color: #f0f2f5;
-        padding: 40px 20px; /* Padding del contenedor exterior */
+        padding: 40px 20px;
         min-height: calc(100vh - 100px); 
         display: flex;
         flex-direction: column;
@@ -16,21 +17,20 @@
     }
     .wizard-card {
         background-color: #ffffff;
-        padding: 50px; /* AUMENTADO padding general de la tarjeta */
+        padding: 50px; 
         border-radius: 8px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         width: 100%;
         max-width: 600px; 
         text-align: center;
         margin-top: 20px;
-        margin-bottom: 40px; /* Añadido margen inferior a la tarjeta */
+        margin-bottom: 40px; 
     }
-
     .progress-bar-container {
         width: 100%;
         background-color: #e9ecef;
         border-radius: 20px;
-        margin-bottom: 40px; /* AUMENTADO margen inferior */
+        margin-bottom: 40px; 
         overflow: hidden;
         height: 12px;
     }
@@ -44,21 +44,19 @@
         font-size: 0.8em;
         transition: width 0.4s ease-in-out;
     }
-
     .wizard-form h3.step-title {
         font-size: 1.8em;
         color: #1c1e21;
-        margin-bottom: 20px; /* AUMENTADO margen inferior */
+        margin-bottom: 20px; 
         font-weight: 600;
     }
     .wizard-form p.step-description {
         font-size: 1.05em;
         color: #606770;
-        margin-bottom: 40px; /* AUMENTADO margen inferior */
+        margin-bottom: 40px; 
     }
-
     .wizard-form .form-field {
-        margin-bottom: 30px; /* AUMENTADO margen entre campos */
+        margin-bottom: 30px; 
         text-align: left;
     }
     .wizard-form .form-field label {
@@ -101,7 +99,6 @@
         padding: 0;
         margin-top: 6px;
     }
-
     .form-field-choices ul {
         list-style-type: none;
         padding: 0;
@@ -138,16 +135,14 @@
         border-color: #007bff;
         background-color: #e7f3ff;
     }
-
-    .wizard-form hr { /* Estilo para la línea separadora */
-        margin-top: 40px; /* AUMENTADO */
-        margin-bottom: 30px; /* AUMENTADO */
+    .wizard-form hr {
+        margin-top: 40px;
+        margin-bottom: 30px;
         border: 0;
         border-top: 1px solid #eee;
     }
-
     .wizard-buttons {
-        margin-top: 40px; /* AUMENTADO */
+        margin-top: 40px;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -178,7 +173,6 @@
         background-color: #0056b3;
         border-color: #0056b3;
     }
-    
 </style>
 {% endblock %}
 
@@ -196,7 +190,7 @@
             {% csrf_token %}
             {{ wizard.management_form }}
 
-    <h3 class="step-title">{% block wizard_step_title %}{{ step_title_from_view|default_if_none:""|safe }}{% endblock wizard_step_title %}</h3>
+            <h3 class="step-title">{% block wizard_step_title %}{{ step_title_from_view|default_if_none:""|safe }}{% endblock wizard_step_title %}</h3>
             
             {% block wizard_step_description_container %}
             <p class="step-description">{% block wizard_step_description %}{{ step_description_from_view|default_if_none:""|safe }}{% endblock wizard_step_description %}</p>
@@ -206,11 +200,12 @@
                 {{ wizard.form.as_p }}
             {% endblock wizard_form_fields %}
             
-            <hr> {# La línea separadora ahora tiene estilos CSS arriba #}
+            <hr>
 
             <div class="wizard-buttons">
                 {% if wizard.steps.prev %}
-                    <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}" class="btn-wizard-prev">
+                    {# --- CORRECCIÓN AQUÍ: Añadido formnovalidate --- #}
+                    <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}" class="btn-wizard-prev" formnovalidate>
                         {% trans "Volver" %}
                     </button>
                 {% else %}

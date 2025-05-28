@@ -27,5 +27,4 @@ urlpatterns = [
     path('ejercicios/brazos/', views.vista_brazos, name='vista_brazos'),
     path('ejercicios/abdominales/', views.vista_abdominales, name='vista_abdominales'),
         
-    # path('inicio/', views.inicio_publico, name='inicio_publico'), # ⬅️--- LÍNEA ELIMINADA/COMENTADA ---
 ]
