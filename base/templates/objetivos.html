@@ -1,0 +1,242 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block title %}{% trans "Mis Objetivos | Nutricontrol" %}{% endblock %}
+
+{# --- ITEMS PARA EL DESPLEGABLE DE ESCRITORIO DEL DASHBOARD --- #}
+{% block dashboard_dropdown_items %}
+    <li><a href="{% url 'dashboard' %}">{% trans "Inicio (Resumen)" %}</a></li>
+    <li><a href="{% url 'mis_objetivos' %}" class="active">{% trans "Mis Objetivos" %}</a></li> 
+    <li><a href="{% url 'registrar_medidas' %}">{% trans "Registrar Medidas" %}</a></li>
+    <li><a href="{% url 'ver_perfil' %}">{% trans "Mi Perfil" %}</a></li>
+{% endblock dashboard_dropdown_items %}
+
+{# --- ITEMS PARA EL MENÚ LATERAL MÓVIL DEL DASHBOARD --- #}
+{% block mobile_dashboard_dropdown_items %}
+    <a href="{% url 'dashboard' %}" class="mobile-dropdown-link">↳ {% trans "Inicio (Resumen)" %}</a>
+    <a href="{% url 'mis_objetivos' %}" class="mobile-dropdown-link active">↳ {% trans "Mis Objetivos" %}</a>
+    <a href="{% url 'registrar_medidas' %}" class="mobile-dropdown-link">↳ {% trans "Registrar Medidas" %}</a>
+    <a href="{% url 'ver_perfil' %}" class="mobile-dropdown-link">↳ {% trans "Mi Perfil" %}</a>
+{% endblock mobile_dashboard_dropdown_items %}
+
+{% block extra_head %}
+{{ block.super }}
+<style>
+    .page-header {
+        text-align: center;
+        margin: 25px 0 35px 0;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+    .page-header h1 {
+        font-size: 2.2em;
+        color: #333;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .objetivos-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 30px;
+        max-width: 1100px;
+        margin: 0 auto 40px auto;
+        padding: 0 15px;
+    }
+
+    @media (min-width: 992px) {
+        .objetivos-grid {
+            grid-template-columns: minmax(0, 2.5fr) minmax(0, 1fr);
+        }
+    }
+
+    .objetivos-main-content {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .objetivos-card {
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 25px; 
+        box-shadow: 0 3px 10px rgba(0,0,0,0.07);
+    }
+    .objetivos-card h2 {
+        font-size: 1.4em; 
+        color: #007bff; 
+        margin-top: 0;
+        margin-bottom: 8px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+        display: flex; /* Para alinear título y posible botón editar */
+        justify-content: space-between;
+        align-items: center;
+    }
+    .objetivos-card .card-subtitle {
+        font-size: 0.9em;
+        color: #6c757d;
+        margin-top: -5px;
+        margin-bottom: 20px;
+    }
+    .objetivos-card .edit-link { 
+        font-size: 0.8em;
+        font-weight: bold;
+        color: #007bff;
+        text-decoration: none;
+    }
+    .objetivos-card .edit-link:hover {
+        text-decoration: underline;
+    }
+
+    .meal-calories-list { list-style: none; padding: 0; margin: 0; }
+    .meal-calories-list li {
+        display: flex; justify-content: space-between;
+        padding: 10px 0; font-size: 0.95em;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .meal-calories-list li:last-child { border-bottom: none; }
+    .meal-calories-list .meal-name { color: #333; }
+    .meal-calories-list .meal-value { font-weight: bold; color: #007bff; }
+
+    .macros-list { list-style: none; padding: 0; margin: 0; }
+    .macros-list li {
+        display: grid; 
+        grid-template-columns: auto 1fr auto; 
+        gap: 10px;
+        align-items: center;
+        padding: 10px 0; font-size: 0.95em;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .macros-list li:last-child { border-bottom: none; }
+    .macros-list .macro-name { color: #333; font-weight: 500; }
+    .macros-list .macro-percentage { color: #555; text-align: right; }
+    .macros-list .macro-grams { font-weight: bold; color: #007bff; text-align: right; }
+    .macros-list .macro-total-calories { 
+        grid-column: 1 / -1; 
+        text-align: left; 
+        font-size: 1.1em;
+        font-weight: bold;
+        padding-top: 10px;
+        color: #333;
+    }
+
+    .fitness-goals-list { list-style: none; padding: 0; margin:0; }
+    .fitness-goals-list li {
+        display: flex; justify-content: space-between;
+        padding: 10px 0; font-size: 0.95em;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .fitness-goals-list li:last-child { border-bottom: none; }
+    .fitness-goals-list .goal-label { color: #333; }
+    .fitness-goals-list .goal-value { font-weight: bold; color: #007bff; }
+
+    .objetivos-sidebar .ad-placeholder {
+        background-color: #e9ecef; min-height: 150px; display: flex; 
+        align-items: center; justify-content: center; color: #6c757d; 
+        border-radius: 6px; font-style: italic; padding: 20px; text-align: center;
+        margin-bottom: 25px; 
+        border: 1px dashed #ccc;
+    }
+    .objetivos-sidebar h3 { 
+        font-size: 1em; color: #6c757d; text-align: center;
+        margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{% trans "Mis Objetivos" %}</h1>
+    {# <a href="#">{% trans "Configurar mis objetivos" %}</a> #}
+</div>
+
+<div class="objetivos-grid">
+    <main class="objetivos-main-content">
+        
+        <section class="objetivos-card">
+            <h2>
+                {% trans "Objetivos de Nutrición Diarios" %}
+                {# <a href="#" class="edit-link">{% trans "EDITAR" %}</a> #}
+            </h2>
+            {% if calorias_objetivo_diario > 0 %}
+            <p class="card-subtitle">{% blocktrans with calories=calorias_objetivo_diario|floatformat:0 %}Basado en tu objetivo de {{ calories }} Calorías{% endblocktrans %}</p>
+            {% else %}
+            <p class="card-subtitle">{% trans "Aún no has definido un objetivo calórico. Configúralo en tu perfil." %}</p>
+            {% endif %}
+            <ul class="macros-list">
+                <li class="macro-total-calories">
+                    <span>{{ calorias_objetivo_diario|default_if_none:"---"|floatformat:0 }} {% trans "Calorías" %}</span>
+                </li>
+                <li>
+                    <span class="macro-name">{% trans "Carbohidratos" %}</span>
+                    <span class="macro-percentage">{{ porcentaje_carbohidratos|default_if_none:"-" }}%</span>
+                    <span class="macro-grams">{{ objetivo_carbohidratos_g|default_if_none:"-" }}g</span>
+                </li>
+                <li>
+                    <span class="macro-name">{% trans "Proteínas" %}</span>
+                    <span class="macro-percentage">{{ porcentaje_proteinas|default_if_none:"-" }}%</span>
+                    <span class="macro-grams">{{ objetivo_proteinas_g|default_if_none:"-" }}g</span>
+                </li>
+                <li>
+                    <span class="macro-name">{% trans "Grasas" %}</span>
+                    <span class="macro-percentage">{{ porcentaje_grasas|default_if_none:"-" }}%</span>
+                    <span class="macro-grams">{{ objetivo_grasas_g|default_if_none:"-" }}g</span>
+                </li>
+            </ul>
+        </section>
+
+        <section class="objetivos-card">
+            <h2>
+                {% trans "Distribución de Calorías por Comida" %}
+                {# <a href="#" class="edit-link">{% trans "EDITAR" %}</a> #}
+            </h2>
+             {% if calorias_objetivo_diario > 0 %}
+            <p class="card-subtitle">{% blocktrans with calories=calorias_objetivo_diario|floatformat:0 %}Sugerencia basada en {{ calories }} Calorías{% endblocktrans %}</p>
+            {% else %}
+            <p class="card-subtitle">{% trans "Define tu objetivo calórico para ver una distribución." %}</p>
+            {% endif %}
+            <ul class="meal-calories-list">
+                <li><span class="meal-name">{% trans "Desayuno" %} (20%)</span> <span class="meal-value">{{ cal_desayuno|floatformat:0 }} {% trans "kcal" %}</span></li>
+                <li><span class="meal-name">{% trans "Comida" %} (30%)</span> <span class="meal-value">{{ cal_almuerzo|floatformat:0 }} {% trans "kcal" %}</span></li>
+                <li><span class="meal-name">{% trans "Cena" %} (30%)</span> <span class="meal-value">{{ cal_cena|floatformat:0 }} {% trans "kcal" %}</span></li>
+                <li><span class="meal-name">{% trans "Snacks" %} (20%)</span> <span class="meal-value">{{ cal_snacks|floatformat:0 }} {% trans "kcal" %}</span></li>
+            </ul>
+        </section>
+
+    </main>
+
+    <aside class="objetivos-sidebar">
+        <section class="objetivos-card">
+            <h2>
+                {% trans "Objetivos de Preparación Física" %}
+                {# <a href="#" class="edit-link">{% trans "EDITAR" %}</a> #}
+            </h2>
+            <ul class="fitness-goals-list">
+                <li>
+                    <span class="goal-label">{% trans "Minutos de ejercicio / semana" %}</span>
+                    <span class="goal-value">{{ minutos_ejercicio_semana|default_if_none:"---" }}</span>
+                </li>
+                <li>
+                    <span class="goal-label">{% trans "Entrenamientos / semana" %}</span>
+                    <span class="goal-value">{{ entrenamientos_semana|default_if_none:"---" }}</span>
+                </li>
+                <li>
+                    <span class="goal-label">{% trans "Calorías quemadas / semana" %}</span>
+                    <span class="goal-value">{{ calorias_quemadas_semana_obj|default_if_none:"---"|floatformat:0 }} {% trans "kcal" %}</span>
+                </li>
+            </ul>
+        </section>
+
+        <div style="margin-top: 30px;">
+            <h3>{% trans "Anuncios" %}</h3>
+            <div class="ad-placeholder">
+                {% trans "Publicidad Fake 1" %}
+            </div>
+             <div class="ad-placeholder" style="margin-top:25px;">
+                {% trans "Publicidad Fake 2" %}
+            </div>
+        </div>
+    </aside>
+</div>
+{% endblock %}

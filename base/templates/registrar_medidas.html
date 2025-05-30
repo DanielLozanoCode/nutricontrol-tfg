@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block title %}{% trans "Registrar Medidas | Nutricontrol" %}{% endblock %}
+
+{# --- ITEMS PARA EL DESPLEGABLE DE ESCRITORIO DEL DASHBOARD --- #}
+{% block dashboard_dropdown_items %}
+    <li><a href="{% url 'dashboard' %}">{% trans "Inicio (Resumen)" %}</a></li>
+    <li><a href="{% url 'mis_objetivos' %}">{% trans "Mis Objetivos" %}</a></li> 
+    <li><a href="{% url 'registrar_medidas' %}" class="active">{% trans "Registrar Medidas" %}</a></li>
+    <li><a href="{% url 'ver_perfil' %}">{% trans "Mi Perfil" %}</a></li>
+{% endblock dashboard_dropdown_items %}
+
+{# --- ITEMS PARA EL MENÚ LATERAL MÓVIL DEL DASHBOARD --- #}
+{% block mobile_dashboard_dropdown_items %}
+    <a href="{% url 'dashboard' %}" class="mobile-dropdown-link">↳ {% trans "Inicio (Resumen)" %}</a>
+    <a href="{% url 'mis_objetivos' %}" class="mobile-dropdown-link">↳ {% trans "Mis Objetivos" %}</a>
+    <a href="{% url 'registrar_medidas' %}" class="mobile-dropdown-link active">↳ {% trans "Registrar Medidas" %}</a>
+    <a href="{% url 'ver_perfil' %}" class="mobile-dropdown-link">↳ {% trans "Mi Perfil" %}</a>
+{% endblock mobile_dashboard_dropdown_items %}
+
+{% block extra_head %}
+{{ block.super }}
+<style>
+    .page-header {
+        text-align: center;
+        margin: 25px 0 20px 0;
+    }
+    .page-header h1 {
+        font-size: 2.2em; color: #333; font-weight: 600; margin: 0;
+    }
+    .page-header .current-date { font-size: 1em; color: #555; margin-top: 5px; }
+
+    .medidas-grid {
+        display: grid; grid-template-columns: 1fr; gap: 30px; 
+        max-width: 1100px; margin: 0 auto 40px auto; padding: 0 15px;
+    }
+    @media (min-width: 768px) { .medidas-grid { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); } }
+
+    .medidas-form-container {
+        background-color: #fff; border-radius: 8px;
+        padding: 25px 30px; box-shadow: 0 3px 10px rgba(0,0,0,0.07);
+    }
+    .medidas-form-container h2 {
+        font-size: 1.4em; color: #007bff; margin-top: 0;
+        margin-bottom: 25px; padding-bottom: 10px; border-bottom: 1px solid #eee;
+    }
+    .medidas-form .form-group { margin-bottom: 20px; }
+    .medidas-form label { display: block; font-weight: 600; margin-bottom: 8px; color: #495057; }
+    .medidas-form input[type="number"], .medidas-form input[type="text"] {
+        width: 100%; padding: 12px 15px; font-size: 1em;
+        border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box;
+        transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    .medidas-form input[type="number"]:focus, .medidas-form input[type="text"]:focus {
+        border-color: #007bff; box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); outline: none;
+    }
+    .medidas-form .help-text { font-size: 0.85em; color: #6c757d; margin-top: 5px; display: block; }
+    .medidas-form .errorlist { color: #dc3545; font-size: 0.85em; list-style-type: none; padding: 0; margin-top: 5px; }
+    .medidas-form button[type="submit"] {
+        background-color: #28a745; color: white; padding: 12px 25px;
+        font-size: 1.05em; font-weight: bold; border: none; border-radius: 5px;
+        cursor: pointer; transition: background-color 0.2s ease;
+        width: 100%; margin-top: 10px; 
+    }
+    .medidas-form button[type="submit"]:hover { background-color: #218838; }
+    .medidas-info-text {
+        background-color: #f8f9fa; border-radius: 6px; padding: 20px;
+        margin-top: 30px; font-size: 0.9em; color: #555; line-height: 1.6;
+        border: 1px solid #e9ecef;
+    }
+    .mensaje-exito { 
+        background-color: #d4edda; color: #155724; padding: 15px;
+        margin-bottom: 20px; border: 1px solid #c3e6cb; border-radius: 4px;
+        text-align: center;
+    }
+    .medidas-registradas-hoy {
+        margin-top: 20px; padding: 15px;
+        background-color: #e7f3ff; border: 1px solid #b3d7ff; color: #004085;
+        border-radius: 4px;
+    }
+    .medidas-registradas-hoy ul { list-style: none; padding-left:0; margin-bottom:0;}
+    .medidas-registradas-hoy li { margin-bottom: 5px;}
+
+    .medidas-sidebar .ad-placeholder {
+        background-color: #e9ecef; min-height: 200px; display: flex; 
+        align-items: center; justify-content: center; color: #6c757d; 
+        border-radius: 6px; font-style: italic; padding: 20px; text-align: center;
+        margin-bottom: 25px; border: 1px dashed #ccc;
+    }
+    .medidas-sidebar h3 { 
+        font-size: 1em; color: #6c757d; text-align: center;
+        margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{% trans "Registrar Medidas Corporales" %}</h1>
+    <p class="current-date">{% trans "Hoy es" %}: {{ fecha_hoy|date:"l, j F Y" }}</p>
+</div>
+
+<div class="medidas-grid">
+    <main class="medidas-form-container">
+        <h2>{% trans "Introduce tus medidas de hoy" %}</h2>
+
+        {% if messages %}
+            {% for message in messages %}
+            <div class="mensaje-exito">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST" class="medidas-form">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+                <div class="errorlist nonfield" style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 4px; margin-bottom: 15px;">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}
+                        <small class="help-text">{{ field.help_text|safe }}</small>
+                    {% endif %}
+                    {% if field.errors %}
+                        <div class="errorlist">
+                            {% for error in field.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            
+            <button type="submit">{% trans "Guardar Medidas" %}</button>
+        </form>
+
+        {% if medida_registrada_hoy %}
+        <div class="medidas-registradas-hoy">
+            <p><strong>{% trans "Medidas ya guardadas para hoy:" %}</strong></p>
+            <ul>
+                {% if medida_registrada_hoy.peso is not None %}<li>{% trans "Peso:" %} {{ medida_registrada_hoy.peso }} kg</li>{% endif %}
+                {% if medida_registrada_hoy.cuello is not None %}<li>{% trans "Cuello:" %} {{ medida_registrada_hoy.cuello }} cm</li>{% endif %}
+                {% if medida_registrada_hoy.cintura is not None %}<li>{% trans "Cintura:" %} {{ medida_registrada_hoy.cintura }} cm</li>{% endif %}
+                {% if medida_registrada_hoy.caderas is not None %}<li>{% trans "Caderas:" %} {{ medida_registrada_hoy.caderas }} cm</li>{% endif %}
+            </ul>
+            <p style="font-size:0.9em; margin-top:10px;"><em>{% trans "Si guardas de nuevo, se actualizarán los valores de hoy." %}</em></p>
+        </div>
+        {% endif %}
+
+        <div class="medidas-info-text">
+            <p><strong>{% trans "Consejo para registrar medidas:" %}</strong></p>
+            <p>{% blocktrans %}Intenta registrar tus medidas regularmente, idealmente una vez por semana, a la misma hora del día (por ejemplo, por la mañana antes de desayunar) y en condiciones similares para obtener los resultados más consistentes. El peso corporal puede fluctuar diariamente.{% endblocktrans %}</p>
+        </div>
+    </main>
+
+    <aside class="medidas-sidebar">
+        <h3>{% trans "Anuncios" %}</h3>
+        <div class="ad-placeholder">
+            {% trans "Publicidad Fake 1" %}
+        </div>
+         <div class="ad-placeholder">
+            {% trans "Publicidad Fake 2" %}
+        </div>
+    </aside>
+</div>
+{% endblock %}

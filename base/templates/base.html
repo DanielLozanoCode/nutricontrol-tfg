@@ -21,52 +21,53 @@
     .main-navbar-left .logo { height: 45px; display: block; }
     
     .main-navbar-center { display: flex; gap: 0; height: 100%; }
-    .nav-item { position: relative; display: flex; align-items: center; /* Para alinear link y botón flecha */ }
+    .nav-item { position: relative; display: flex; align-items: stretch; /* Para que los hijos ocupen altura */ }
     
-    .nav-item .nav-link { /* Enlace principal de navegación */
-        color: white; text-decoration: none; padding: 0 10px; /* Padding solo para el texto */
+    .nav-item .nav-link-text { /* Texto del enlace principal */
+        color: white; text-decoration: none; padding: 0 15px; 
         font-weight: bold; font-size: 0.9em; 
         transition: background-color 0.2s ease;
         display: flex; align-items: center; height: 100%;
-        border-radius: 4px 0 0 4px; /* Redondear lado izquierdo */
+        /* El border-radius se manejará por el .nav-item o .dropdown-toggle-button */
     }
-    .nav-item .nav-link:hover,
-    .nav-item .nav-link.active { 
-        background-color: #005bb5; 
-    }
-    /* Si el desplegable está abierto, el enlace principal podría o no cambiar */
-    .nav-item.dropdown-open > .nav-link {
-         background-color: #005bb5; /* Mismo color que el hover/active */
-    }
-
-
+    
     .dropdown-toggle-button { /* Botón específico para la flecha */
-        color: white;
-        padding: 0 10px; /* Padding para el área de la flecha */
-        height: 100%;
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        margin-left: -1px; /* Para que el borde se solape o esté muy junto */
-        border-radius: 0 4px 4px 0; /* Redondear lado derecho */
+        color: white; padding: 0 10px; height: 100%;
+        display: flex; align-items: center; cursor: pointer;
         transition: background-color 0.2s ease;
     }
-    .nav-item:hover .dropdown-toggle-button, /* Para que el hover conjunto se vea bien */
-    .nav-item.dropdown-open .dropdown-toggle-button {
-         background-color: #005bb5; 
+
+    /* Efecto hover/active/open unificado para .nav-item */
+    .nav-item:hover,
+    .nav-item.active, /* Nueva clase 'active' en el div.nav-item */
+    .nav-item.dropdown-open {
+        background-color: #005bb5;
+        border-radius: 4px; /* Redondeo general para el item */
     }
+    /* Ajustar redondeo si el desplegable está abierto */
+    .nav-item.dropdown-open {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    /* Para enlaces simples sin flecha, el hover/active aplica al <a> directamente */
+     .nav-item > a.nav-link-text:only-child:hover, /* :only-child si es el único hijo directo del nav-item */
+     .nav-item > a.nav-link-text.active:only-child {
+        background-color: #005bb5;
+        border-radius: 4px;
+     }
+
+
     .dropdown-arrow { 
-        font-size: 0.8em; /* Tamaño de la flecha */
-        transition: transform 0.2s ease-out; 
-        display: inline-block; 
+        font-size: 0.8em; transition: transform 0.2s ease-out; display: inline-block; 
     }
     .nav-item.dropdown-open .dropdown-toggle-button .dropdown-arrow { transform: rotate(180deg); }
 
     .dropdown-menu {
-        display: none; position: absolute; top: 60px; /* Altura de la navbar */
-        left: 0; background-color: #005bb5; 
+        display: none; position: absolute; top: 60px; 
+        left: 0; background-color: #005bb5; /* Mismo color que el nav-item abierto */
         border-radius: 0 0 6px 6px; box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        min-width: 220px; list-style: none; padding: 8px 0; margin: 0;
+        min-width: 100%; /* Ocupa el ancho del nav-item */
+        list-style: none; padding: 8px 0; margin: 0;
         z-index: 1001; 
     }
     .nav-item.dropdown-open .dropdown-menu { display: block; }
@@ -76,18 +77,21 @@
         transition: background-color 0.2s ease, color 0.2s ease;
     }
     .dropdown-menu li a:hover { background-color: #0070dd; color: white; }
+    .dropdown-menu li a.active { /* Para el sub-item activo */
+        background-color: #007fe0; /* Un azul diferente o más brillante */
+        color: white;
+        font-weight: bold;
+    }
+
 
     .main-navbar-right { display: flex; align-items: center; gap: 10px; }
-    .main-navbar-right .nav-button, .main-navbar-right .btn-logout { /* Estilos para botones de Login/Logout/Registro */
-        color: white; text-decoration: none; padding: 7px 14px; 
-        border-radius: 4px; font-weight: bold; background: none; 
-        border: 1px solid white; font-size: 0.85em; cursor: pointer;
-        transition: background-color 0.2s ease, color 0.2s ease;
-    }
+    /* ... (otros estilos de .main-navbar-right sin cambios) ... */
+    .main-navbar-right .nav-button, .main-navbar-right .btn-logout { color: white; text-decoration: none; padding: 7px 14px; border-radius: 4px; font-weight: bold; background: none; border: 1px solid white; font-size: 0.85em; cursor: pointer; transition: background-color 0.2s ease, color 0.2s ease; }
     .main-navbar-right .nav-button:hover, .main-navbar-right .btn-logout:hover { background-color: white; color: #0070dd; }
     .main-navbar-right .btn-register { background-color: #005bb5; border-color: #005bb5; }
     .main-navbar-right .btn-register:hover { background-color: white; color: #005bb5; }
     .logout-form-inline { display: inline; }
+
 
     .menu-toggle { 
         display: none; flex-direction: column; justify-content: space-around;
@@ -112,26 +116,19 @@
     }
     .mobile-side-menu.active { right: 0; }
     .mobile-side-menu-content-wrapper { padding-top: 60px; width: 100%; display: flex; flex-direction: column; }
-    .mobile-side-menu a, .mobile-side-menu .logout-form-mobile button {
-        padding: 15px 20px; width: 100%; text-align: left;
-        border-bottom: 1px solid #0070dd; color: white; font-weight: bold; 
-        text-decoration: none; background: none; 
-        border-left: none; border-right: none; border-top: none;
-        font-size: 1em; cursor: pointer; display: block;
-    }
+    /* ... (estilos de .mobile-side-menu a, button, .mobile-dropdown-items sin cambios significativos) ... */
+    .mobile-side-menu a, .mobile-side-menu .logout-form-mobile button { padding: 15px 20px; width: 100%; text-align: left; border-bottom: 1px solid #0070dd; color: white; font-weight: bold; text-decoration: none; background: none; border-left: none; border-right: none; border-top: none; font-size: 1em; cursor: pointer; display: block; }
     .mobile-side-menu a:hover, .mobile-side-menu .logout-form-mobile button:hover { background-color: #007fe0; }
     .mobile-side-menu .logout-form-mobile { width: 100%; padding: 0; margin: 0; }
-    .mobile-side-menu > .mobile-side-menu-content-wrapper > *:last-child,
-    .mobile-side-menu > .mobile-side-menu-content-wrapper > div:last-child > form > button { border-bottom: none; }
-    
-    .mobile-dropdown-items a {
-        padding-left: 35px !important; font-size: 0.9em !important;
-        font-weight: normal !important; border-bottom-style: dashed !important;
-        border-color: rgba(0, 112, 221, 0.5) !important;
-    }
+    .mobile-side-menu > .mobile-side-menu-content-wrapper > *:last-child, .mobile-side-menu > .mobile-side-menu-content-wrapper > div:last-child > form > button { border-bottom: none; }
+    .mobile-dropdown-items a { padding-left: 35px !important; font-size: 0.9em !important; font-weight: normal !important; border-bottom-style: dashed !important; border-color: rgba(0, 112, 221, 0.5) !important; }
     .mobile-dropdown-items a:last-child { border-bottom: 1px solid #0070dd !important; }
-    .mobile-side-menu > .mobile-side-menu-content-wrapper > .mobile-dropdown-items:last-child > a:last-child {
-        border-bottom: none !important;
+    .mobile-side-menu > .mobile-side-menu-content-wrapper > .mobile-dropdown-items:last-child > a:last-child { border-bottom: none !important; }
+    /* Estilo para el enlace activo en el menú móvil */
+    .mobile-side-menu a.active, 
+    .mobile-side-menu .mobile-dropdown-items a.active {
+        background-color: #004c9a; /* Un azul ligeramente diferente para el activo */
+        font-weight: bold;
     }
     
     .main-content-area { padding: 20px; flex-grow: 1; }
@@ -158,58 +155,28 @@
             </div>
             <div class="main-navbar-center" id="desktopNavLinks">
                 
-                <div class="nav-item" id="nav-dashboard-item">
-                    <a href="{% url 'dashboard' %}" class="nav-link"> {% trans "MI PÁGINA DE INICIO" %} 
-                    </a>
-                    {# Solo mostrar el botón de flecha y el menú si hay items en el desplegable Y el usuario está autenticado #}
-                    {% if user.is_authenticated %} {# Podrías añadir and block.super para verificar si el bloque tiene contenido, pero es complejo #}
-                    <span class="dropdown-toggle-button"> {# Botón separado para el desplegable #}
-                        <span class="dropdown-arrow">&#9662;</span>
-                    </span>
-                    <ul class="dropdown-menu">
-                        {% block dashboard_dropdown_items %}{% endblock dashboard_dropdown_items %}
-                    </ul>
-                    {% endif %}
+                <div class="nav-item {% if active_section == 'dashboard' %}active{% endif %}" id="nav-dashboard-item">
+                    <a href="{% url 'dashboard' %}" class="nav-link nav-link-text">{% trans "MI PÁGINA DE INICIO" %}</a>
+                    {% if user.is_authenticated %}<span class="dropdown-toggle-button"><span class="dropdown-arrow">&#9662;</span></span>{% endif %}
+                    {% if user.is_authenticated %}<ul class="dropdown-menu">{% block dashboard_dropdown_items %}{% endblock %}</ul>{% endif %}
                 </div>
 
-                <div class="nav-item" id="nav-alimentos-item">
-                    <a href="{% url 'registro_alimentacion' %}" class="nav-link">{% trans "ALIMENTOS" %}</a>
-                    {% if user.is_authenticated %}
-                    <span class="dropdown-toggle-button">
-                        <span class="dropdown-arrow">&#9662;</span>
-                    </span>
-                    <ul class="dropdown-menu">
-                        {% block alimentos_dropdown_items %}
-                            <li><a href="#">{% trans "Base de Datos (Alim.)" %}</a></li> {# Ejemplo #}
-                        {% endblock alimentos_dropdown_items %}
-                    </ul>
-                    {% endif %}
+                <div class="nav-item {% if active_section == 'alimentos' %}active{% endif %}" id="nav-alimentos-item">
+                    <a href="{% url 'diario_alimentos_hoy' %}" class="nav-link nav-link-text">{% trans "ALIMENTOS" %}</a>
+                    {% if user.is_authenticated %}<span class="dropdown-toggle-button"><span class="dropdown-arrow">&#9662;</span></span>{% endif %}
+                    {% if user.is_authenticated %}<ul class="dropdown-menu">{% block alimentos_dropdown_items %}{% endblock %}</ul>{% endif %}
                 </div>
-                <div class="nav-item" id="nav-ejercicio-item">
-                    <a href="{% url 'ver_ejercicios' %}" class="nav-link">{% trans "EJERCICIO" %}</a>
-                     {% if user.is_authenticated %}
-                    <span class="dropdown-toggle-button">
-                        <span class="dropdown-arrow">&#9662;</span>
-                    </span>
-                    <ul class="dropdown-menu">
-                        {% block ejercicio_dropdown_items %}
-                             <li><a href="#">{% trans "Base de Datos (Ejer.)" %}</a></li> {# Ejemplo #}
-                        {% endblock ejercicio_dropdown_items %}
-                    </ul>
-                    {% endif %}
+
+                <div class="nav-item {% if active_section == 'ejercicio' %}active{% endif %}" id="nav-ejercicio-item">
+                    <a href="{% url 'ver_ejercicios' %}" class="nav-link nav-link-text">{% trans "EJERCICIO" %}</a>
+                    {% if user.is_authenticated %}<span class="dropdown-toggle-button"><span class="dropdown-arrow">&#9662;</span></span>{% endif %}
+                    {% if user.is_authenticated %}<ul class="dropdown-menu">{% block ejercicio_dropdown_items %}{% endblock %}</ul>{% endif %}
                 </div>
-                <div class="nav-item" id="nav-informes-item">
-                    <a href="{% url 'lista_registros' %}" class="nav-link">{% trans "INFORMES" %}</a>
-                    {% if user.is_authenticated %}
-                    <span class="dropdown-toggle-button">
-                        <span class="dropdown-arrow">&#9662;</span>
-                    </span>
-                    <ul class="dropdown-menu">
-                        {% block informes_dropdown_items %}
-                            <li><a href="#">{% trans "Resumen Semanal" %}</a></li> {# Ejemplo #}
-                        {% endblock informes_dropdown_items %}
-                    </ul>
-                    {% endif %}
+
+                <div class="nav-item {% if active_section == 'informes' %}active{% endif %}" id="nav-informes-item">
+                    <a href="{% url 'lista_registros' %}" class="nav-link nav-link-text">{% trans "INFORMES" %}</a>
+                    {% if user.is_authenticated %}<span class="dropdown-toggle-button"><span class="dropdown-arrow">&#9662;</span></span>{% endif %}
+                    {% if user.is_authenticated %}<ul class="dropdown-menu">{% block informes_dropdown_items %}{% endblock %}</ul>{% endif %}
                 </div>
 
             </div>
@@ -232,16 +199,16 @@
 
     <div class="mobile-side-menu" id="navbarMenu"> 
         <div class="mobile-side-menu-content-wrapper">
-            <a href="{% url 'dashboard' %}">{% trans "MI PÁGINA DE INICIO" %}</a>
+            <a href="{% url 'dashboard' %}" class="{% if active_section == 'dashboard' %}active{% endif %}">{% trans "MI PÁGINA DE INICIO" %}</a>
             {% if user.is_authenticated %}<div class="mobile-dropdown-items">{% block mobile_dashboard_dropdown_items %}{% endblock %}</div>{% endif %}
             
-            <a href="{% url 'registro_alimentacion' %}">{% trans "ALIMENTOS" %}</a>
+            <a href="{% url 'diario_alimentos_hoy' %}" class="{% if active_section == 'alimentos' %}active{% endif %}">{% trans "ALIMENTOS" %}</a>
             {% if user.is_authenticated %}<div class="mobile-dropdown-items">{% block mobile_alimentos_dropdown_items %}{% endblock %}</div>{% endif %}
 
-            <a href="{% url 'ver_ejercicios' %}">{% trans "EJERCICIO" %}</a>
+            <a href="{% url 'ver_ejercicios' %}" class="{% if active_section == 'ejercicio' %}active{% endif %}">{% trans "EJERCICIO" %}</a>
             {% if user.is_authenticated %}<div class="mobile-dropdown-items">{% block mobile_ejercicio_dropdown_items %}{% endblock %}</div>{% endif %}
 
-            <a href="{% url 'lista_registros' %}">{% trans "INFORMES" %}</a>
+            <a href="{% url 'lista_registros' %}" class="{% if active_section == 'informes' %}active{% endif %}">{% trans "INFORMES" %}</a>
             {% if user.is_authenticated %}<div class="mobile-dropdown-items">{% block mobile_informes_dropdown_items %}{% endblock %}</div>{% endif %}
 
             <hr style="border-color: #0070dd; margin: 10px 20px;"> 
@@ -283,30 +250,19 @@
         });
     }
 
-    const mobileMenuLinks = document.querySelectorAll('.mobile-side-menu a, .mobile-side-menu form button');
-    mobileMenuLinks.forEach(linkOrButton => {
-        linkOrButton.addEventListener('click', function(event) {
-            // console.log('Clic en (menú lateral):', this.tagName, this.href || 'Botón de formulario');
-        });
-    });
-
     // --- JavaScript para los Desplegables de la Navbar Principal (Escritorio) ---
     document.querySelectorAll('.nav-item .dropdown-toggle-button').forEach(toggleButton => {
         toggleButton.addEventListener('click', function(event) {
-            event.stopPropagation(); // Previene que el clic se propague al listener del document
-
+            event.preventDefault(); 
+            event.stopPropagation();
             const parentNavItem = this.closest('.nav-item');
             if (parentNavItem) {
                 const isCurrentlyOpen = parentNavItem.classList.contains('dropdown-open');
-                
-                // Cerrar todos los OTROS desplegables
                 document.querySelectorAll('.nav-item.dropdown-open').forEach(openDropdown => {
                     if (openDropdown !== parentNavItem) {
                         openDropdown.classList.remove('dropdown-open');
                     }
                 });
-
-                // Alternar el estado del desplegable actual
                 if (isCurrentlyOpen) {
                     parentNavItem.classList.remove('dropdown-open');
                 } else {
@@ -316,14 +272,11 @@
         });
     });
 
-    // Cerrar desplegables si se hace clic fuera de ellos
     document.addEventListener('click', function(event) {
-        const openDropdowns = document.querySelectorAll('.nav-item.dropdown-open');
-        
-        openDropdowns.forEach(dropdownContainer => {
-            // Cerrar si el clic fue FUERA del .nav-item que contiene este desplegable
-            if (!dropdownContainer.contains(event.target)) {
-                dropdownContainer.classList.remove('dropdown-open');
+        if (event.target.closest('.dropdown-toggle-button')) { return; }
+        document.querySelectorAll('.nav-item.dropdown-open').forEach(openDropdown => {
+            if (!openDropdown.contains(event.target)) {
+                openDropdown.classList.remove('dropdown-open');
             }
         });
     });
@@ -344,6 +297,5 @@
     <p>© {% now "Y" %} NutriControl. {% trans "Proyecto académico desarrollado con fines educativos." %}</p>
   </div>
 </footer>
-
 </body>
 </html>

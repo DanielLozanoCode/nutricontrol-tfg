@@ -1,137 +1,181 @@
 {% extends "base.html" %}
-{% load static i18n %} {# Añadido load static i18n por si se usa static aquí directamente #}
+{% load static i18n %}
 
-{% block title %}{% trans "Registrar Alimento" %}{% endblock %}
+{% block title %}{% trans "Añadir Nuevo Alimento a la Base de Datos" %}{% endblock %}
 
 {# --- ITEMS PARA EL DESPLEGABLE DE ESCRITORIO DE ALIMENTOS --- #}
 {% block alimentos_dropdown_items %}
-    {# Debes crear la URL 'alimentos_basedatos' y su vista/plantilla #}
-    <li><a href="#">{% trans "Base de Datos" %}</a></li> 
-    {# Podrías añadir un enlace a la página actual si tiene sentido #}
-    <li><a href="{% url 'registro_alimentacion' %}">{% trans "Registrar Nuevo Alimento" %}</a></li>
+    <li><a href="{% url 'diario_alimentos_hoy' %}" class="{% if active_subsection == 'diario_alimentos' %}active{% endif %}">{% trans "Mi Diario" %}</a></li>
+    <li><a href="{% url 'alimentos_database' %}" class="{% if active_subsection == 'alimentos_database' %}active{% endif %}">{% trans "Base de Datos" %}</a></li>
+    <li><a href="{% url 'registro_alimentacion' %}" class="{% if active_subsection == 'registro_alimentacion' %}active{% endif %}">{% trans "Añadir Alimento a BD" %}</a></li>
 {% endblock alimentos_dropdown_items %}
 
-{# --- ITEMS PARA EL DESPLEGABLE DE ALIMENTOS EN MÓVIL --- #}
+{# --- ITEMS PARA EL MENÚ LATERAL MÓVIL DE ALIMENTOS --- #}
 {% block mobile_alimentos_dropdown_items %}
-    <a href="#" class="mobile-dropdown-link">↳ {% trans "Base de Datos" %}</a>
-    <a href="{% url 'registro_alimentacion' %}" class="mobile-dropdown-link">↳ {% trans "Registrar Nuevo Alimento" %}</a>
+    <a href="{% url 'diario_alimentos_hoy' %}" class="mobile-dropdown-link {% if active_subsection == 'diario_alimentos' %}active{% endif %}">↳ {% trans "Mi Diario" %}</a>
+    <a href="{% url 'alimentos_database' %}" class="mobile-dropdown-link {% if active_subsection == 'alimentos_database' %}active{% endif %}">↳ {% trans "Base de Datos" %}</a>
+    <a href="{% url 'registro_alimentacion' %}" class="mobile-dropdown-link {% if active_subsection == 'registro_alimentacion' %}active{% endif %}">↳ {% trans "Añadir Alimento a BD" %}</a>
 {% endblock mobile_alimentos_dropdown_items %}
 
 {% block extra_head %}
 {{ block.super }}
 <style>
-  h2 {
-    text-align: center;
-    margin: 30px 0 20px;
-  }
-  form {
-    max-width: 500px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  input, select, button { /* Estilo más específico para evitar afectar botones de navbar si se usa !important */
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-  }
-  form button[type="submit"] { /* Más específico para el botón del formulario */
-    background-color: #1a73e8;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  form button[type="submit"]:hover {
-    background-color: #0c54b8;
-  }
-  .mensaje {
-    color: green;
-    text-align: center;
-    margin: 10px 0; /* Añadido margen vertical */
-  }
-  .volver {
-    text-align: center;
-    margin-top: 30px;
-  }
-  .volver a {
-    text-decoration: none;
-    background-color: #1a73e8;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    transition: background-color 0.2s ease;
-  }
-  .volver a:hover {
-    background-color: #0c54b8;
-  }
+    .page-header {
+        text-align: center;
+        margin: 25px 0 30px 0;
+    }
+    .page-header h1 {
+        font-size: 2.2em;
+        color: #333;
+        font-weight: 600;
+    }
+    .form-container {
+        max-width: 600px; /* Un poco más de ancho para el formulario */
+        margin: 0 auto 40px auto; /* Centrado y con margen inferior */
+        padding: 25px 30px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .form-container h2 { /* Título dentro del contenedor del formulario */
+        text-align: center;
+        font-size: 1.5em;
+        color: #007bff;
+        margin-top: 0;
+        margin-bottom: 25px;
+    }
+    .create-food-form .form-group {
+        margin-bottom: 20px;
+    }
+    .create-food-form label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #495057;
+    }
+    .create-food-form input[type="text"],
+    .create-food-form input[type="number"] {
+        width: 100%;
+        padding: 12px 15px;
+        font-size: 1em;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        box-sizing: border-box;
+        transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    .create-food-form input[type="text"]:focus,
+    .create-food-form input[type="number"]:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        outline: none;
+    }
+    .create-food-form .help-text {
+        font-size: 0.85em;
+        color: #6c757d;
+        margin-top: 5px;
+        display: block;
+    }
+    .create-food-form .errorlist {
+        color: #dc3545;
+        font-size: 0.85em;
+        list-style-type: none;
+        padding: 0;
+        margin-top: 5px;
+    }
+    .create-food-form button[type="submit"] {
+        background-color: #28a745; /* Verde para guardar */
+        color: white;
+        padding: 12px 25px;
+        font-size: 1.05em;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        width: 100%;
+        margin-top: 10px;
+    }
+    .create-food-form button[type="submit"]:hover {
+        background-color: #218838;
+    }
+    .mensaje-feedback { /* Para mensajes de éxito o error de Django */
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+        text-align: center;
+    }
+    .mensaje-feedback.success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .mensaje-feedback.error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+    .volver-link-container { /* Contenedor para el enlace de volver */
+        text-align: center;
+        margin-top: 30px;
+    }
+    .volver-link-container a {
+        text-decoration: none;
+        color: #007bff;
+        font-weight: 500;
+    }
+    .volver-link-container a:hover {
+        text-decoration: underline;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-  <h2>{% trans "Registro de alimentación" %}</h2>
+<div class="page-header">
+    <h1>{% trans "Añadir Nuevo Alimento a la Base de Datos" %}</h1>
+</div>
 
-  {% if messages %}
-    {% for message in messages %}
-      <p class="mensaje">{{ message }}</p>
-    {% endfor %}
-  {% endif %}
+<div class="form-container">
+    <h2>{% trans "Detalles del Nuevo Alimento" %}</h2>
 
-  <form method="POST">
-    {% csrf_token %}
-    <input list="sugerencias"
-           id="id_alimento_nombre"
-           name="alimento_nombre"
-           placeholder="{% trans 'Escribe un alimento...' %}"
-           required>
-    <datalist id="sugerencias"></datalist>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="mensaje-feedback {% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
 
-    {{ form.cantidad }} {# Asume que el widget ya tiene placeholder desde forms.py #}
+    <form method="POST" class="create-food-form">
+        {% csrf_token %}
+        
+        {% if form.non_field_errors %}
+            <div class="errorlist nonfield">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
 
-    <button type="submit">{% trans "Guardar" %}</button>
-  </form>
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                    <small class="help-text">{{ field.help_text|safe }}</small>
+                {% endif %}
+                {% if field.errors %}
+                    <div class="errorlist">
+                        {% for error in field.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        
+        <button type="submit">{% trans "Guardar Alimento en Base de Datos" %}</button>
+    </form>
 
-  <div class="volver">
-    <a href="{% url 'dashboard' %}">← {% trans "Volver al dashboard" %}</a>
-  </div>
+    <div class="volver-link-container">
+        <a href="{% url 'alimentos_database' %}">{% trans "← Volver a la Base de Datos de Alimentos" %}</a>
+        <span style="margin: 0 10px;">|</span>
+        <a href="{% url 'diario_alimentos_hoy' %}">{% trans "Ir a Mi Diario de Alimentos" %}</a>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_script %}
 {{ block.super }}
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  const input = document.getElementById("id_alimento_nombre");
-  const datalist = document.getElementById("sugerencias");
-
-  if (input && datalist) { // Verificar que los elementos existan
-    input.addEventListener("input", async function() {
-      const query = encodeURIComponent(input.value); // Asegurar que la query está codificada
-      if (query.length < 2) { // Opcional: no buscar si es muy corto
-          datalist.innerHTML = "";
-          return;
-      }
-      try {
-        const response = await fetch(`/sugerencias-alimentos/?q=${query}`);
-        if (!response.ok) {
-            console.error("Error en la respuesta de sugerencias:", response.status);
-            return;
-        }
-        const datos = await response.json();
-
-        datalist.innerHTML = "";
-        if (Array.isArray(datos)) {
-            datos.forEach(item => { // Asumiendo que 'datos' es [{nombre: '...'}, ...] o [nombre1, nombre2]
-                const option = document.createElement("option");
-                option.value = typeof item === 'object' && item.nombre ? item.nombre : item;
-                datalist.appendChild(option);
-            });
-        }
-      } catch (error) {
-          console.error("Error al obtener sugerencias de alimentos:", error);
-      }
-    });
-  }
-});
-</script>
+{# Ya no necesitamos el script de datalist/sugerencias aquí #}
 {% endblock %}

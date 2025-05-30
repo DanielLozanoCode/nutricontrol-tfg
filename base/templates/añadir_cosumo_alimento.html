@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block title %}{% trans "Añadir Consumo a Diario" %} | Nutricontrol{% endblock %}
+
+{# --- ITEMS PARA EL DESPLEGABLE DE ESCRITORIO DE ALIMENTOS --- #}
+{% block alimentos_dropdown_items %}
+    <li><a href="{% url 'diario_alimentos_fecha' fecha_str=fecha_diario_str|default_if_none:'' %}" class="{% if active_subsection == 'diario_alimentos' %}active{% endif %}">{% trans "Mi Diario" %}</a></li>
+    <li><a href="{% url 'alimentos_database' %}" class="{% if active_subsection == 'alimentos_database' %}active{% endif %}">{% trans "Base de Datos" %}</a></li>
+    <li><a href="{% url 'crear_alimento_personalizado' %}" class="{% if active_subsection == 'crear_alimento_personalizado' %}active{% endif %}">{% trans "Crear Alimento en BD" %}</a></li>
+{% endblock alimentos_dropdown_items %}
+
+{# --- ITEMS PARA EL MENÚ LATERAL MÓVIL DE ALIMENTOS --- #}
+{% block mobile_alimentos_dropdown_items %}
+    <a href="{% url 'diario_alimentos_fecha' fecha_str=fecha_diario_str|default_if_none:'' %}" class="mobile-dropdown-link {% if active_subsection == 'diario_alimentos' %}active{% endif %}">↳ {% trans "Mi Diario" %}</a>
+    <a href="{% url 'alimentos_database' %}" class="mobile-dropdown-link {% if active_subsection == 'alimentos_database' %}active{% endif %}">↳ {% trans "Base de Datos" %}</a>
+    <a href="{% url 'crear_alimento_personalizado' %}" class="mobile-dropdown-link {% if active_subsection == 'crear_alimento_personalizado' %}active{% endif %}">↳ {% trans "Crear Alimento en BD" %}</a>
+{% endblock mobile_alimentos_dropdown_items %}
+
+{% block extra_head %}
+{{ block.super }}
+<style>
+    .page-header {
+        text-align: center;
+        margin: 25px 0 20px 0;
+    }
+    .page-header h1 {
+        font-size: 2em;
+        color: #333;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+    .page-header .sub-info {
+        font-size: 1em;
+        color: #555;
+    }
+    .form-container {
+        max-width: 600px;
+        margin: 0 auto 40px auto;
+        padding: 25px 30px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .add-consumo-form .form-group {
+        margin-bottom: 20px;
+    }
+    .add-consumo-form label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #495057;
+    }
+    .add-consumo-form input[type="text"],
+    .add-consumo-form input[type="number"] {
+        width: 100%;
+        padding: 12px 15px;
+        font-size: 1em;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        box-sizing: border-box;
+    }
+    .add-consumo-form input[type="text"]:focus,
+    .add-consumo-form input[type="number"]:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        outline: none;
+    }
+    .add-consumo-form .help-text {
+        font-size: 0.85em;
+        color: #6c757d;
+        margin-top: 5px;
+        display: block;
+    }
+    .add-consumo-form ul.errorlist { /* Estilo para errores de campo y non_field_errors */
+        color: #dc3545;
+        font-size: 0.85em;
+        list-style-type: none;
+        padding: 0;
+        margin-top: 5px;
+        margin-bottom: 10px;
+    }
+     .add-consumo-form ul.errorlist li {
+        margin-bottom: 3px;
+    }
+    .add-consumo-form button[type="submit"] {
+        background-color: #28a745;
+        color: white;
+        padding: 12px 25px;
+        font-size: 1.05em;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        width: 100%;
+        margin-top: 10px;
+    }
+    .add-consumo-form button[type="submit"]:hover {
+        background-color: #218838;
+    }
+    .mensaje-feedback {
+        padding: 15px; margin-bottom: 20px; border-radius: 4px; text-align: center;
+    }
+    .mensaje-feedback.success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .mensaje-feedback.error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+    .volver-link-container { text-align: center; margin-top: 30px; }
+    .volver-link-container a { text-decoration: none; color: #007bff; font-weight: 500; }
+    .volver-link-container a:hover { text-decoration: underline; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{% trans "Añadir Alimento al Diario" %}</h1>
+    <p class="sub-info">
+        {% blocktrans with meal_display_name=nombre_tipo_comida_display date_display=fecha_diario|date:"j F Y" %}
+        Añadiendo a: <strong>{{ meal_display_name }}</strong> para el <strong>{{ date_display }}</strong>
+        {% endblocktrans %}
+    </p>
+</div>
+
+<div class="form-container">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="mensaje-feedback {% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    {# El action de este form apuntará a la misma URL, la vista maneja GET y POST #}
+    <form method="POST" class="add-consumo-form"> 
+        {% csrf_token %}
+        
+        {% if form.non_field_errors %}
+            <ul class="errorlist nonfield">
+                {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+            </ul>
+        {% endif %}
+
+        {# Renderizar campos visibles del AnadirConsumoAlimentoForm #}
+        <div class="form-group">
+            <label for="{{ form.alimento_nombre.id_for_label }}">{{ form.alimento_nombre.label }}</label>
+            {{ form.alimento_nombre }} {# Este input tiene list="sugerencias_consumo" #}
+            <datalist id="sugerencias_consumo"></datalist> {# Datalist para las sugerencias #}
+            {% if form.alimento_nombre.help_text %}<small class="help-text">{{ form.alimento_nombre.help_text|safe }}</small>{% endif %}
+            {% if form.alimento_nombre.errors %}<ul class="errorlist">{% for error in form.alimento_nombre.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.cantidad.id_for_label }}">{{ form.cantidad.label }}</label>
+            {{ form.cantidad }}
+            {% if form.cantidad.help_text %}<small class="help-text">{{ form.cantidad.help_text|safe }}</small>{% endif %}
+            {% if form.cantidad.errors %}<ul class="errorlist">{% for error in form.cantidad.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+        </div>
+        
+        {# Campos ocultos para fecha y tipo_comida (ya están en el form con HiddenInput) #}
+        {{ form.fecha }}
+        {{ form.tipo_comida }}
+        
+        <button type="submit">{% trans "Guardar Consumo" %}</button>
+    </form>
+
+    <div class="volver-link-container">
+        <a href="{% url 'diario_alimentos_fecha' fecha_str=fecha_diario.isoformat %}">← {% trans "Cancelar y Volver al Diario" %}</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+{{ block.super }}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const inputAlimento = document.getElementById("{{ form.alimento_nombre.id_for_label }}"); // Usa el ID del campo del form
+  const datalistSugerencias = document.getElementById("sugerencias_consumo");
+
+  if (inputAlimento && datalistSugerencias) {
+    inputAlimento.addEventListener("input", async function() {
+      const query = encodeURIComponent(inputAlimento.value);
+      if (query.length < 2) { // No buscar si es muy corto
+          datalistSugerencias.innerHTML = "";
+          return;
+      }
+      try {
+        const response = await fetch(`{% url 'sugerencias_alimentos' %}?q=${query}`);
+        if (!response.ok) {
+            console.error("Error en la respuesta de sugerencias:", response.status);
+            return;
+        }
+        const datos = await response.json();
+        datalistSugerencias.innerHTML = "";
+        if (Array.isArray(datos)) {
+            datos.forEach(nombre => {
+                const option = document.createElement("option");
+                option.value = nombre;
+                datalistSugerencias.appendChild(option);
+            });
+        }
+      } catch (error) {
+          console.error("Error al obtener sugerencias de alimentos:", error);
+      }
+    });
+  }
+});
+</script>
+{% endblock %}

@@ -5,71 +5,208 @@
 
 {# --- ITEMS PARA EL DESPLEGABLE DE ESCRITORIO DEL DASHBOARD --- #}
 {% block dashboard_dropdown_items %}
-    {# <li><a href="{% url 'dashboard' %}">{% trans "Inicio (Resumen)" %}</a></li> ELIMINADO POR REDUNDANCIA #}
-    <li><a href="#">{% trans "Mis Objetivos" %}</a></li> {# Placeholder URL #}
-    <li><a href="#">{% trans "Registrar Medidas" %}</a></li> {# Placeholder URL #}
-    <li><a href="#">{% trans "Mi Perfil" %}</a></li> {# Placeholder URL #}
-{% endblock dashboard_dropdown_items %}
+    <li><a href="{% url 'mis_objetivos' %}">{% trans "Mis Objetivos" %}</a></li>
+    <li><a href="{% url 'registrar_medidas' %}" class="{% if active_subsection == 'registrar_medidas' %}active{% endif %}">{% trans "Registrar Medidas" %}</a></li>
+<li><a href="{% url 'ver_perfil' %}" class="{% if active_subsection == 'ver_perfil' %}active{% endif %}">{% trans "Mi Perfil" %}</a></li>
+    {% endblock dashboard_dropdown_items %}
 
-{# --- ITEMS PARA EL DESPLEGABLE DEL DASHBOARD EN MÓVIL --- #}
+{# --- ITEMS PARA EL MENÚ LATERAL MÓVIL DEL DASHBOARD --- #}
 {% block mobile_dashboard_dropdown_items %}
-    {# <a href="{% url 'dashboard' %}" class="mobile-dropdown-link">↳ {% trans "Inicio (Resumen)" %}</a> ELIMINADO POR REDUNDANCIA #}
-    <a href="#" class="mobile-dropdown-link">↳ {% trans "Mis Objetivos" %}</a> {# Placeholder URL #}
-    <a href="#" class="mobile-dropdown-link">↳ {% trans "Registrar Medidas" %}</a> {# Placeholder URL #}
-    <a href="#" class="mobile-dropdown-link">↳ {% trans "Mi Perfil" %}</a> {# Placeholder URL #}
+    <a href="{% url 'mis_objetivos' %}" class="mobile-dropdown-link">↳ {% trans "Mis Objetivos" %}</a>
+    <a href="{% url 'registrar_medidas' %}" class="{% if active_subsection == 'registrar_medidas' %}active{% endif %}">{% trans "Registrar Medidas" %}</a>
+    <a href="{% url 'ver_perfil' %}" class="mobile-dropdown-link {% if active_subsection == 'ver_perfil' %}active{% endif %}">↳ {% trans "Mi Perfil" %}</a>
 {% endblock mobile_dashboard_dropdown_items %}
 
-{% block content %}
-    <h1 style="text-align: center; margin-bottom: 30px;">
-        {% trans "Bienvenido al Dashboard Principal" %}
-    </h1>
-    <p style="text-align:center;">Este es el contenido de la sección "Inicio (Resumen)" del dashboard.</p>
+{% block extra_head %}
+{{ block.super }}
+<style>
+    .dashboard-page-container {
+        padding: 0px 15px 20px 15px;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+    .dashboard-page-title {
+        text-align: center;
+        font-size: 1.8em;
+        color: #333;
+        margin: 20px 0 30px 0;
+        font-weight: 600;
+    }
     
-    <div class="carrusel-container" style="margin-top: 40px;">
-        <div class="carrusel" id="carruselDashboard">
-            <div class="testimonio">
-                <img src="{% static 'base/testimonio1.jpg' %}" alt="Stephanie">
-                <p>“{% trans "Testimonio específico del dashboard 1." %}”</p>
-                <h3>Stephanie</h3>
-            </div>
-            <div class="testimonio">
-                <img src="{% static 'base/testimonio2.jpg' %}" alt="Eric">
-                <p>“{% trans "Testimonio específico del dashboard 2." %}”</p>
-                <h3>Eric</h3>
-            </div>
-        </div>
-        <div class="carrusel-controles">
-            <button onclick="moverCarruselDashboard(-1)">←</button>
-            <button onclick="moverCarruselDashboard(1)">→</button>
-        </div>
-    </div>
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: 1fr; 
+        gap: 25px;
+        align-items: start; /* MODIFICADO: Alinear items al inicio para que no se estiren innecesariamente si el contenido es muy diferente */
+    }
+
+    @media (min-width: 992px) { 
+        .dashboard-grid {
+            grid-template-columns: minmax(0, 2.5fr) minmax(0, 1fr); 
+        }
+    }
+
+    .dashboard-main-content {
+        display: flex;
+        flex-direction: column;
+        gap: 25px; 
+    }
+    .dashboard-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 25px; 
+    }
+    
+    .dashboard-card { 
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 20px 25px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        /* Añadimos display flex para que si la tarjeta de la sidebar necesita estirarse, pueda hacerlo */
+        display: flex; 
+        flex-direction: column;
+    }
+    .dashboard-card h2, .dashboard-sidebar .dashboard-card h3 { /* Estilo común para títulos de tarjeta */
+        font-size: 1.3em; color: #007bff; margin-top: 0;
+        margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee;
+        /* display: flex; justify-content: space-between; align-items: center; Quitamos flex de h2 para el h3 de sidebar */
+    }
+     .dashboard-card h2 .date-today { font-size: 0.8em; color: #777; font-weight: normal; float:right; }
+    
+    /* Tarjeta de Calorías */
+    .calories-summary-card h2 { margin-bottom: 25px;}
+    .calories-equation {
+        display: flex; justify-content: space-around; align-items: center;
+        text-align: center; margin-bottom: 25px; flex-wrap: wrap; gap: 10px;
+    }
+    .calories-equation > div { display: flex; flex-direction: column; align-items: center; min-width: 60px; }
+    .calories-equation .value { font-size: 1.7em; font-weight: bold; color: #007bff; line-height: 1.1; }
+    .calories-equation .label { font-size: 0.75em; color: #555; margin-top: 3px; text-transform: uppercase; }
+    .calories-equation .operator { font-size: 1.4em; color: #777; align-self: center; padding: 0 5px; }
+    .calories-remaining .value { color: #28a745; font-size: 2.5em; }
+    
+    .add-buttons-container { margin-top: 20px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+    .add-buttons-container .btn-add {
+        background-color: #007bff; color: white; padding: 10px 20px;
+        font-size: 0.95em; font-weight: bold; border: none; border-radius: 5px;
+        text-decoration: none; cursor: pointer; transition: background-color 0.2s ease;
+        display: inline-flex; align-items: center; gap: 8px;
+    }
+    .add-buttons-container .btn-add:hover { background-color: #0056b3; }
+
+    /* Tarjeta de Macronutrientes */
+    .macros-summary-card .macro-item { margin-bottom: 18px; }
+    .macro-item .macro-label-container {
+        display: flex; justify-content: space-between;
+        font-weight: bold; margin-bottom: 6px; font-size: 0.9em;
+    }
+    .macro-item .macro-name { color: #333; }
+    .macro-item .macro-values { font-size: 0.9em; color: #555; }
+    .progress-bar-bg {
+        background-color: #e9ecef; border-radius: 20px;
+        height: 18px; overflow: hidden; position: relative;
+    }
+    .progress-bar-fill {
+        height: 100%; border-radius: 20px; transition: width 0.5s ease-out;
+        display: flex; align-items: center; justify-content: flex-end;
+        padding-right: 8px; color: white; font-size: 0.75em; font-weight: bold;
+    }
+    .progress-bar-fill.protein { background-color: #28a745; } 
+    .progress-bar-fill.fat { background-color: #ffc107; color: #333; }
+    .progress-bar-fill.carbs { background-color: #fd7e14; } 
+
+    /* Tarjeta de "Más Acciones" */
+    .quick-action-buttons h2 { /* Estilo para el título de esta tarjeta */
+        /* No necesita flex si no tiene .date-today */
+    }
+
+    /* Columna Lateral (Publicidad) */
+    .dashboard-sidebar .ad-placeholder {
+        background-color: #f0f0f0; /* Un gris un poco más oscuro que el fondo de página si fuera blanco */
+        flex-grow: 1; /* Permitir que el placeholder crezca */
+        min-height: 200px; /* Altura mínima para cada anuncio */
+        display: flex; align-items: center; justify-content: center; 
+        color: #777; border-radius: 6px; font-style: italic; 
+        padding: 20px; text-align: center;
+        border: 1px dashed #ccc;
+    }
+    .dashboard-sidebar .dashboard-card h3 { /* Título para "Anuncios" */
+        font-size: 1.1em; color: #333; text-align: left; 
+        margin-top: 0; margin-bottom: 15px; padding-bottom: 8px;
+        border-bottom: 1px solid #eee;
+    }
+
+</style>
 {% endblock %}
 
-{% block extra_head %}
-    {{ block.super }} {# Importante si base.html tiene contenido en extra_head #}
-    <style>
-    .carrusel-container { max-width: 1000px; margin: 50px auto; overflow: hidden; position: relative; }
-    .carrusel { display: flex; transition: transform 0.4s ease-in-out; }
-    .testimonio { min-width: 100%; box-sizing: border-box; padding: 40px 20px; text-align: center; }
-    .testimonio img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; }
-    .testimonio h3 { margin-top: 10px; color: #1a73e8; }
-    .testimonio p { font-size: 16px; color: #555; }
-    .carrusel-controles { text-align: center; margin-top: 10px; }
-    .carrusel-controles button { background-color: #1a73e8; border: none; color: white; padding: 8px 15px; margin: 0 5px; cursor: pointer; border-radius: 5px; }
-    .carrusel-controles button:hover { background-color: #0c54b8; }
-    </style>
+{% block content %}
+<div class="dashboard-page-container">
+    <div class="dashboard-page-title">
+        {% trans "Bienvenido de nuevo," %} {{ user.first_name|default:user.username }}!
+    </div>
+
+    <div class="dashboard-grid">
+        <main class="dashboard-main-content">
+            <section class="dashboard-card calories-summary-card">
+                <h2>
+                    <span>{% trans "Resumen del Día" %}</span>
+                    <span class="date-today">{% now "DATE_FORMAT" %}</span>
+                </h2>
+                <div class="calories-equation">
+                    <div><span class="value">{{ calorias_objetivo|default_if_none:"0"|floatformat:0 }}</span><span class="label">{% trans "Objetivo" %}</span></div>
+                    <span class="operator">-</span>
+                    <div><span class="value">{{ calorias_consumidas|default_if_none:"0"|floatformat:0 }}</span><span class="label">{% trans "Alimentos" %}</span></div>
+                    <span class="operator">+</span>
+                    <div><span class="value">{{ calorias_ejercicio|default_if_none:"0"|floatformat:0 }}</span><span class="label">{% trans "Ejercicio" %}</span></div>
+                    <span class="operator">=</span>
+                    <div class="calories-remaining"><span class="value">{{ calorias_restantes|default_if_none:"0"|floatformat:0 }}</span><span class="label">{% trans "Restantes" %}</span></div>
+                </div>
+                <div class="add-buttons-container">
+                    <a href="{% url 'registro_alimentacion' %}" class="btn-add">➕ {% trans "Añadir Alimento" %}</a>
+                </div>
+            </section>
+
+            <section class="dashboard-card macros-summary-card">
+                <h2>{% trans "Macronutrientes" %}</h2>
+                <div class="macro-item">
+                    <div class="macro-label-container"><span class="macro-name">{% trans "Carbohidratos" %}</span><span class="macro-values">{{ consumo_carbohidratos|default_if_none:"0"|floatformat:0 }}g / {{ objetivo_carbohidratos|default_if_none:"0"|floatformat:0 }}g</span></div>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill carbs" style="width: {{ porcentaje_carbohidratos|default_if_none:"0" }}%;">{% if porcentaje_carbohidratos > 10 %}{{ porcentaje_carbohidratos|floatformat:0 }}%{% endif %}</div></div>
+                </div>
+                <div class="macro-item">
+                    <div class="macro-label-container"><span class="macro-name">{% trans "Grasas" %}</span><span class="macro-values">{{ consumo_grasas|default_if_none:"0"|floatformat:0 }}g / {{ objetivo_grasas|default_if_none:"0"|floatformat:0 }}g</span></div>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill fat" style="width: {{ porcentaje_grasas|default_if_none:"0" }}%;">{% if porcentaje_grasas > 10 %}{{ porcentaje_grasas|floatformat:0 }}%{% endif %}</div></div>
+                </div>
+                <div class="macro-item">
+                    <div class="macro-label-container"><span class="macro-name">{% trans "Proteínas" %}</span><span class="macro-values">{{ consumo_proteinas|default_if_none:"0"|floatformat:0 }}g / {{ objetivo_proteinas|default_if_none:"0"|floatformat:0 }}g</span></div>
+                    <div class="progress-bar-bg"><div class="progress-bar-fill protein" style="width: {{ porcentaje_proteinas|default_if_none:"0" }}%;">{% if porcentaje_proteinas > 10 %}{{ porcentaje_proteinas|floatformat:0 }}%{% endif %}</div></div>
+                </div>
+            </section>
+            
+            <section class="dashboard-card quick-action-buttons">
+                 <h2>{% trans "Más Acciones" %}</h2>
+                <div class="add-buttons-container"> 
+                    <a href="{% url 'resumen_diario' %}" class="btn-add" style="background-color: #6c757d;">{% trans "Ver Resumen Detallado" %}</a>
+                    <a href="{% url 'lista_registros' %}" class="btn-add" style="background-color: #6c757d;">{% trans "Historial de Registros" %}</a>
+                    <a href="{% url 'ver_ejercicios' %}" class="btn-add" style="background-color: #6c757d;">{% trans "Explorar Ejercicios" %}</a>
+                </div>
+            </section>
+        </main>
+
+        <aside class="dashboard-sidebar">
+            {# Tarjeta de Anuncios con dos placeholders fake #}
+            <div class="dashboard-card"> 
+                <h3>{% trans "Anuncios" %}</h3> 
+                <div class="ad-placeholder">{% trans "Publicidad Fake 1" %}</div>
+                <div class="ad-placeholder" style="margin-top: 20px;">{% trans "Publicidad Fake 2" %}</div>
+            </div>
+            
+            {# Carrusel ELIMINADO #}
+        </aside>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_script %}
-    {{ block.super }} {# Importante si base.html tiene contenido en extra_script #}
-    <script>
-    let dashboardCarouselIndex = 0;
-    function moverCarruselDashboard(direccion) {
-        const carrusel = document.getElementById('carruselDashboard');
-        if (!carrusel || !carrusel.children || carrusel.children.length === 0) return;
-        const totalSlides = carrusel.children.length;
-        dashboardCarouselIndex = (dashboardCarouselIndex + direccion + totalSlides) % totalSlides;
-        carrusel.style.transform = `translateX(-${dashboardCarouselIndex * 100}%)`;
-    }
-    </script>
+{{ block.super }}
+{# Script del carrusel ELIMINADO #}
 {% endblock %}

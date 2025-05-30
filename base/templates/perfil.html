@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block title %}{% trans "Mi Perfil | Nutricontrol" %}{% endblock %}
+
+{# --- ITEMS PARA EL DESPLEGABLE DE ESCRITORIO DEL DASHBOARD --- #}
+{% block dashboard_dropdown_items %}
+    <li><a href="{% url 'dashboard' %}">{% trans "Inicio (Resumen)" %}</a></li>
+    <li><a href="{% url 'mis_objetivos' %}">{% trans "Mis Objetivos" %}</a></li> 
+    <li><a href="{% url 'registrar_medidas' %}">{% trans "Registrar Medidas" %}</a></li>
+    <li><a href="{% url 'ver_perfil' %}" class="active">{% trans "Mi Perfil" %}</a></li>
+{% endblock dashboard_dropdown_items %}
+
+{# --- ITEMS PARA EL MENÚ LATERAL MÓVIL DEL DASHBOARD --- #}
+{% block mobile_dashboard_dropdown_items %}
+    <a href="{% url 'dashboard' %}" class="mobile-dropdown-link">↳ {% trans "Inicio (Resumen)" %}</a>
+    <a href="{% url 'mis_objetivos' %}" class="mobile-dropdown-link">↳ {% trans "Mis Objetivos" %}</a>
+    <a href="{% url 'registrar_medidas' %}" class="mobile-dropdown-link">↳ {% trans "Registrar Medidas" %}</a>
+    <a href="{% url 'ver_perfil' %}" class="mobile-dropdown-link active">↳ {% trans "Mi Perfil" %}</a>
+{% endblock mobile_dashboard_dropdown_items %}
+
+{% block extra_head %}
+{{ block.super }}
+<style>
+    .page-header {
+        text-align: center;
+        margin: 25px 0 35px 0;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+    .page-header h1 {
+        font-size: 2.2em; color: #333; font-weight: 600; margin: 0;
+    }
+    .perfil-container {
+        max-width: 900px; margin: 0 auto 40px auto; padding: 0 15px;
+    }
+    .perfil-card {
+        background-color: #fff; border-radius: 8px;
+        padding: 25px 30px; box-shadow: 0 3px 10px rgba(0,0,0,0.07);
+        margin-bottom: 30px;
+    }
+    .perfil-card h2 {
+        font-size: 1.5em; color: #007bff; margin-top: 0;
+        margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eee;
+    }
+    .perfil-header {
+        display: flex; align-items: center; margin-bottom: 25px;
+        gap: 25px; flex-wrap: wrap; 
+    }
+    .perfil-foto-container { flex-shrink: 0; }
+    .perfil-foto {
+        width: 120px; height: 120px; border-radius: 50%;
+        object-fit: cover; border: 3px solid #eee;
+    }
+    .perfil-info h1 { font-size: 1.8em; margin-top: 0; margin-bottom: 5px; color: #333; }
+    .perfil-info p { font-size: 0.95em; color: #555; margin-bottom: 15px; }
+    .btn-editar-perfil {
+        display: inline-block; background-color: #007bff; color: white;
+        padding: 10px 20px; text-decoration: none; border-radius: 5px;
+        font-weight: bold; transition: background-color 0.2s ease;
+    }
+    .btn-editar-perfil:hover { background-color: #0056b3; }
+    .datos-lista, .medidas-lista { list-style: none; padding: 0; margin: 0; }
+    .datos-lista li, .medidas-lista li {
+        display: flex; justify-content: space-between;
+        padding: 10px 0; font-size: 1em;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .datos-lista li:last-child, 
+    .medidas-lista li:last-child:not(.link-registrar-li) { /* No quitar borde si el link está debajo */
+        border-bottom: none;
+    }
+    .medidas-lista .link-registrar-li { /* Li que contiene el enlace para registrar */
+        padding-top: 20px; /* Espacio antes del enlace */
+        border-bottom: none; 
+        justify-content: flex-end; /* Alinear el enlace a la derecha */
+    }
+    .datos-lista .label, .medidas-lista .label { color: #555; font-weight: 600; }
+    .datos-lista .value, .medidas-lista .value { color: #333; font-weight: 500; text-align: right; }
+    .no-data { font-style: italic; color: #777; }
+    .medidas-lista .link-registrar a {
+        color: #007bff; text-decoration: none; font-weight: bold;
+    }
+    .medidas-lista .link-registrar a:hover { text-decoration: underline; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header"><h1>{% trans "Mi Perfil" %}</h1></div>
+
+<div class="perfil-container">
+    <section class="perfil-card">
+        <div class="perfil-header">
+            <div class="perfil-foto-container">
+                {% if usuario_perfil.foto_perfil and usuario_perfil.foto_perfil.url %}
+                    <img src="{{ usuario_perfil.foto_perfil.url }}" alt="{% trans 'Foto de perfil' %}" class="perfil-foto">
+                {% else %}
+                    <img src="{% static 'base/fotos_perfil/default.png' %}" alt="{% trans 'Foto de perfil por defecto' %}" class="perfil-foto">
+                {% endif %}
+            </div>
+            <div class="perfil-info">
+                <h1>{{ usuario_perfil.first_name|default:usuario_perfil.username }}</h1>
+                <p>{% trans "Nombre de usuario" %}: {{ usuario_perfil.username }}</p>
+                <p>{% trans "Miembro desde" %}: {{ usuario_perfil.date_joined|date:"j F Y" }}</p> {# Formato de fecha más amigable #}
+                <a href="#" class="btn-editar-perfil">{% trans "EDITAR PERFIL" %}</a> {# Placeholder: {% url 'editar_perfil' %} #}
+            </div>
+        </div>
+    </section>
+
+    <section class="perfil-card">
+        <h2>{% trans "Mis Datos Personales y Objetivos" %}</h2>
+        <ul class="datos-lista">
+            <li><span class="label">{% trans "Email:" %}</span> <span class="value">{{ usuario_perfil.email }}</span></li>
+            <li><span class="label">{% trans "Edad:" %}</span> <span class="value">{{ usuario_perfil.edad|default_if_none:"No especificada" }} {% if usuario_perfil.edad %}{% trans "años" %}{% endif %}</span></li>
+            <li><span class="label">{% trans "Sexo:" %}</span> <span class="value">{{ usuario_perfil.get_sexo_display|default_if_none:"No especificado" }}</span></li>
+            <li><span class="label">{% trans "Objetivo Principal:" %}</span> <span class="value">{{ usuario_perfil.get_objetivo_display|default_if_none:"No especificado" }}</span></li>
+            <li><span class="label">{% trans "Nivel de Actividad Física:" %}</span> <span class="value">{{ usuario_perfil.actividad_fisica|default_if_none:"No especificado" }}</span></li>
+        </ul>
+    </section>
+
+    <section class="perfil-card">
+        <h2>{% trans "Mis Medidas Actuales" %}</h2>
+        <ul class="medidas-lista">
+            <li><span class="label">{% trans "Peso Actual:" %}</span> <span class="value">{{ usuario_perfil.peso|default_if_none:"--"|floatformat:"1" }} kg</span></li>
+            <li><span class="label">{% trans "Altura:" %}</span> <span class="value">{{ usuario_perfil.altura|default_if_none:"--"|floatformat:"0" }} cm</span></li>
+            
+            {% if ultimas_medidas %}
+                {% if ultimas_medidas.cuello is not None %}<li><span class="label">{% trans "Cuello:" %}</span> <span class="value">{{ ultimas_medidas.cuello|floatformat:"1" }} cm</span></li>{% endif %}
+                {% if ultimas_medidas.cintura is not None %}<li><span class="label">{% trans "Cintura:" %}</span> <span class="value">{{ ultimas_medidas.cintura|floatformat:"1" }} cm</span></li>{% endif %}
+                {% if ultimas_medidas.caderas is not None %}<li><span class="label">{% trans "Caderas:" %}</span> <span class="value">{{ ultimas_medidas.caderas|floatformat:"1" }} cm</span></li>{% endif %}
+                <li class="link-registrar-li"> {# Movido el link-registrar a su propio li si es el último item lógico #}
+                    <div class="link-registrar">
+                        <span class="label" style="margin-right:auto; font-weight:normal; color:#555;">{% trans "Medidas del" %}: {{ ultimas_medidas.fecha|date:"j F Y" }}</span>
+                        <a href="{% url 'registrar_medidas' %}">{% trans "Actualizar medidas" %} &rarr;</a>
+                    </div>
+                </li>
+            {% else %}
+                <li><span class="label">{% trans "Otras medidas:" %}</span> <span class="value no-data">{% trans "Aún no registradas" %}</span></li>
+                <li class="link-registrar-li">
+                     <div class="link-registrar">
+                        <a href="{% url 'registrar_medidas' %}">{% trans "Registrar mis medidas" %} &rarr;</a>
+                    </div>
+                </li>
+            {% endif %}
+        </ul>
+    </section>
+</div>
+{% endblock %}

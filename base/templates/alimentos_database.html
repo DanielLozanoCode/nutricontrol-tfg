@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block title %}{% trans "Base de Datos de Alimentos | Nutricontrol" %}{% endblock %}
+
+{# --- ITEMS PARA EL DESPLEGABLE DE ESCRITORIO DE ALIMENTOS --- #}
+{% block alimentos_dropdown_items %}
+    <li><a href="{% url 'diario_alimentos_hoy' %}" class="{% if active_subsection == 'diario_alimentos' %}active{% endif %}">{% trans "Mi Diario" %}</a></li>
+    <li><a href="{% url 'alimentos_database' %}" class="{% if active_subsection == 'alimentos_database' %}active{% endif %}">{% trans "Base de Datos" %}</a></li>
+    <li><a href="{% url 'registro_alimentacion' %}" class="{% if active_subsection == 'registro_alimentacion' %}active{% endif %}">{% trans "Registrar Alimento" %}</a></li>
+{% endblock alimentos_dropdown_items %}
+
+{# --- ITEMS PARA EL MENÚ LATERAL MÓVIL DE ALIMENTOS --- #}
+{% block mobile_alimentos_dropdown_items %}
+    <a href="{% url 'diario_alimentos_hoy' %}" class="mobile-dropdown-link {% if active_subsection == 'diario_alimentos' %}active{% endif %}">↳ {% trans "Mi Diario" %}</a>
+    <a href="{% url 'alimentos_database' %}" class="mobile-dropdown-link {% if active_subsection == 'alimentos_database' %}active{% endif %}">↳ {% trans "Base de Datos" %}</a>
+    <a href="{% url 'registro_alimentacion' %}" class="mobile-dropdown-link {% if active_subsection == 'registro_alimentacion' %}active{% endif %}">↳ {% trans "Registrar Alimento" %}</a>
+{% endblock mobile_alimentos_dropdown_items %}
+
+{% block extra_head %}
+{{ block.super }}
+<style>
+    .page-header {
+        text-align: center;
+        margin: 25px 0 30px 0;
+    }
+    .page-header h1 {
+        font-size: 2.2em; color: #333; font-weight: 600; margin: 0;
+    }
+
+    .database-grid {
+        display: grid;
+        grid-template-columns: 1fr; /* Por defecto una columna para móviles */
+        gap: 30px; 
+        max-width: 1100px; 
+        margin: 0 auto 40px auto; 
+        padding: 0 15px;
+    }
+
+    @media (min-width: 992px) { /* Dos columnas para pantallas más grandes */
+        .database-grid {
+            grid-template-columns: minmax(0, 2.5fr) minmax(0, 1fr); 
+        }
+    }
+
+    .database-main-content {
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 25px 30px; 
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .database-main-content h2 { /* Título dentro de la tarjeta principal */
+        font-size: 1.4em; 
+        color: #007bff; 
+        margin-top: 0;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    /* Formulario de búsqueda */
+    .search-form {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 30px;
+    }
+    .search-form input[type="text"] {
+        flex-grow: 1;
+        padding: 10px 15px;
+        font-size: 1em;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        box-sizing: border-box;
+    }
+    .search-form button[type="submit"] {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        font-size: 1em;
+        font-weight: bold;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+    .search-form button[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+    /* Resultados de búsqueda */
+    .search-results h3 {
+        font-size: 1.2em;
+        color: #333;
+        margin-top: 0;
+        margin-bottom: 15px;
+    }
+    .search-results .food-item {
+        border: 1px solid #eee;
+        border-radius: 6px;
+        padding: 15px;
+        margin-bottom: 15px;
+        background-color: #f8f9fa;
+    }
+    .search-results .food-item h4 { /* Nombre del alimento */
+        margin-top: 0;
+        margin-bottom: 10px;
+        font-size: 1.1em;
+        color: #007bff;
+    }
+    .search-results .food-item p {
+        margin-bottom: 5px;
+        font-size: 0.95em;
+        color: #555;
+    }
+    .search-results .food-item p strong {
+        color: #333;
+    }
+    .no-results {
+        font-style: italic;
+        color: #777;
+    }
+
+    /* Sidebar (Publicidad) */
+    .database-sidebar .ad-placeholder {
+        background-color: #e9ecef; min-height: 200px; display: flex; 
+        align-items: center; justify-content: center; color: #6c757d; 
+        border-radius: 6px; font-style: italic; padding: 20px; text-align: center;
+        margin-bottom: 25px; border: 1px dashed #ccc;
+    }
+    .database-sidebar h3 { /* Título para "Anuncios" */
+        font-size: 1em; color: #6c757d; text-align: center;
+        margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{% trans "Base de Datos de Alimentos" %}</h1>
+</div>
+
+<div class="database-grid">
+    <main class="database-main-content">
+        <h2>{% trans "Buscar Alimento" %}</h2>
+        <form method="GET" action="{% url 'alimentos_database' %}" class="search-form">
+            <input type="text" name="q_alimento" placeholder="{% trans 'Escribe el nombre del alimento...' %}" value="{{ termino_busqueda|default:'' }}">
+            <button type="submit">{% trans "Buscar" %}</button>
+        </form>
+
+        <div class="search-results">
+            {% if termino_busqueda and not resultados_busqueda %}
+                <h3>{% trans "Resultados para" %}: "{{ termino_busqueda }}"</h3>
+                <p class="no-results">{% trans "No se encontraron alimentos con ese nombre." %}</p>
+            {% elif resultados_busqueda %}
+                <h3>{% trans "Resultados para" %}: "{{ termino_busqueda }}"</h3>
+                {% for alimento in resultados_busqueda %}
+                    <div class="food-item">
+                        <h4>{{ alimento.nombre }}</h4>
+                        <p><strong>{% trans "Calorías:" %}</strong> {{ alimento.calorias|floatformat:0 }} kcal / 100g</p>
+                        <p><strong>{% trans "Proteínas:" %}</strong> {{ alimento.proteinas|floatformat:1 }}g / 100g</p>
+                        <p><strong>{% trans "Grasas:" %}</strong> {{ alimento.grasas|floatformat:1 }}g / 100g</p>
+                        <p><strong>{% trans "Carbohidratos:" %}</strong> {{ alimento.carbohidratos|floatformat:1 }}g / 100g</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="no-results">{% trans "Introduce un término para buscar en la base de datos." %}</p>
+            {% endif %}
+        </div>
+    </main>
+
+    <aside class="database-sidebar">
+        <div class="diario-card"> {# Reutilizando estilo de tarjeta para consistencia #}
+            <h3>{% trans "Anuncios" %}</h3>
+            <div class="ad-placeholder">
+                {% trans "Publicidad Fake 1" %}
+            </div>
+            <div class="ad-placeholder" style="margin-top: 20px;">
+                {% trans "Publicidad Fake 2" %}
+            </div>
+        </div>
+    </aside>
+</div>
+{% endblock %}

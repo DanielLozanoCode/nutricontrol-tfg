@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block title %}{% trans "Editar Consumo de Alimento | Nutricontrol" %}{% endblock %}
+
+{# --- ITEMS PARA EL DESPLEGABLE DE ESCRITORIO DE ALIMENTOS --- #}
+{% block alimentos_dropdown_items %}
+    <li><a href="{% url 'diario_alimentos_fecha' fecha_str=fecha_diario_actual|default_if_none:'' %}" class="{% if active_subsection == 'diario_alimentos' %}active{% endif %}">{% trans "Mi Diario" %}</a></li>
+    <li><a href="{% url 'alimentos_database' %}" class="{% if active_subsection == 'alimentos_database' %}active{% endif %}">{% trans "Base de Datos" %}</a></li>
+    <li><a href="{% url 'crear_alimento_personalizado' %}" class="{% if active_subsection == 'crear_alimento_personalizado' %}active{% endif %}">{% trans "Crear Alimento en BD" %}</a></li>
+{% endblock alimentos_dropdown_items %}
+
+{# --- ITEMS PARA EL MENÚ LATERAL MÓVIL DE ALIMENTOS --- #}
+{% block mobile_alimentos_dropdown_items %}
+    <a href="{% url 'diario_alimentos_fecha' fecha_str=fecha_diario_actual|default_if_none:'' %}" class="mobile-dropdown-link {% if active_subsection == 'diario_alimentos' %}active{% endif %}">↳ {% trans "Mi Diario" %}</a>
+    <a href="{% url 'alimentos_database' %}" class="mobile-dropdown-link {% if active_subsection == 'alimentos_database' %}active{% endif %}">↳ {% trans "Base de Datos" %}</a>
+    <a href="{% url 'crear_alimento_personalizado' %}" class="mobile-dropdown-link {% if active_subsection == 'crear_alimento_personalizado' %}active{% endif %}">↳ {% trans "Crear Alimento en BD" %}</a>
+{% endblock mobile_alimentos_dropdown_items %}
+
+{% block extra_head %}
+{{ block.super }}
+<style>
+    .page-header {
+        text-align: center;
+        margin: 25px 0 20px 0;
+    }
+    .page-header h1 {
+        font-size: 2.2em; color: #333; font-weight: 600; margin-bottom: 5px;
+    }
+     .page-header .sub-info {
+        font-size: 1em; color: #555;
+    }
+    .form-container {
+        max-width: 600px; margin: 0 auto 40px auto; padding: 25px 30px;
+        background-color: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .edit-consumo-form .form-group { margin-bottom: 20px; }
+    .edit-consumo-form label { display: block; font-weight: 600; margin-bottom: 8px; color: #495057; }
+    .edit-consumo-form input[type="text"],
+    .edit-consumo-form input[type="number"] {
+        width: 100%; padding: 12px 15px; font-size: 1em;
+        border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box;
+    }
+    .edit-consumo-form input[type="text"]:focus,
+    .edit-consumo-form input[type="number"]:focus {
+        border-color: #007bff; box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); outline: none;
+    }
+    .edit-consumo-form .help-text { font-size: 0.85em; color: #6c757d; margin-top: 5px; display: block; }
+    .edit-consumo-form ul.errorlist { color: #dc3545; font-size: 0.85em; list-style-type: none; padding: 0; margin-top: 5px; margin-bottom: 10px;}
+    .edit-consumo-form ul.errorlist li { margin-bottom: 3px;}
+    .edit-consumo-form button[type="submit"] {
+        background-color: #007bff; /* Azul para actualizar */ color: white;
+        padding: 12px 25px; font-size: 1.05em; font-weight: bold;
+        border: none; border-radius: 5px; cursor: pointer;
+        transition: background-color 0.2s ease; width: 100%; margin-top: 10px;
+    }
+    .edit-consumo-form button[type="submit"]:hover { background-color: #0056b3; }
+    .mensaje-feedback { padding: 15px; margin-bottom: 20px; border-radius: 4px; text-align: center; }
+    .mensaje-feedback.success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .mensaje-feedback.error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    .volver-link-container { text-align: center; margin-top: 30px; }
+    .volver-link-container a { text-decoration: none; color: #007bff; font-weight: 500; }
+    .volver-link-container a:hover { text-decoration: underline; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{% trans "Editar Consumo de Alimento" %}</h1>
+    <p class="sub-info">
+        {% if registro_editando %}
+            {% blocktrans with meal_name=nombre_tipo_comida_display date_val=registro_editando.fecha|date:"j F Y" food_name=registro_editando.alimento.nombre %}
+            Modificando "{{ food_name }}" para <strong>{{ meal_name }}</strong> del día <strong>{{ date_val }}</strong>
+            {% endblocktrans %}
+        {% endif %}
+    </p>
+</div>
+
+<div class="form-container">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="mensaje-feedback {% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST" class="edit-consumo-form"> 
+        {% csrf_token %}
+        
+        {% if form.non_field_errors %}
+            <ul class="errorlist nonfield">
+                {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+            </ul>
+        {% endif %}
+
+        <div class="form-group">
+            <label for="{{ form.alimento_nombre.id_for_label }}">{{ form.alimento_nombre.label }}</label>
+            {{ form.alimento_nombre }}
+            <datalist id="sugerencias_consumo_edit"></datalist>
+            {% if form.alimento_nombre.help_text %}<small class="help-text">{{ form.alimento_nombre.help_text|safe }}</small>{% endif %}
+            {% if form.alimento_nombre.errors %}<ul class="errorlist">{% for error in form.alimento_nombre.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.cantidad.id_for_label }}">{{ form.cantidad.label }}</label>
+            {{ form.cantidad }}
+            {% if form.cantidad.help_text %}<small class="help-text">{{ form.cantidad.help_text|safe }}</small>{% endif %}
+            {% if form.cantidad.errors %}<ul class="errorlist">{% for error in form.cantidad.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+        </div>
+        
+        {# Los campos fecha y tipo_comida son parte del registro original y no se editan aquí #}
+        {# Si quisieras permitir editar el tipo de comida, deberías añadir el campo al form #}
+        
+        <button type="submit">{% trans "Guardar Cambios" %}</button>
+    </form>
+
+    <div class="volver-link-container">
+        <a href="{% url 'diario_alimentos_fecha' fecha_str=fecha_diario_actual %}">← {% trans "Cancelar y Volver al Diario" %}</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+{{ block.super }}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const inputAlimentoEdit = document.getElementById("{{ form.alimento_nombre.id_for_label }}");
+  const datalistSugerenciasEdit = document.getElementById("sugerencias_consumo_edit");
+
+  if (inputAlimentoEdit && datalistSugerenciasEdit) {
+    inputAlimentoEdit.addEventListener("input", async function() {
+      const query = encodeURIComponent(inputAlimentoEdit.value);
+      if (query.length < 2) {
+          datalistSugerenciasEdit.innerHTML = "";
+          return;
+      }
+      try {
+        const response = await fetch(`{% url 'sugerencias_alimentos' %}?q=${query}`);
+        if (!response.ok) {
+            console.error("Error en la respuesta de sugerencias:", response.status);
+            return;
+        }
+        const datos = await response.json();
+        datalistSugerenciasEdit.innerHTML = "";
+        if (Array.isArray(datos)) {
+            datos.forEach(nombre => {
+                const option = document.createElement("option");
+                option.value = nombre;
+                datalistSugerenciasEdit.appendChild(option);
+            });
+        }
+      } catch (error) {
+          console.error("Error al obtener sugerencias de alimentos:", error);
+      }
+    });
+  }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,286 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block title %}{% trans "Mi Diario de Alimentos | Nutricontrol" %}{% endblock %}
+
+{# --- ITEMS PARA EL DESPLEGABLE DE ESCRITORIO DE ALIMENTOS --- #}
+{% block alimentos_dropdown_items %}
+    <li><a href="{% url 'diario_alimentos_hoy' %}" class="{% if active_subsection == 'diario_alimentos' %}active{% endif %}">{% trans "Mi Diario" %}</a></li>
+    <li><a href="#">{% trans "Base de Datos" %}</a></li> {# Placeholder: {% url 'alimentos_database' %} #}
+    <li><a href="{% url 'registro_alimentacion' %}?fecha={{ fecha_seleccionada_str|default_if_none:'' }}">{% trans "Registrar Alimento" %}</a></li>
+{% endblock alimentos_dropdown_items %}
+
+{# --- ITEMS PARA EL MENÚ LATERAL MÓVIL DE ALIMENTOS --- #}
+{% block mobile_alimentos_dropdown_items %}
+    <a href="{% url 'diario_alimentos_hoy' %}" class="mobile-dropdown-link {% if active_subsection == 'diario_alimentos' %}active{% endif %}">↳ {% trans "Mi Diario" %}</a>
+    <a href="#" class="mobile-dropdown-link">↳ {% trans "Base de Datos" %}</a>
+    <a href="{% url 'registro_alimentacion' %}?fecha={{ fecha_seleccionada_str|default_if_none:'' }}" class="mobile-dropdown-link">↳ {% trans "Registrar Alimento" %}</a>
+{% endblock mobile_alimentos_dropdown_items %}
+
+
+{% block extra_head %}
+{{ block.super }}
+<style>
+    .page-header { text-align: center; margin: 25px 0 20px 0; } 
+    .page-header h1 { font-size: 2.2em; color: #333; font-weight: 600; margin: 0; }
+    .date-navigation { display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 25px; }
+    .date-navigation a, .date-navigation input[type="date"] {
+        padding: 8px 12px; background-color: #007bff; color: white; text-decoration: none; 
+        border-radius: 5px; border: none; font-size: 0.9em; cursor: pointer;
+    }
+    .date-navigation a:hover { background-color: #0056b3; }
+    .date-navigation input[type="date"] { border: 1px solid #ccc; color: #495057; background-color: #fff; }
+    .date-navigation .current-date-display { font-size: 1.1em; font-weight: bold; color: #333; }
+    
+    .diario-grid { display: grid; grid-template-columns: 1fr; gap: 30px; max-width: 1100px; margin: 0 auto 40px auto; padding: 0 15px;}
+    @media (min-width: 992px) { .diario-grid { grid-template-columns: minmax(0, 2.5fr) minmax(0, 1fr); } }
+    .diario-main-content { display: flex; flex-direction: column; gap: 25px; }
+    
+    .diario-card { background-color: #fff; border-radius: 8px; padding: 20px 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .diario-card h2, .diario-card h3.card-title { 
+        font-size: 1.3em; color: #007bff; margin-top: 0; margin-bottom: 15px; 
+        padding-bottom: 10px; border-bottom: 1px solid #eee;
+        display: flex; justify-content: space-between; align-items: center;
+    }
+    .meal-section h3.card-title { color: #333; font-size: 1.2em; border-bottom-style: dashed; }
+    .meal-section .total-meal-calories { font-size: 0.9em; color: #555; font-weight: normal; }
+    
+    .meal-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 0.95em; border-bottom: 1px dotted #ddd; }
+    .meal-item:last-child { border-bottom: none; }
+    .meal-item .food-name { color: #444; flex-grow: 1; margin-right:10px;}
+    .meal-item .food-details { font-size: 0.85em; color: #777; margin-right:10px; }
+    .meal-item .food-calories { font-weight: bold; color: #007bff; white-space:nowrap; }
+    .meal-item .actions { white-space:nowrap; margin-left:15px;}
+    .meal-item .actions a { color: #dc3545; text-decoration: none; font-size: 0.8em; margin-left: 10px; }
+    .meal-item .actions a:hover { text-decoration: underline; }
+    .btn-add-food {
+        display: inline-block; background-color: #28a745; color: white; padding: 8px 15px; 
+        text-decoration: none; border-radius: 5px; font-size: 0.9em; font-weight: bold; 
+        margin-top: 15px; transition: background-color 0.2s ease;
+    }
+    .btn-add-food:hover { background-color: #218838; }
+    .no-food-message { color: #777; font-style: italic; margin-top: 10px; }
+
+    .nutrient-summary-card { padding: 20px; }
+    .nutrient-summary-card h2 { 
+        text-align: left; justify-content: flex-start; font-size: 1.2em; 
+        color: #333; margin-bottom: 15px; 
+    }
+    .nutrient-summary-table { width: 100%; border-collapse: collapse; margin-top: 5px; font-size: 0.9em; }
+    .nutrient-summary-table th, .nutrient-summary-table td {
+        text-align: right; padding: 10px 5px; 
+        border-bottom: 1px solid #f0f0f0; vertical-align: middle; 
+    }
+    .nutrient-summary-table th:first-child, .nutrient-summary-table td:first-child { 
+        text-align: left; font-weight: 600; color: #444; padding-left: 0;
+    }
+    .nutrient-summary-table td { color: #333; } 
+    .nutrient-summary-table thead th { 
+        color: #6c757d; font-weight: 500; border-bottom-width: 1px; 
+        border-bottom-color: #dee2e6; padding-bottom: 8px;
+    }
+    .nutrient-summary-table tbody tr:last-child td { border-bottom: none; }
+    .nutrient-summary-table .highlight { font-weight: bold; color: #28a745; } 
+
+    .water-intake-card h2 { margin-bottom: 20px; text-align: left; justify-content: flex-start; font-size:1.2em; color:#333;}
+    .water-glass-container { display: flex; justify-content: center; align-items: flex-end; margin-bottom: 15px; }
+    .water-glass { width: 60px; height: 100px; border: 3px solid #007bff; border-top: none; border-radius: 0 0 10px 10px; position: relative; background-color: #e6f2ff; }
+    .water-fill { position: absolute; bottom: 0; left: 0; width: 100%; background-color: #7fdbff; border-radius: 0 0 7px 7px; transition: height 0.5s ease; }
+    .water-controls { text-align: center; margin-bottom: 10px; }
+    .water-controls button { background-color: #007bff; color: white; border: none; padding: 7px 12px; margin: 0 4px; border-radius: 5px; cursor: pointer; font-size: 0.8em; }
+    .water-controls button:hover { background-color: #0056b3; }
+    .water-target-info { text-align: center; font-size: 0.85em; color: #555; }
+
+    .diario-sidebar .ad-placeholder { background-color: #e9ecef; min-height: 150px; display: flex; align-items: center; justify-content: center; color: #6c757d; border-radius: 6px; font-style: italic; padding: 20px; text-align: center; margin-bottom: 25px; border: 1px dashed #ccc; }
+    .diario-sidebar h3 { font-size: 1em; color: #6c757d; text-align: center; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{% trans "Mi Diario de Alimentos" %}</h1>
+</div>
+
+<div class="date-navigation">
+    <a href="{% url 'diario_alimentos_fecha' fecha_str=dia_anterior_str %}">&laquo; {% trans "Anterior" %}</a>
+    <form method="GET" action="." id="datePickerForm" style="display:inline-block; margin:0;">
+        <input type="date" name="fecha_diario" value="{{ fecha_seleccionada_str }}" 
+               onchange="this.form.submit();" 
+               title="{% trans 'Seleccionar fecha' %}"
+               style="padding: 7px 10px; border-radius: 5px; border: 1px solid #ccc; font-size:0.9em;">
+    </form>
+    {% if not es_hoy %}
+        <a href="{% url 'diario_alimentos_hoy' %}" style="font-weight:normal; font-size:0.8em; margin-left:-10px;">({% trans "Ir a Hoy" %})</a>
+    {% endif %}
+    <a href="{% url 'diario_alimentos_fecha' fecha_str=dia_siguiente_str %}">{% trans "Siguiente" %} &raquo;</a>
+</div>
+
+
+<div class="diario-grid">
+    <main class="diario-main-content">
+    {% for comida_info in comidas_del_dia_lista_ordenada %}
+        <section class="diario-card meal-section" id="meal-{{ comida_info.key }}">
+            <h3 class="card-title"> 
+                <span>{{ comida_info.nombre_display }}</span>
+                <span class="total-meal-calories">{{ comida_info.total_calorias|floatformat:0 }} {% trans "kcal" %}</span>
+            </h3>
+            {% if comida_info.registros %}
+                {% for registro in comida_info.registros %}
+                <div class="meal-item">
+                    <div>
+                        <span class="food-name">{{ registro.alimento.nombre }}</span>
+                        <span class="food-details"> ({{ registro.cantidad|floatformat:0 }}g)</span>
+                    </div>
+                    <div class="food-calories">
+                        {{ registro.calorias_consumidas|floatformat:0 }} {% trans "kcal" %}
+                        <span class="actions">
+                            <a href="{% url 'editar_registro' registro.pk %}?next={% url 'diario_alimentos_fecha' fecha_str=fecha_seleccionada_str %}">{% trans "Editar" %}</a>
+                            <a href="{% url 'eliminar_registro' registro.pk %}?next={% url 'diario_alimentos_fecha' fecha_str=fecha_seleccionada_str %}" 
+                               onclick="return confirm('{% blocktrans with alimento_nombre=registro.alimento.nombre %}Estás seguro que quieres eliminar el registro de {{ alimento_nombre }}?{% endblocktrans %}')">
+                               {% trans "Eliminar" %}
+                            </a>
+                        </span>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p class="no-food-message">{% trans "No hay alimentos registrados para esta comida." %}</p>
+            {% endif %}
+            <a href="{% url 'registro_alimentacion' %}?fecha={{ fecha_seleccionada_str }}&tipo_comida={{ comida_info.key }}" class="btn-add-food">
+                + {% trans "Añadir Alimento" %}
+            </a>
+        </section>
+    {% endfor %}
+</main>
+
+    <aside class="diario-sidebar">
+        <section class="diario-card nutrient-summary-card"> 
+            <h2>{% trans "Resumen del Día" %}</h2>
+            <table class="nutrient-summary-table">
+                <thead>
+                    <tr>
+                        <th>{% trans "Nutriente" %}</th>
+                        <th>{% trans "Total" %}</th>
+                        <th>{% trans "Objetivo" %}</th>
+                        <th>{% trans "Restante" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{% trans "Calorías" %}</td>
+                        <td>{{ total_calorias_consumidas|floatformat:0 }}</td>
+                        <td>{{ calorias_objetivo_diario|floatformat:0 }}</td>
+                        <td class="highlight">{{ calorias_restantes|floatformat:0 }}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans "Carbohidratos" %}</td>
+                        <td>{{ total_carbohidratos_consumidos|floatformat:0 }}g</td>
+                        <td>{{ objetivo_carbohidratos_g|floatformat:0 }}g</td>
+                        <td>{{ carbohidratos_restantes|floatformat:0 }}g</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans "Grasas" %}</td>
+                        <td>{{ total_grasas_consumidas|floatformat:0 }}g</td>
+                        <td>{{ objetivo_grasas_g|floatformat:0 }}g</td>
+                        <td>{{ grasas_restantes|floatformat:0 }}g</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans "Proteínas" %}</td>
+                        <td>{{ total_proteinas_consumidas|floatformat:0 }}g</td>
+                        <td>{{ objetivo_proteinas_g|floatformat:0 }}g</td>
+                        <td>{{ proteinas_restantes|floatformat:0 }}g</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="diario-card water-intake-card">
+            <h2>{% trans "Consumo de Agua" %}</h2>
+            <div class="water-glass-container">
+                <div class="water-glass" id="waterGlassVisual"> 
+                    <div class="water-fill" id="waterFillVisual" style="height: {{ porcentaje_agua_consumida }}%;"></div>
+                </div>
+            </div>
+            <div class="water-controls">
+                <button data-cantidad="250" class="btn-add-water">+ 1 {% trans "vaso" %} (250ml)</button>
+                <button data-cantidad="500" class="btn-add-water">+ 1 {% trans "botella" %} (500ml)</button>
+                <button data-cantidad="-1" class="btn-reset-water" style="background-color:#6c757d;">{% trans "Resetear" %}</button>
+            </div>
+            <p class="water-target-info" id="waterTargetInfo">
+                {% blocktrans with consumed=consumo_agua_ml|floatformat:0 target=objetivo_agua_ml|floatformat:0 %}
+                Consumido: {{ consumed }}ml / Objetivo: {{ target }}ml
+                {% endblocktrans %}
+            </p>
+        </section>
+        
+        <div style="margin-top: 30px;">
+            <h3>{% trans "Anuncios" %}</h3>
+            <div class="ad-placeholder">{% trans "Publicidad Fake 1" %}</div>
+            <div class="ad-placeholder" style="margin-top:25px;">{% trans "Publicidad Fake 2" %}</div>
+        </div>
+    </aside>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+{{ block.super }}
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+
+    document.querySelectorAll('.btn-add-water, .btn-reset-water').forEach(button => {
+        button.addEventListener('click', async function() {
+            const cantidadMl = parseInt(this.dataset.cantidad);
+            const datePicker = document.querySelector('.date-navigation input[name="fecha_diario"]');
+            const fechaActualStr = datePicker ? datePicker.value : '{{ fecha_seleccionada_str }}';
+            
+            try {
+                const response = await fetch("{% url 'actualizar_consumo_agua' %}", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrftoken },
+                    body: JSON.stringify({ fecha: fechaActualStr, cantidad_ml: cantidadMl })
+                });
+                const data = await response.json();
+                if (data.status === 'ok') {
+                    const waterFillDiv = document.getElementById('waterFillVisual');
+                    const waterTargetInfoP = document.getElementById('waterTargetInfo');
+                    const objetivoAgua = {{ objetivo_agua_ml|default_if_none:2000|floatformat:0 }};
+                    
+                    if (waterFillDiv) waterFillDiv.style.height = data.porcentaje_agua + '%';
+                    if (waterTargetInfoP) {
+                        waterTargetInfoP.textContent = `{% trans "Consumido:" %} ${data.nueva_cantidad_ml}ml / {% trans "Objetivo:" %} ${objetivoAgua}ml`;
+                    }
+                } else {
+                    alert("{% trans 'Error al registrar el agua:' %} " + (data.message || "{% trans 'Error desconocido' %}"));
+                }
+            } catch (error) {
+                console.error('Error en registrarAgua:', error);
+                alert("{% trans 'Ocurrió un error de red.' %}");
+            }
+        });
+    });
+
+    const datePickerInput = document.querySelector('.date-navigation input[name="fecha_diario"]');
+    if (datePickerInput) {
+        datePickerInput.addEventListener('change', function() {
+            if (this.value) {
+                let urlBase = "{% url 'diario_alimentos_fecha' '0000-00-00' %}"; 
+                window.location.href = urlBase.replace('0000-00-00', this.value);
+            }
+        });
+    }
+</script>
+{% endblock %}
