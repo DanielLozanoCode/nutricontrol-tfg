@@ -1,0 +1,110 @@
+{
+  "grupo": "Brazos",
+  "ejercicios": [
+    {
+      "nombre": "Curl con barra",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video_url": "https://www.youtube.com/watch?v=a9hli15uWiA",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Curl martillo",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video_url": "https://www.youtube.com/watch?v=zC3nLlEvin4",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Fondos de tríceps",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video_url": "https://www.youtube.com/watch?v=6kALZikXxLc",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Extensiones de tríceps en polea",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video_url": "https://www.youtube.com/watch?v=2-LAMcpzODU",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Curl concentrado",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video_url": "https://www.youtube.com/watch?v=0AUGkch3tzc",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Press cerrado",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video_url": "https://www.youtube.com/watch?v=6JtP6ju0IMw",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Curl predicador",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video_url": "https://www.youtube.com/watch?v=d_KZxkY_0cM",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Patada de tríceps",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video_url": "https://www.youtube.com/watch?v=6SS6K3lAwZ8",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Curl en banco inclinado",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video_url": "https://www.youtube.com/watch?v=soxrZlIl35U",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Curl con polea baja",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video_url": "https://www.youtube.com/watch?v=KTKpz7xJ9Y4",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Extensión de tríceps en banco",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video_url": "https://www.youtube.com/watch?v=hK1tT-l5hZ8",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Dominadas supinas",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video_url": "https://www.youtube.com/watch?v=bEv6CCg2BC8",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 65
+    },
+    {
+      "nombre": "Flexiones diamante",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video_url": "https://www.youtube.com/watch?v=J0DnG1_S92I",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Zottman curl",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video_url": "https://www.youtube.com/watch?v=U8dD1jv0yWQ",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Curl inverso",
+      "descripcion": "Ejercicio clásico de brazos.",
+      "video_url": "https://www.youtube.com/watch?v=0AUGkch3tzc",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    }
+  ]
+}

@@ -1,131 +1,220 @@
 {% extends "base.html" %}
+{% load static i18n %}
 
-{% block title %}Ejercicios de {{ grupo }}{% endblock %}
+{% block title %}{{ grupo_nombre_display|default:_("Ejercicios") }} | {% trans "Nutricontrol" %}{% endblock %}
+
+{# --- ITEMS PARA EL DESPLEGABLE DE ESCRITORIO DE EJERCICIO --- #}
+{% block ejercicio_dropdown_items %}
+    <li><a href="{% url 'ver_ejercicios' %}" class="{% if active_subsection == 'ver_ejercicios' %}active{% endif %}">{% trans "Registro de Ejercicio" %}</a></li>
+    <li><a href="{% url 'database_ejercicios' %}" class="{% if active_subsection == 'database_ejercicios' or active_subsection == 'vista_grupo' %}active{% endif %}">{% trans "Base de Datos Ejercicios" %}</a></li>
+{% endblock ejercicio_dropdown_items %}
+
+{# --- ITEMS PARA EL MENÚ LATERAL MÓVIL DE EJERCICIO --- #}
+{% block mobile_ejercicio_dropdown_items %}
+    <a href="{% url 'ver_ejercicios' %}" class="mobile-dropdown-link {% if active_subsection == 'ver_ejercicios' %}active{% endif %}">↳ {% trans "Registro de Ejercicio" %}</a>
+    <a href="{% url 'database_ejercicios' %}" class="mobile-dropdown-link {% if active_subsection == 'database_ejercicios' or active_subsection == 'vista_grupo' %}active{% endif %}">↳ {% trans "Base de Datos Ejercicios" %}</a>
+{% endblock mobile_ejercicio_dropdown_items %}
 
 {% block extra_head %}
+{{ block.super }}
+{# Bootstrap CSS (asegúrate que esté cargado, preferiblemente en base.html) #}
+{% if not "bootstrap.min.css" in block.super %} {# Carga condicional si no está en base.html #}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+{% endif %}
 <style>
-  h1 {
-    text-align: center;
-    margin: 40px 0 20px;
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-
-  li {
-    background-color: #fff;
-    margin-bottom: 15px;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    text-align: center;
-  }
-
-  li a {
-    display: inline-block;
-    margin-top: 8px;
-    color: #1a73e8;
-    text-decoration: none;
-    font-weight: bold;
-  }
-
-  li a:hover {
-    text-decoration: underline;
-  }
-
-  .modal {
-    display: none;
-    position: fixed;
-    z-index: 9999;
-    padding-top: 60px;
-    left: 0; top: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(0,0,0,0.8);
-  }
-
-  .modal-content {
-    margin: auto;
-    display: block;
-    width: 95%;
-    max-width: 1000px;
-    aspect-ratio: 16/9;
-    height: auto;
-  }
-
-  .close {
-    position: absolute;
-    top: 25px;
-    right: 35px;
-    color: #fff;
-    font-size: 40px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-
-  @media screen and (max-width: 768px) {
-    .modal-content {
-      width: 100%;
-      max-width: 100%;
+    .page-header { text-align: center; margin: 25px 0 20px 0; }
+    .page-header .breadcrumb-nav { font-size: 0.9em; margin-bottom: 5px; /* Reducido margen inferior */ }
+    .page-header .breadcrumb-nav .breadcrumb {
+        padding-left: 0; /* Quitar padding por defecto de listas si es necesario */
+        list-style: none; /* Asegurar que no haya estilos de lista */
     }
-  }
+    /* Bootstrap ya debería manejar el estilo de .breadcrumb-item y quitar los números */
+    .page-header h1 { font-size: 2.2em; color: #333; font-weight: 600; margin-top: 0; margin-bottom: 15px; }
 
-  .volver {
-    text-align: center;
-    margin-top: 30px;
-  }
+    .btn-volver-container { text-align: center; margin-bottom: 30px; }
+    .btn-volver {
+        display: inline-block; padding: 8px 18px; background-color: #6c757d; /* Gris secundario */
+        color: white; text-decoration: none; border-radius: 5px; font-size: 0.9em;
+        transition: background-color 0.2s ease;
+    }
+    .btn-volver:hover { background-color: #5a6268; }
 
-  .volver a {
-    text-decoration: none;
-    background-color: #1a73e8;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-  }
+    .exercises-list-container { max-width: 900px; margin: 0 auto 40px auto; padding: 0 15px; }
+    .exercise-item-card {
+        background-color: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        margin-bottom: 20px; padding: 20px 25px; /* Aumentado padding lateral */
+    }
+    .exercise-item-card h3.exercise-name { font-size: 1.4em; color: #007bff; margin: 0 0 8px 0; }
+    .exercise-item-card p.exercise-description { font-size: 0.95em; color: #555; margin-bottom: 12px; line-height: 1.6; }
+    .exercise-item-card .exercise-details { margin-bottom: 15px; } /* Más espacio antes de las acciones */
+    .exercise-item-card .exercise-details span {
+        font-size: 0.85em; color: #333; background-color: #e9ecef;
+        padding: 4px 10px; border-radius: 10px; /* Más redondeado */
+        margin-right: 8px; display: inline-block; margin-bottom: 5px;
+    }
+    .exercise-item-card .exercise-actions { margin-top: 10px; text-align: left; /* Alinear botón a la izquierda */ }
+    .btn-video {
+        background-color: #dc3545; color: white; padding: 8px 15px;
+        text-decoration: none; border-radius: 5px; font-size: 0.9em;
+        border: none; cursor: pointer; transition: background-color 0.2s ease;
+        display: inline-flex; align-items: center; /* Para ícono y texto si se añade */
+    }
+    .btn-video:hover { background-color: #c82333; }
+    .btn-video .youtube-icon { /* Si quieres añadir un ícono de YouTube */
+        width: 16px; height: 16px; margin-right: 6px;
+        /* background-image: url('path_to_youtube_icon.svg'); background-repeat: no-repeat; */
+    }
 
-  .volver a:hover {
-    background-color: #0c54b8;
-  }
+    .no-exercises-message { text-align: center; font-style: italic; color: #777; margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 6px; }
+    
+    /* Estilos para el Modal del Video */
+    #modalVerVideo .modal-body { padding: 0; /* Quitar padding si el iframe ocupa todo */ }
+    .video-modal-iframe-container { position: relative; width: 100%; padding-top: 56.25%; /* 16:9 Aspect Ratio */ }
+    .video-modal-iframe-container iframe {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-  <h1>Ejercicios de {{ grupo }}</h1>
+<div class="page-header">
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <ol class="breadcrumb justify-content-center mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">{% trans "Inicio" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'database_ejercicios' %}">{% trans "Base de Datos de Ejercicios" %}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ grupo_nombre_display|default:_("Grupo") }}</li>
+        </ol>
+    </nav>
+    <h1>{% blocktrans with group_name=grupo_nombre_display %}Ejercicios de {{ group_name }}{% endblocktrans %}</h1>
+</div>
 
-  <ul>
-    {% for e in ejercicios %}
-      <li>
-        <strong>{{ e.nombre }}</strong><br>
-        {{ e.descripcion }}<br>
-        <a href="#" onclick="abrirVideo('{{ e.video }}'); return false;">Ver video</a>
-      </li>
-    {% endfor %}
-  </ul>
+<div class="btn-volver-container">
+    <a href="{% url 'database_ejercicios' %}" class="btn-volver">
+        &laquo; {% trans "Volver a Grupos de Ejercicios" %}
+    </a>
+</div>
 
-  <div id="videoModal" class="modal">
-    <span class="close" onclick="cerrarModal()">&times;</span>
-    <iframe id="videoIframe" class="modal-content" frameborder="0" allowfullscreen></iframe>
-  </div>
+<div class="exercises-list-container">
+    {% if ejercicios_list %}
+        {% for ejercicio in ejercicios_list %}
+            <div class="exercise-item-card">
+                <h3 class="exercise-name">{{ ejercicio.nombre }}</h3>
+                {% if ejercicio.descripcion %}
+                    <p class="exercise-description">{{ ejercicio.descripcion|linebreaksbr }}</p>
+                {% endif %}
+                <div class="exercise-details">
+                    <span><strong>{% trans "Tipo:" %}</strong> {{ ejercicio.get_tipo_display }}</span>
+                    <span>
+                        <strong>{% trans "Calorías Base:" %}</strong> {{ ejercicio.calorias_quemadas_base }}
+                        {% if ejercicio.tipo == 'cardio' %}
+                            {% trans "kcal/min" %}
+                        {% else %}
+                            {% trans "kcal/sesión" %}
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="exercise-actions">
+                    {% if ejercicio.video_url %}
+                        <button type="button" class="btn btn-sm btn-video" {# Añadido btn y btn-sm de Bootstrap #}
+                                data-bs-toggle="modal" data-bs-target="#modalVerVideo"
+                                data-video-url="{{ ejercicio.video_url }}"
+                                data-video-title="{{ ejercicio.nombre }}">
+                            <span class="youtube-icon"></span> {# Para un futuro ícono si quieres #}
+                            {% trans "Ver Vídeo Explicativo" %}
+                        </button>
+                    {% else %}
+                        <span class="text-muted"><em>{% trans "Vídeo no disponible" %}</em></span>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="no-exercises-message">{% trans "No hay ejercicios disponibles para este grupo actualmente." %}</p>
+    {% endif %}
+</div>
 
-  <div class="volver">
-    <a href="{% url 'ver_ejercicios' %}">← Volver a grupos musculares</a>
-  </div>
+<div class="modal fade" id="modalVerVideo" tabindex="-1" aria-labelledby="modalVerVideoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalVerVideoLabel">{% trans "Vídeo Explicativo" %}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="video-modal-iframe-container">
+                    <iframe id="videoModalIframe"
+                            src="" allowfullscreen
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block extra_script %}
+{{ block.super }}
+{# Bootstrap JS Bundle (asegúrate que esté cargado, preferiblemente en base.html) #}
+{% if not "bootstrap.bundle.min.js" in block.super %} {# Carga condicional si no está en base.html #}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% endif %}
+
 <script>
-  function abrirVideo(url) {
-    const videoId = new URL(url).searchParams.get("v");
-    document.getElementById('videoIframe').src =
-      "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
-    document.getElementById('videoModal').style.display = "block";
-  }
-  function cerrarModal() {
-    document.getElementById('videoModal').style.display = "none";
-    document.getElementById('videoIframe').src = "";
-  }
+document.addEventListener('DOMContentLoaded', function () {
+    const modalVerVideoEl = document.getElementById('modalVerVideo');
+    if (modalVerVideoEl) {
+        const videoIframe = modalVerVideoEl.querySelector('#videoModalIframe');
+        const modalTitleEl = modalVerVideoEl.querySelector('#modalVerVideoLabel');
+
+        modalVerVideoEl.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            let videoUrl = button.getAttribute('data-video-url');
+            const videoTitle = button.getAttribute('data-video-title');
+
+            if (modalTitleEl && videoTitle) {
+                modalTitleEl.textContent = videoTitle;
+            } else {
+                modalTitleEl.textContent = "{% trans 'Vídeo Explicativo' %}";
+            }
+
+            if (videoUrl) {
+                // Convertir URLs de YouTube normales a formato de embed y limpiar
+                if (videoUrl.includes("watch?v=")) {
+                    videoUrl = videoUrl.replace("watch?v=", "embed/");
+                } else if (videoUrl.includes("youtu.be/")) {
+                    videoUrl = videoUrl.replace("youtu.be/", "www.youtube.com/embed/");
+                }
+                // Asegurarse que el protocolo esté (si falta) para youtu.be
+                if (videoUrl.startsWith("www.youtube.com/embed/")) {
+                    videoUrl = "https://" + videoUrl;
+                }
+                
+                // Eliminar parámetros de URL como &list=..., &index=..., &t=...
+                const urlParts = videoUrl.split('?');
+                videoUrl = urlParts[0];
+                if (urlParts.length > 1) {
+                    const params = new URLSearchParams(urlParts[1]);
+                    // Si quieres conservar algún parámetro específico, lo harías aquí,
+                    // pero para embed, normalmente solo se necesita la URL base del video.
+                }
+            }
+            
+            if (videoIframe) {
+                videoIframe.setAttribute('src', videoUrl || '');
+            }
+        });
+
+        modalVerVideoEl.addEventListener('hidden.bs.modal', function () {
+            if (videoIframe) {
+                videoIframe.setAttribute('src', ''); 
+            }
+            if (modalTitleEl) {
+                modalTitleEl.textContent = "{% trans 'Vídeo Explicativo' %}";
+            }
+        });
+    }
+});
 </script>
 {% endblock %}

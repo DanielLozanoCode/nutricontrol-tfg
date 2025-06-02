@@ -2,7 +2,7 @@
 
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import Usuario, Alimento, RegistroAlimentacion
+from .models import Usuario, Alimento, RegistroAlimentacion, MedidaCorporal, ConsumoAgua, Ejercicio, RegistroEjercicioRealizado
 from django.utils.translation import gettext_lazy as _
 
 # Define un nuevo User admin
@@ -42,3 +42,6 @@ class RegistroAlimentacionAdmin(admin.ModelAdmin):
     get_calorias_consumidas.short_description = _('Calorías Consumidas')
     # Si necesitas ordenarlo:
     # get_calorias_consumidas.admin_order_field = '?' # No se puede ordenar directamente por una propiedad calculada sin más
+    
+admin.site.register(Ejercicio)
+admin.site.register(RegistroEjercicioRealizado)

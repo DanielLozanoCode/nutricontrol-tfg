@@ -1,0 +1,61 @@
+{
+  "grupo": "Cardiovascular",
+  "ejercicios": [
+    {
+      "nombre": "Correr en cinta (ritmo moderado)",
+      "descripcion": "Ejercicio cardiovascular para mejorar la resistencia y quemar calorías.",
+      "video_url": "https://www.youtube.com/watch?v=zwZlKoo5C7g",
+      "tipo": "cardio",
+      "calorias_quemadas_base": 10
+    },
+    {
+      "nombre": "Bicicleta estática (resistencia media)",
+      "descripcion": "Cardio de bajo impacto para mejorar la capacidad aeróbica.",
+      "video_url": "https://www.youtube.com/watch?v=csbjgOkGN6M",
+      "tipo": "cardio",
+      "calorias_quemadas_base": 8
+    },
+    {
+      "nombre": "Máquina elíptica",
+      "descripcion": "Ejercicio cardiovascular completo que reduce el impacto articular.",
+      "video_url": "https://www.youtube.com/watch?v=MX8ymje3CXE",
+      "tipo": "cardio",
+      "calorias_quemadas_base": 9
+    },
+    {
+      "nombre": "Caminar rápido",
+      "descripcion": "Actividad cardiovascular moderada ideal para todos los niveles.",
+      "video_url": "https://www.youtube.com/watch?v=5ZX1k4MlU1M",
+      "tipo": "cardio",
+      "calorias_quemadas_base": 6
+    },
+    {
+      "nombre": "Nadar estilo crol (ritmo moderado)",
+      "descripcion": "Ejercicio cardiovascular excelente para todo el cuerpo.",
+      "video_url": "https://www.youtube.com/watch?v=QJtkeGx2vmM",
+      "tipo": "cardio",
+      "calorias_quemadas_base": 9
+    },
+    {
+      "nombre": "Saltar la cuerda",
+      "descripcion": "Ejercicio cardiovascular intenso que mejora la coordinación y quema muchas calorías.",
+      "video_url": "https://www.youtube.com/watch?v=8BJGgQp6eQ8",
+      "tipo": "cardio",
+      "calorias_quemadas_base": 11
+    },
+    {
+      "nombre": "Subir escaleras",
+      "descripcion": "Cardio que fortalece piernas y glúteos mientras mejora la resistencia.",
+      "video_url": "https://www.youtube.com/watch?v=HRrFjjby2fI",
+      "tipo": "cardio",
+      "calorias_quemadas_base": 9
+    },
+    {
+      "nombre": "Burpees",
+      "descripcion": "Ejercicio cardiovascular de alta intensidad que involucra todo el cuerpo.",
+      "video_url": "https://www.youtube.com/watch?v=TU8QYVW0gDU",
+      "tipo": "cardio",
+      "calorias_quemadas_base": 10
+    }
+  ]
+}

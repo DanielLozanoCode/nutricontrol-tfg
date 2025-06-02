@@ -1,0 +1,110 @@
+{
+  "grupo": "Piernas",
+  "ejercicios": [
+    {
+      "nombre": "Sentadilla libre",
+      "descripcion": "Ejercicio clásico de piernas.",
+      "video_url": "https://www.youtube.com/watch?v=dsCuiccYNGs",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 100
+    },
+    {
+      "nombre": "Prensa de piernas",
+      "descripcion": "Ejercicio clásico de piernas.",
+      "video_url": "https://www.youtube.com/watch?v=D1FvjYNX9QI",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Zancadas con mancuernas",
+      "descripcion": "Ejercicio clásico de piernas.",
+      "video_url": "https://www.youtube.com/watch?v=Uw56z6JdWGY",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Curl femoral",
+      "descripcion": "Ejercicio clásico de piernas.",
+      "video_url": "https://www.youtube.com/watch?v=H_ADCsf0JOw",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Extensión de cuádriceps",
+      "descripcion": "Ejercicio clásico de piernas.",
+      "video_url": "https://www.youtube.com/watch?v=HYcpmjS1yss",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 50
+    },
+    {
+      "nombre": "Sentadilla hack",
+      "descripcion": "Ejercicio clásico de piernas.",
+      "video_url": "https://www.youtube.com/watch?v=VNpkYdex6Yc",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Peso muerto rumano",
+      "descripcion": "Ejercicio clásico de piernas.",
+      "video_url": "https://www.youtube.com/watch?v=NIng2JWF1Rs",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 120
+    },
+    {
+      "nombre": "Step up con mancuernas",
+      "descripcion": "Ejercicio clásico de piernas.",
+      "video_url": "https://www.youtube.com/watch?v=QxZzLH4UwvY",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Hip thrust",
+      "descripcion": "Ejercicio clásico de piernas.",
+      "video_url": "https://www.youtube.com/watch?v=LWj9YiMWJk0",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Sentadilla búlgara",
+      "descripcion": "Ejercicio clásico de piernas.",
+      "video_url": "https://www.youtube.com/watch?v=x_k90ghjPPw",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Sissy squat",
+      "descripcion": "Ejercicio clásico de piernas.",
+      "video_url": "https://www.youtube.com/watch?v=LExRPf4BsHE",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Curl femoral sentado",
+      "descripcion": "Ejercicio clásico de piernas.",
+      "video_url": "https://www.youtube.com/watch?v=btCzEKtNUNI",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Sentadilla frontal",
+      "descripcion": "Ejercicio clásico de piernas.",
+      "video_url": "https://www.youtube.com/watch?v=yyIpwHq_eE8",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Good mornings",
+      "descripcion": "Ejercicio clásico de piernas.",
+      "video_url": "https://www.youtube.com/watch?v=T3ZQ49Y8GXk",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Zancada con barra",
+      "descripcion": "Ejercicio clásico de piernas.",
+      "video_url": "https://www.youtube.com/watch?v=-fNn_GLJHRs",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    }
+  ]
+}

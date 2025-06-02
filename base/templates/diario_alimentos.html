@@ -1,86 +1,92 @@
 {% extends "base.html" %}
 {% load static i18n %}
+{% load widget_tweaks %} {# Para render_field. Asegúrate de tenerlo instalado y en INSTALLED_APPS #}
 
 {% block title %}{% trans "Mi Diario de Alimentos | Nutricontrol" %}{% endblock %}
 
 {# --- ITEMS PARA EL DESPLEGABLE DE ESCRITORIO DE ALIMENTOS --- #}
 {% block alimentos_dropdown_items %}
     <li><a href="{% url 'diario_alimentos_hoy' %}" class="{% if active_subsection == 'diario_alimentos' %}active{% endif %}">{% trans "Mi Diario" %}</a></li>
-    <li><a href="#">{% trans "Base de Datos" %}</a></li> {# Placeholder: {% url 'alimentos_database' %} #}
-    <li><a href="{% url 'registro_alimentacion' %}?fecha={{ fecha_seleccionada_str|default_if_none:'' }}">{% trans "Registrar Alimento" %}</a></li>
+    <li><a href="{% url 'alimentos_database' %}" class="{% if active_subsection == 'alimentos_database' %}active{% endif %}">{% trans "Base de Datos Alimentos" %}</a></li>
+    {# Este enlace apunta a la vista que crea un nuevo alimento en la BD Alimento (antes llamada registro_alimentacion) #}
+    <li><a href="{% url 'registro_alimentacion' %}" class="{% if active_subsection == 'registro_alimentacion' %}active{% endif %}">{% trans "Registrar Alimento en BD" %}</a></li>
 {% endblock alimentos_dropdown_items %}
 
 {# --- ITEMS PARA EL MENÚ LATERAL MÓVIL DE ALIMENTOS --- #}
 {% block mobile_alimentos_dropdown_items %}
     <a href="{% url 'diario_alimentos_hoy' %}" class="mobile-dropdown-link {% if active_subsection == 'diario_alimentos' %}active{% endif %}">↳ {% trans "Mi Diario" %}</a>
-    <a href="#" class="mobile-dropdown-link">↳ {% trans "Base de Datos" %}</a>
-    <a href="{% url 'registro_alimentacion' %}?fecha={{ fecha_seleccionada_str|default_if_none:'' }}" class="mobile-dropdown-link">↳ {% trans "Registrar Alimento" %}</a>
+    <a href="{% url 'alimentos_database' %}" class="mobile-dropdown-link {% if active_subsection == 'alimentos_database' %}active{% endif %}">↳ {% trans "Base de Datos Alimentos" %}</a>
+    <a href="{% url 'registro_alimentacion' %}" class="mobile-dropdown-link {% if active_subsection == 'registro_alimentacion' %}active{% endif %}">↳ {% trans "Registrar Alimento en BD" %}</a>
 {% endblock mobile_alimentos_dropdown_items %}
 
 
 {% block extra_head %}
 {{ block.super }}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 <style>
-    .page-header { text-align: center; margin: 25px 0 20px 0; } 
+    /* Tus estilos existentes para diario_alimentos.html */
+    .page-header { text-align: center; margin: 25px 0 20px 0; }
     .page-header h1 { font-size: 2.2em; color: #333; font-weight: 600; margin: 0; }
     .date-navigation { display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 25px; }
     .date-navigation a, .date-navigation input[type="date"] {
-        padding: 8px 12px; background-color: #007bff; color: white; text-decoration: none; 
+        padding: 8px 12px; background-color: #007bff; color: white; text-decoration: none;
         border-radius: 5px; border: none; font-size: 0.9em; cursor: pointer;
     }
     .date-navigation a:hover { background-color: #0056b3; }
     .date-navigation input[type="date"] { border: 1px solid #ccc; color: #495057; background-color: #fff; }
     .date-navigation .current-date-display { font-size: 1.1em; font-weight: bold; color: #333; }
-    
+
     .diario-grid { display: grid; grid-template-columns: 1fr; gap: 30px; max-width: 1100px; margin: 0 auto 40px auto; padding: 0 15px;}
     @media (min-width: 992px) { .diario-grid { grid-template-columns: minmax(0, 2.5fr) minmax(0, 1fr); } }
     .diario-main-content { display: flex; flex-direction: column; gap: 25px; }
-    
+
     .diario-card { background-color: #fff; border-radius: 8px; padding: 20px 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-    .diario-card h2, .diario-card h3.card-title { 
-        font-size: 1.3em; color: #007bff; margin-top: 0; margin-bottom: 15px; 
+    .diario-card h2, .diario-card h3.card-title {
+        font-size: 1.3em; color: #007bff; margin-top: 0; margin-bottom: 15px;
         padding-bottom: 10px; border-bottom: 1px solid #eee;
         display: flex; justify-content: space-between; align-items: center;
     }
     .meal-section h3.card-title { color: #333; font-size: 1.2em; border-bottom-style: dashed; }
     .meal-section .total-meal-calories { font-size: 0.9em; color: #555; font-weight: normal; }
-    
+
     .meal-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 0.95em; border-bottom: 1px dotted #ddd; }
     .meal-item:last-child { border-bottom: none; }
     .meal-item .food-name { color: #444; flex-grow: 1; margin-right:10px;}
     .meal-item .food-details { font-size: 0.85em; color: #777; margin-right:10px; }
     .meal-item .food-calories { font-weight: bold; color: #007bff; white-space:nowrap; }
     .meal-item .actions { white-space:nowrap; margin-left:15px;}
-    .meal-item .actions a { color: #dc3545; text-decoration: none; font-size: 0.8em; margin-left: 10px; }
-    .meal-item .actions a:hover { text-decoration: underline; }
-    .btn-add-food {
-        display: inline-block; background-color: #28a745; color: white; padding: 8px 15px; 
-        text-decoration: none; border-radius: 5px; font-size: 0.9em; font-weight: bold; 
-        margin-top: 15px; transition: background-color 0.2s ease;
+    .meal-item .actions a { text-decoration: none; font-size: 0.8em; margin-left: 10px; }
+    .meal-item .actions a.text-primary:hover { text-decoration: underline; } /* Color primario para editar */
+    .meal-item .actions a.text-danger:hover { text-decoration: underline; } /* Color rojo para eliminar */
+
+    .btn-add-food { /* Este es el botón que abrirá el modal */
+        display: inline-block; background-color: #28a745; color: white; padding: 8px 15px;
+        text-decoration: none; border-radius: 5px; font-size: 0.9em; font-weight: bold;
+        margin-top: 15px; transition: background-color 0.2s ease; border: none; cursor: pointer;
     }
     .btn-add-food:hover { background-color: #218838; }
     .no-food-message { color: #777; font-style: italic; margin-top: 10px; }
 
     .nutrient-summary-card { padding: 20px; }
-    .nutrient-summary-card h2 { 
-        text-align: left; justify-content: flex-start; font-size: 1.2em; 
-        color: #333; margin-bottom: 15px; 
+    .nutrient-summary-card h2 {
+        text-align: left; justify-content: flex-start; font-size: 1.2em;
+        color: #333; margin-bottom: 15px;
     }
     .nutrient-summary-table { width: 100%; border-collapse: collapse; margin-top: 5px; font-size: 0.9em; }
     .nutrient-summary-table th, .nutrient-summary-table td {
-        text-align: right; padding: 10px 5px; 
-        border-bottom: 1px solid #f0f0f0; vertical-align: middle; 
+        text-align: right; padding: 10px 5px;
+        border-bottom: 1px solid #f0f0f0; vertical-align: middle;
     }
-    .nutrient-summary-table th:first-child, .nutrient-summary-table td:first-child { 
+    .nutrient-summary-table th:first-child, .nutrient-summary-table td:first-child {
         text-align: left; font-weight: 600; color: #444; padding-left: 0;
     }
-    .nutrient-summary-table td { color: #333; } 
-    .nutrient-summary-table thead th { 
-        color: #6c757d; font-weight: 500; border-bottom-width: 1px; 
+    .nutrient-summary-table td { color: #333; }
+    .nutrient-summary-table thead th {
+        color: #6c757d; font-weight: 500; border-bottom-width: 1px;
         border-bottom-color: #dee2e6; padding-bottom: 8px;
     }
     .nutrient-summary-table tbody tr:last-child td { border-bottom: none; }
-    .nutrient-summary-table .highlight { font-weight: bold; color: #28a745; } 
+    .nutrient-summary-table .highlight { font-weight: bold; color: #28a745; }
 
     .water-intake-card h2 { margin-bottom: 20px; text-align: left; justify-content: flex-start; font-size:1.2em; color:#333;}
     .water-glass-container { display: flex; justify-content: center; align-items: flex-end; margin-bottom: 15px; }
@@ -93,6 +99,14 @@
 
     .diario-sidebar .ad-placeholder { background-color: #e9ecef; min-height: 150px; display: flex; align-items: center; justify-content: center; color: #6c757d; border-radius: 6px; font-style: italic; padding: 20px; text-align: center; margin-bottom: 25px; border: 1px dashed #ccc; }
     .diario-sidebar h3 { font-size: 1em; color: #6c757d; text-align: center; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* Estilos para el formulario dentro del modal, si son necesarios */
+    #modalAnadirConsumo .form-group { margin-bottom: 1rem; }
+    #modalAnadirConsumo .form-label { font-weight: 500; margin-bottom: .5rem; display: block; }
+    #modalAnadirConsumo .form-control-sm { padding: .3rem .6rem; font-size: .875rem; }
+    #modalAnadirConsumo .form-text { font-size: 0.8rem; }
+    #modalAnadirConsumo .invalid-feedback { font-size: 0.8rem; }
+    #modalAnadirConsumo .modal-footer { padding-top: 1rem; border-top: 1px solid #dee2e6;}
 </style>
 {% endblock %}
 
@@ -103,9 +117,8 @@
 
 <div class="date-navigation">
     <a href="{% url 'diario_alimentos_fecha' fecha_str=dia_anterior_str %}">&laquo; {% trans "Anterior" %}</a>
-    <form method="GET" action="." id="datePickerForm" style="display:inline-block; margin:0;">
-        <input type="date" name="fecha_diario" value="{{ fecha_seleccionada_str }}" 
-               onchange="this.form.submit();" 
+    <form method="GET" id="datePickerForm" style="display:inline-block; margin:0;">
+        <input type="date" name="fecha_diario_picker" value="{{ fecha_seleccionada_str }}"
                title="{% trans 'Seleccionar fecha' %}"
                style="padding: 7px 10px; border-radius: 5px; border: 1px solid #ccc; font-size:0.9em;">
     </form>
@@ -115,12 +128,21 @@
     <a href="{% url 'diario_alimentos_fecha' fecha_str=dia_siguiente_str %}">{% trans "Siguiente" %} &raquo;</a>
 </div>
 
+{# Mostrar mensajes de Django (éxito o error tras POST) #}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %} alert-dismissible fade show" role="alert" style="max-width: 1100px; margin: 10px auto 20px auto;">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
 
 <div class="diario-grid">
     <main class="diario-main-content">
     {% for comida_info in comidas_del_dia_lista_ordenada %}
         <section class="diario-card meal-section" id="meal-{{ comida_info.key }}">
-            <h3 class="card-title"> 
+            <h3 class="card-title">
                 <span>{{ comida_info.nombre_display }}</span>
                 <span class="total-meal-calories">{{ comida_info.total_calorias|floatformat:0 }} {% trans "kcal" %}</span>
             </h3>
@@ -134,9 +156,9 @@
                     <div class="food-calories">
                         {{ registro.calorias_consumidas|floatformat:0 }} {% trans "kcal" %}
                         <span class="actions">
-                            <a href="{% url 'editar_registro' registro.pk %}?next={% url 'diario_alimentos_fecha' fecha_str=fecha_seleccionada_str %}">{% trans "Editar" %}</a>
-                            <a href="{% url 'eliminar_registro' registro.pk %}?next={% url 'diario_alimentos_fecha' fecha_str=fecha_seleccionada_str %}" 
-                               onclick="return confirm('{% blocktrans with alimento_nombre=registro.alimento.nombre %}Estás seguro que quieres eliminar el registro de {{ alimento_nombre }}?{% endblocktrans %}')">
+                            <a href="{% url 'editar_registro' registro.pk %}" class="text-primary">{% trans "Editar" %}</a>
+                            <a href="{% url 'eliminar_registro' registro.pk %}"
+                               onclick="return confirm('{% blocktrans with alimento_nombre=registro.alimento.nombre %}Estás seguro que quieres eliminar el registro de {{ alimento_nombre }}?{% endblocktrans %}')" class="text-danger">
                                {% trans "Eliminar" %}
                             </a>
                         </span>
@@ -146,15 +168,19 @@
             {% else %}
                 <p class="no-food-message">{% trans "No hay alimentos registrados para esta comida." %}</p>
             {% endif %}
-            <a href="{% url 'registro_alimentacion' %}?fecha={{ fecha_seleccionada_str }}&tipo_comida={{ comida_info.key }}" class="btn-add-food">
+            {# Este botón ahora abre el modal. Se pasan data attributes para el JS. #}
+            <button type="button" class="btn-add-food"
+                    data-bs-toggle="modal" data-bs-target="#modalAnadirConsumo"
+                    data-tipo-comida="{{ comida_info.key }}"
+                    data-nombre-comida="{{ comida_info.nombre_display }}">
                 + {% trans "Añadir Alimento" %}
-            </a>
+            </button>
         </section>
     {% endfor %}
-</main>
+    </main>
 
     <aside class="diario-sidebar">
-        <section class="diario-card nutrient-summary-card"> 
+        <section class="diario-card nutrient-summary-card">
             <h2>{% trans "Resumen del Día" %}</h2>
             <table class="nutrient-summary-table">
                 <thead>
@@ -166,30 +192,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>{% trans "Calorías" %}</td>
-                        <td>{{ total_calorias_consumidas|floatformat:0 }}</td>
-                        <td>{{ calorias_objetivo_diario|floatformat:0 }}</td>
-                        <td class="highlight">{{ calorias_restantes|floatformat:0 }}</td>
-                    </tr>
-                    <tr>
-                        <td>{% trans "Carbohidratos" %}</td>
-                        <td>{{ total_carbohidratos_consumidos|floatformat:0 }}g</td>
-                        <td>{{ objetivo_carbohidratos_g|floatformat:0 }}g</td>
-                        <td>{{ carbohidratos_restantes|floatformat:0 }}g</td>
-                    </tr>
-                    <tr>
-                        <td>{% trans "Grasas" %}</td>
-                        <td>{{ total_grasas_consumidas|floatformat:0 }}g</td>
-                        <td>{{ objetivo_grasas_g|floatformat:0 }}g</td>
-                        <td>{{ grasas_restantes|floatformat:0 }}g</td>
-                    </tr>
-                    <tr>
-                        <td>{% trans "Proteínas" %}</td>
-                        <td>{{ total_proteinas_consumidas|floatformat:0 }}g</td>
-                        <td>{{ objetivo_proteinas_g|floatformat:0 }}g</td>
-                        <td>{{ proteinas_restantes|floatformat:0 }}g</td>
-                    </tr>
+                    <tr><td>{% trans "Calorías" %}</td><td>{{ total_calorias_consumidas|floatformat:0 }}</td><td>{{ calorias_objetivo_diario|floatformat:0 }}</td><td class="highlight">{{ calorias_restantes|floatformat:0 }}</td></tr>
+                    <tr><td>{% trans "Carbohidratos" %}</td><td>{{ total_carbohidratos_consumidos|floatformat:0 }}g</td><td>{{ objetivo_carbohidratos_g|floatformat:0 }}g</td><td>{{ carbohidratos_restantes|floatformat:0 }}g</td></tr>
+                    <tr><td>{% trans "Grasas" %}</td><td>{{ total_grasas_consumidas|floatformat:0 }}g</td><td>{{ objetivo_grasas_g|floatformat:0 }}g</td><td>{{ grasas_restantes|floatformat:0 }}g</td></tr>
+                    <tr><td>{% trans "Proteínas" %}</td><td>{{ total_proteinas_consumidas|floatformat:0 }}g</td><td>{{ objetivo_proteinas_g|floatformat:0 }}g</td><td>{{ proteinas_restantes|floatformat:0 }}g</td></tr>
                 </tbody>
             </table>
         </section>
@@ -197,7 +203,7 @@
         <section class="diario-card water-intake-card">
             <h2>{% trans "Consumo de Agua" %}</h2>
             <div class="water-glass-container">
-                <div class="water-glass" id="waterGlassVisual"> 
+                <div class="water-glass" id="waterGlassVisual">
                     <div class="water-fill" id="waterFillVisual" style="height: {{ porcentaje_agua_consumida }}%;"></div>
                 </div>
             </div>
@@ -207,24 +213,157 @@
                 <button data-cantidad="-1" class="btn-reset-water" style="background-color:#6c757d;">{% trans "Resetear" %}</button>
             </div>
             <p class="water-target-info" id="waterTargetInfo">
-                {% blocktrans with consumed=consumo_agua_ml|floatformat:0 target=objetivo_agua_ml|floatformat:0 %}
+                {% blocktrans trimmed with consumed=consumo_agua_ml|floatformat:0 target=objetivo_agua_ml|floatformat:0 %}
                 Consumido: {{ consumed }}ml / Objetivo: {{ target }}ml
                 {% endblocktrans %}
             </p>
         </section>
-        
+
         <div style="margin-top: 30px;">
             <h3>{% trans "Anuncios" %}</h3>
-            <div class="ad-placeholder">{% trans "Publicidad Fake 1" %}</div>
-            <div class="ad-placeholder" style="margin-top:25px;">{% trans "Publicidad Fake 2" %}</div>
+                <img src="{{ MEDIA_URL }}fotos_publi/p1.png" alt="{% trans 'Publicidad 1' %}" style="width: 100%; height: auto; border-radius: 6px;">
         </div>
     </aside>
+</div>
+
+<div class="modal fade" id="modalAnadirConsumo" tabindex="-1" aria-labelledby="modalAnadirConsumoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAnadirConsumoLabel">{% trans "Añadir Alimento" %}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {# El action del form apunta a la URL del diario actual para que la vista diario_alimentos lo procese #}
+                <form method="POST" action="{% url 'diario_alimentos_fecha' fecha_str=fecha_seleccionada_str %}" id="formAnadirConsumoModal">
+                    {% csrf_token %}
+
+                    {# Renderizar campos del form_anadir_consumo_modal #}
+                    <div class="form-group mb-3">
+                        <label for="{{ form_anadir_consumo_modal.alimento_nombre.id_for_label }}" class="form-label">{{ form_anadir_consumo_modal.alimento_nombre.label }}</label>
+                        {% render_field form_anadir_consumo_modal.alimento_nombre id=form_anadir_consumo_modal.alimento_nombre.id_for_label class+="form-control form-control-sm" list="sugerencias_para_consumo_diario" autocomplete="off" %}
+                        <datalist id="sugerencias_para_consumo_diario"></datalist> {# Datalist para las sugerencias #}
+                        {% if form_anadir_consumo_modal.alimento_nombre.help_text %}<small class="form-text text-muted">{{ form_anadir_consumo_modal.alimento_nombre.help_text|safe }}</small>{% endif %}
+                        {% for error in form_anadir_consumo_modal.alimento_nombre.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="{{ form_anadir_consumo_modal.cantidad.id_for_label }}" class="form-label">{{ form_anadir_consumo_modal.cantidad.label }}</label>
+                        {% render_field form_anadir_consumo_modal.cantidad id=form_anadir_consumo_modal.cantidad.id_for_label class+="form-control form-control-sm" step="0.1" %}
+                        {% for error in form_anadir_consumo_modal.cantidad.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                    </div>
+
+                    {# Campos ocultos: fecha ya está prellenada por la vista. tipo_comida se rellena con JS #}
+                    {% render_field form_anadir_consumo_modal.fecha %} {# Esto renderizará <input type="hidden" ...> #}
+                    <input type="hidden" name="{{ form_anadir_consumo_modal.tipo_comida.html_name }}" id="id_modal_tipo_comida">
+                    {% render_field form_anadir_consumo_modal.alimento_id id="id_modal_alimento_id" %} {# Campo oculto para el ID del alimento #}
+
+
+                    <div class="modal-footer mt-3">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">{% trans "Cancelar" %}</button>
+                        <button type="submit" class="btn btn-primary btn-sm">{% trans "Guardar Consumo" %}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
 {% block extra_script %}
 {{ block.super }}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+
 <script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Navegación por selector de fecha
+    const datePickerInputNav = document.querySelector('.date-navigation input[name="fecha_diario_picker"]');
+    if (datePickerInputNav) {
+        datePickerInputNav.addEventListener('change', function() {
+            if (this.value) {
+                let urlBase = "{% url 'diario_alimentos_fecha' '0000-00-00' %}";
+                window.location.href = urlBase.replace('0000-00-00', this.value);
+            }
+        });
+    }
+
+    // Lógica para el Modal de Añadir Consumo
+    const modalAnadirConsumoEl = document.getElementById('modalAnadirConsumo');
+    if (modalAnadirConsumoEl) {
+        const formAnadirConsumoModal = modalAnadirConsumoEl.querySelector('#formAnadirConsumoModal');
+        const inputTipoComidaModal = modalAnadirConsumoEl.querySelector('#id_modal_tipo_comida');
+        const inputAlimentoIdModal = modalAnadirConsumoEl.querySelector('#id_modal_alimento_id');
+        const modalTitleEl = modalAnadirConsumoEl.querySelector('.modal-title');
+        const inputAlimentoNombreModal = modalAnadirConsumoEl.querySelector('[name="{{ form_anadir_consumo_modal.alimento_nombre.html_name }}"]');
+        const inputCantidadModal = modalAnadirConsumoEl.querySelector('[name="{{ form_anadir_consumo_modal.cantidad.html_name }}"]');
+        const datalistSugerenciasModal = modalAnadirConsumoEl.querySelector('#sugerencias_para_consumo_diario');
+
+        // Evento que se dispara cuando el modal está a punto de mostrarse
+        modalAnadirConsumoEl.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget; // Botón que activó el modal
+            const tipoComida = button.getAttribute('data-tipo-comida');
+            const nombreComidaDisplay = button.getAttribute('data-nombre-comida');
+            const fechaDisplay = "{{ fecha_seleccionada_display|date:'j F Y' }}"; // Fecha actual del diario
+
+            if (inputTipoComidaModal) inputTipoComidaModal.value = tipoComida;
+            if (modalTitleEl) modalTitleEl.textContent = `{% trans "Añadir a" %} ${nombreComidaDisplay} (${fechaDisplay})`;
+
+            // Limpiar campos del formulario y datalist al abrir
+            if(formAnadirConsumoModal) formAnadirConsumoModal.reset(); // Resetea el formulario
+            if(inputAlimentoIdModal) inputAlimentoIdModal.value = ''; // Limpiar ID oculto
+            if(datalistSugerenciasModal) datalistSugerenciasModal.innerHTML = '';
+
+            // Re-establecer la fecha oculta porque form.reset() la borraría
+            const inputFechaModal = formAnadirConsumoModal.querySelector('[name="{{ form_anadir_consumo_modal.fecha.html_name }}"]');
+            if(inputFechaModal) inputFechaModal.value = "{{ fecha_seleccionada_str }}";
+            // Re-establecer el tipo_comida oculto que acabamos de obtener
+            if(inputTipoComidaModal) inputTipoComidaModal.value = tipoComida;
+        });
+
+        // Autocompletado para el nombre del alimento dentro del modal
+        if (inputAlimentoNombreModal && datalistSugerenciasModal) {
+            inputAlimentoNombreModal.addEventListener('input', async function() {
+                const query = encodeURIComponent(this.value);
+                if (query.length < 1) { // Buscar desde 1 caracter
+                    datalistSugerenciasModal.innerHTML = "";
+                    if(inputAlimentoIdModal) inputAlimentoIdModal.value = ''; // Limpiar ID si se borra la búsqueda
+                    return;
+                }
+                try {
+                    const response = await fetch(`{% url 'sugerencias_alimentos' %}?q=${query}`);
+                    if (!response.ok) { console.error("Error en sugerencias:", response.status); return; }
+                    const datos = await response.json();
+                    datalistSugerenciasModal.innerHTML = "";
+                    if (Array.isArray(datos)) {
+                        datos.forEach(item => { // item es {id: X, nombre: "Y"}
+                            const option = document.createElement("option");
+                            option.value = item.nombre;
+                            option.dataset.id = item.id; // Guardamos el ID en un data attribute
+                            datalistSugerenciasModal.appendChild(option);
+                        });
+                    }
+                } catch (error) { console.error("Error fetching sugerencias:", error); }
+            });
+
+            // Cuando el usuario selecciona un valor del datalist (o el valor cambia y coincide)
+            // Intentamos poner el ID en el campo oculto.
+            inputAlimentoNombreModal.addEventListener('change', function() {
+                const nombreSeleccionado = this.value;
+                let idAlimento = '';
+                if (datalistSugerenciasModal.options) {
+                    for (let i = 0; i < datalistSugerenciasModal.options.length; i++) {
+                        if (datalistSugerenciasModal.options[i].value === nombreSeleccionado) {
+                            idAlimento = datalistSugerenciasModal.options[i].dataset.id;
+                            break;
+                        }
+                    }
+                }
+                if(inputAlimentoIdModal) inputAlimentoIdModal.value = idAlimento;
+            });
+        }
+    }
+
+    // Lógica para el consumo de agua (tu código existente)
     function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
@@ -244,9 +383,8 @@
     document.querySelectorAll('.btn-add-water, .btn-reset-water').forEach(button => {
         button.addEventListener('click', async function() {
             const cantidadMl = parseInt(this.dataset.cantidad);
-            const datePicker = document.querySelector('.date-navigation input[name="fecha_diario"]');
-            const fechaActualStr = datePicker ? datePicker.value : '{{ fecha_seleccionada_str }}';
-            
+            const fechaActualStr = datePickerInputNav ? datePickerInputNav.value : '{{ fecha_seleccionada_str }}';
+
             try {
                 const response = await fetch("{% url 'actualizar_consumo_agua' %}", {
                     method: 'POST',
@@ -258,9 +396,10 @@
                     const waterFillDiv = document.getElementById('waterFillVisual');
                     const waterTargetInfoP = document.getElementById('waterTargetInfo');
                     const objetivoAgua = {{ objetivo_agua_ml|default_if_none:2000|floatformat:0 }};
-                    
+
                     if (waterFillDiv) waterFillDiv.style.height = data.porcentaje_agua + '%';
                     if (waterTargetInfoP) {
+                        // Esto es un ejemplo, idealmente las traducciones se manejan de forma más robusta en JS
                         waterTargetInfoP.textContent = `{% trans "Consumido:" %} ${data.nueva_cantidad_ml}ml / {% trans "Objetivo:" %} ${objetivoAgua}ml`;
                     }
                 } else {
@@ -272,15 +411,6 @@
             }
         });
     });
-
-    const datePickerInput = document.querySelector('.date-navigation input[name="fecha_diario"]');
-    if (datePickerInput) {
-        datePickerInput.addEventListener('change', function() {
-            if (this.value) {
-                let urlBase = "{% url 'diario_alimentos_fecha' '0000-00-00' %}"; 
-                window.location.href = urlBase.replace('0000-00-00', this.value);
-            }
-        });
-    }
+});
 </script>
 {% endblock %}

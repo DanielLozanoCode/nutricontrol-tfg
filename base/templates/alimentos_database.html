@@ -169,13 +169,16 @@
     </main>
 
     <aside class="database-sidebar">
-        <div class="diario-card"> {# Reutilizando estilo de tarjeta para consistencia #}
+        <div class="diario-card"> 
             <h3>{% trans "Anuncios" %}</h3>
-            <div class="ad-placeholder">
-                {% trans "Publicidad Fake 1" %}
+                    <div class="ad-placeholder">
+                
+             
+                 
+                    <img src="{{ MEDIA_URL }}fotos_publi/p1.png" alt="{% trans 'Publicidad 1' %}" style="width: 100%; height: auto; border-radius: 6px;">
             </div>
             <div class="ad-placeholder" style="margin-top: 20px;">
-                {% trans "Publicidad Fake 2" %}
+                <img src="{{ MEDIA_URL }}fotos_publi/p2.png" alt="{% trans 'Publicidad 1' %}" style="width: 100%; height: auto; border-radius: 6px;">
             </div>
         </div>
     </aside>

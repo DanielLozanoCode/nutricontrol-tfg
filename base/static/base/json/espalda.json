@@ -1,0 +1,103 @@
+{
+  "grupo": "Espalda",
+  "ejercicios": [
+    {
+      "nombre": "Dominadas",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video_url": "https://www.youtube.com/watch?v=Odgd_kd-_-8",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 65
+    },
+    {
+      "nombre": "Remo con barra",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video_url": "https://www.youtube.com/watch?v=P_kNA_HElgA",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 75
+    },
+    {
+      "nombre": "Jalón al pecho",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video_url": "https://www.youtube.com/watch?v=1JiNvChA0_Q",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Remo con mancuerna",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video_url": "https://www.youtube.com/watch?v=l4n26ss5oe0",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Remo en máquina",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video_url": "https://www.youtube.com/watch?v=lIU61aCwEGo",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Peso muerto",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video_url": "https://www.youtube.com/watch?v=0XL4cZR2Ink",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 120
+    },
+    {
+      "nombre": "Remo T-bar",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video_url": "https://www.youtube.com/watch?v=2anoS6A5DrU",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 75
+    },
+    {
+      "nombre": "Pullover en polea",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video_url": "https://www.youtube.com/watch?v=9YQ1YXKko8s",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Remo invertido",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video_url": "https://www.youtube.com/watch?v=Qnf19U2GPUA",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Jalón tras nuca",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video_url": "https://www.youtube.com/watch?v=CCKWD3FZzzM",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Peso muerto rumano",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video_url": "https://www.youtube.com/watch?v=UgqrPwoTick",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 120
+    },
+    {
+      "nombre": "Remo con agarre supino",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video_url": "https://www.youtube.com/watch?v=Ag6kIw2cT-s",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Hiperextensiones",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video_url": "https://www.youtube.com/watch?v=PicwGUbAjb4",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    },
+    {
+      "nombre": "Remo en punta",
+      "descripcion": "Ejercicio clásico de espalda.",
+      "video_url": "https://www.youtube.com/watch?v=AtkeTkxlxZg",
+      "tipo": "fuerza",
+      "calorias_quemadas_base": 45
+    }
+  ]
+}

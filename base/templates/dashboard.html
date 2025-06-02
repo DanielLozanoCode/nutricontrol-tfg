@@ -162,7 +162,7 @@
                     <div class="calories-remaining"><span class="value">{{ calorias_restantes|default_if_none:"0"|floatformat:0 }}</span><span class="label">{% trans "Restantes" %}</span></div>
                 </div>
                 <div class="add-buttons-container">
-                    <a href="{% url 'registro_alimentacion' %}" class="btn-add">➕ {% trans "Añadir Alimento" %}</a>
+                    <a href="{% url 'diario_alimentos_hoy' %}" class="btn-add">➕ {% trans "Añadir Alimento" %}</a>
                 </div>
             </section>
 
@@ -196,8 +196,11 @@
             {# Tarjeta de Anuncios con dos placeholders fake #}
             <div class="dashboard-card"> 
                 <h3>{% trans "Anuncios" %}</h3> 
-                <div class="ad-placeholder">{% trans "Publicidad Fake 1" %}</div>
-                <div class="ad-placeholder" style="margin-top: 20px;">{% trans "Publicidad Fake 2" %}</div>
+                <div class="ad-placeholder">
+                <img src="{{ MEDIA_URL }}fotos_publi/p3.png" alt="{% trans 'Publicidad 1' %}" style="width: 100%; height: auto; border-radius: 6px;">
+            </div>
+                <div class="ad-placeholder" style="margin-top: 20px;">                <img src="{{ MEDIA_URL }}fotos_publi/p4.png" alt="{% trans 'Publicidad 1' %}" style="width: 100%; height: auto; border-radius: 6px;">
+</div>
             </div>
             
             {# Carrusel ELIMINADO #}

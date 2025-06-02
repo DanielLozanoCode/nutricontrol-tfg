@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block title %}{% trans "Base de Datos de Ejercicios | Nutricontrol" %}{% endblock %}
+
+{# --- ITEMS PARA EL DESPLEGABLE DE ESCRITORIO DE EJERCICIO --- #}
+{% block ejercicio_dropdown_items %}
+    <li><a href="{% url 'ver_ejercicios' %}" class="{% if active_subsection == 'ver_ejercicios' %}active{% endif %}">{% trans "Registro de Ejercicio" %}</a></li>
+    <li><a href="{% url 'database_ejercicios' %}" class="{% if active_subsection == 'database_ejercicios' %}active{% endif %}">{% trans "Base de Datos Ejercicios" %}</a></li>
+    {# Aquí podrías añadir más sub-enlaces directos a grupos si quieres, o mantenerlo simple #}
+{% endblock ejercicio_dropdown_items %}
+
+{# --- ITEMS PARA EL MENÚ LATERAL MÓVIL DE EJERCICIO --- #}
+{% block mobile_ejercicio_dropdown_items %}
+    <a href="{% url 'ver_ejercicios' %}" class="mobile-dropdown-link {% if active_subsection == 'ver_ejercicios' %}active{% endif %}">↳ {% trans "Registro de Ejercicio" %}</a>
+    <a href="{% url 'database_ejercicios' %}" class="mobile-dropdown-link {% if active_subsection == 'database_ejercicios' %}active{% endif %}">↳ {% trans "Base de Datos Ejercicios" %}</a>
+{% endblock mobile_ejercicio_dropdown_items %}
+
+{% block extra_head %}
+{{ block.super }}
+<style>
+    .page-header { text-align: center; margin: 25px 0 30px 0; }
+    .page-header h1 { font-size: 2.2em; color: #333; font-weight: 600; margin: 0; }
+    .page-header p { font-size: 1em; color: #666; margin-top: 5px; }
+
+    .exercise-groups-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+        max-width: 1200px;
+        margin: 0 auto 40px auto;
+        padding: 0 15px;
+    }
+
+    .group-card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        overflow: hidden;
+        transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+        text-decoration: none;
+        color: inherit;
+        display: flex; /* Para alinear contenido si es necesario */
+        flex-direction: column; /* Opcional, si tienes más elementos dentro */
+    }
+    .group-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    }
+    .group-card-image-placeholder { /* Si quieres añadir imágenes a las tarjetas en el futuro */
+        height: 150px;
+        background-color: #007bff; /* Color azul representativo */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* background-image: url('tu_imagen.jpg'); background-size: cover; background-position: center; */
+    }
+    .group-card-image-placeholder .icon-placeholder { /* Para un ícono o texto grande */
+        font-size: 3em;
+        color: rgba(255,255,255,0.8);
+         /* Ejemplo con FontAwesome (necesitarías cargarlo): <i class="fas fa-dumbbell"></i> */
+    }
+    .group-card-content {
+        padding: 20px;
+        text-align: center;
+    }
+    .group-card-content h3 {
+        font-size: 1.4em;
+        color: #333;
+        margin-top: 0;
+        margin-bottom: 0; /* Ajusta si es necesario */
+    }
+    /* Si en el futuro añades una pequeña descripción a la tarjeta del grupo */
+    /* .group-card-content p { font-size: 0.9em; color: #666; margin-top: 10px; } */
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{% trans "Base de Datos de Ejercicios" %}</h1>
+    <p>{% trans "Explora ejercicios por grupo muscular o tipo." %}</p>
+</div>
+
+<div class="exercise-groups-grid">
+    {% for grupo in grupos_ejercicios %}
+        {# Construir la URL para la vista de detalle del grupo muscular #}
+        {# Asumimos que tienes URLs nombradas como 'vista_pecho', 'vista_espalda', 'vista_cardio_general', etc. #}
+        {# O un patrón genérico como 'vista_grupo_ejercicio' que toma la clave del grupo como argumento #}
+        {% if grupo.clave == 'cardio_general' %}
+            {# Si tienes una URL específica para cardio general #}
+            {# {% url 'vista_cardio_general' as url_grupo %} #}
+            {# Por ahora, vamos a asumir que cada grupo tiene una vista nombrada según su clave #}
+            {# ej. 'vista_pecho', 'vista_espalda'. Para cardio usaremos 'vista_cardio_general' como ejemplo #}
+            {% url 'vista_cardio_general' as url_grupo %}
+        {% else %}
+            {# Para grupos de fuerza, el nombre de la URL podría ser 'vista_' + grupo.clave #}
+            {# Necesitaremos crear estas URLs o una genérica. Ejemplo: #}
+            {% comment %}
+            Esta es una forma más avanzada, necesitaría un tag personalizado o lógica más compleja
+            para construir dinámicamente el nombre de la URL.
+            {% with url_name="vista_"|add:grupo.clave %}
+                {% url url_name as url_grupo %}
+            {% endwith %}
+            {% endcomment %}
+            {# Solución más simple por ahora: enlazar a una URL genérica si la tienes, o hardcodear como ejemplo #}
+            {# Por ahora, para que compile, usaré un placeholder. DEBES ACTUALIZAR ESTO. #}
+            {# {% url 'vista_grupo_generica' grupo_slug=grupo.clave as url_grupo %} #}
+            {# La forma más directa es tener una URL para cada grupo como las tenías antes #}
+            {% if grupo.clave == 'pecho' %}{% url 'vista_pecho' as url_grupo %}{% endif %}
+            {% if grupo.clave == 'espalda' %}{% url 'vista_espalda' as url_grupo %}{% endif %}
+            {% if grupo.clave == 'piernas' %}{% url 'vista_piernas' as url_grupo %}{% endif %}
+            {% if grupo.clave == 'hombros' %}{% url 'vista_hombros' as url_grupo %}{% endif %}
+            {% if grupo.clave == 'brazos' %}{% url 'vista_brazos' as url_grupo %}{% endif %}
+            {% if grupo.clave == 'abdominales' %}{% url 'vista_abdominales' as url_grupo %}{% endif %}
+            {# Añade aquí otros grupos si los tienes, o considera una URL genérica #}
+        {% endif %}
+
+        <a href="{{ url_grupo|default:'#' }}" class="group-card">
+            <div class="group-card-image-placeholder">
+                {# Aquí podrías poner un ícono o una imagen representativa del grupo muscular #}
+                <span class="icon-placeholder">💪</span> {# Placeholder simple #}
+            </div>
+            <div class="group-card-content">
+                <h3>{{ grupo.nombre_display }}</h3>
+            </div>
+        </a>
+    {% empty %}
+        <p>{% trans "No hay grupos de ejercicios definidos en el sistema." %}</p>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'base',
     'formtools',
+    'widget_tweaks',
 ]
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
@@ -68,10 +69,11 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-            ],
+ 'django.template.context_processors.media',            ],
         },
     },
 ]

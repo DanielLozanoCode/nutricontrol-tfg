@@ -1,0 +1,333 @@
+{# base/templates/registro_ejercicio_diario.html #}
+
+{% extends "base.html" %}
+{% load static i18n %}
+{% load widget_tweaks %}
+
+{% block title %}{% trans "Registro de Ejercicio Diario | Nutricontrol" %}{% endblock %}
+
+{# --- ITEMS PARA EL DESPLEGABLE DE ESCRITORIO DE EJERCICIO --- #}
+{% block ejercicio_dropdown_items %}
+    {# Este enlace apunta a la página de registro de ejercicio para HOY #}
+    <li><a href="{% url 'ver_ejercicios' %}" class="{% if active_subsection == 'ver_ejercicios' %}active{% endif %}">{% trans "Mi Registro Diario" %}</a></li>
+    {# Este enlace apunta a la página principal de la base de datos de ejercicios #}
+    <li><a href="{% url 'database_ejercicios' %}" class="{% if active_subsection == 'database_ejercicios' %}active{% endif %}">{% trans "Base de Datos Ejercicios" %}</a></li>
+{% endblock ejercicio_dropdown_items %}
+
+{# --- ITEMS PARA EL MENÚ LATERAL MÓVIL DE EJERCICIO --- #}
+{% block mobile_ejercicio_dropdown_items %}
+    <a href="{% url 'ver_ejercicios' %}" class="mobile-dropdown-link {% if active_subsection == 'ver_ejercicios' %}active{% endif %}">↳ {% trans "Mi Registro Diario" %}</a>
+    <a href="{% url 'database_ejercicios' %}" class="mobile-dropdown-link {% if active_subsection == 'database_ejercicios' %}active{% endif %}">↳ {% trans "Base de Datos Ejercicios" %}</a>
+{% endblock mobile_ejercicio_dropdown_items %}
+
+{# ... (El resto del contenido de registro_ejercicio_diario.html que te di antes, sin cambios aquí) ... #}
+{# Incluyendo <head>, <style>, el contenido del bloque principal, modales y JavaScript #}
+
+{% block extra_head %}
+{{ block.super }}
+{% if not "bootstrap.min.css" in block.super %}<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">{% endif %}
+<style>
+    .page-header { text-align: left; margin: 20px 0; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+    .page-header h1 { font-size: 1.8em; color: #333; font-weight: 600; margin: 0; }
+    .date-selector-inline { display: inline-flex; align-items: center; gap: 10px; margin-left: 20px; }
+    .date-selector-inline input[type="date"] { padding: 6px 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 0.9em; }
+    .date-selector-inline .btn-date-nav { font-size: 1.2em; color: #007bff; text-decoration: none; }
+
+    .exercise-log-container { max-width: 900px; margin: 20px auto; }
+    .exercise-section { background-color: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.07); margin-bottom: 30px; }
+    .section-header { padding: 15px 20px; background-color: #f8f9fa; border-bottom: 1px solid #dee2e6; display: flex; justify-content: space-between; align-items: center; border-top-left-radius: 8px; border-top-right-radius: 8px;}
+    .section-header h2 { font-size: 1.2em; color: #007bff; margin: 0; font-weight: 600; }
+    .section-header .header-info span { font-size: 0.85em; color: #495057; margin-left: 15px; background-color: #e9ecef; padding: 3px 8px; border-radius: 4px; }
+
+    .section-content { padding: 20px; }
+    .exercise-entry { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dotted #eee; }
+    .exercise-entry:last-child { border-bottom: none; }
+    .exercise-entry .name { flex-basis: 50%; font-weight: 500; color: #333; }
+    .exercise-entry .details { flex-basis: 30%; text-align: right; font-size: 0.9em; color: #555; }
+    .exercise-entry .calories { flex-basis: 15%; text-align: right; font-weight: bold; color: #28a745; }
+    .exercise-entry .actions a { font-size: 0.8em; margin-left: 8px; }
+
+    .totals-summary { display: flex; justify-content: space-around; padding: 10px 0; font-size: 0.95em; border-top: 1px solid #eee; margin-top:10px; }
+    .totals-summary strong { color: #333; }
+    .totals-summary span { color: #007bff; }
+
+    .btn-add-exercise { background-color: #17a2b8; color: white; padding: 6px 12px; font-size: 0.85em; border-radius: 4px; text-decoration: none; }
+    .btn-add-exercise:hover { background-color: #138496; }
+
+    .notes-section textarea { min-height: 80px; }
+    .form-actions { text-align: right; margin-top: 15px; }
+
+    /* Modal form styles */
+    .modal-body .form-group { margin-bottom: 1rem; }
+    .modal-body .form-label { font-weight: 500; display: block; margin-bottom: .3rem; }
+    .modal-body .form-control-sm { font-size: 0.9em; }
+    .modal-body .form-text { font-size: 0.8em; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>
+            {% trans "Tu Registro de Ejercicios para:" %}
+            <span class="date-selector-inline">
+                <a href="{% url 'ver_ejercicios_fecha' fecha_str=dia_anterior_str %}" class="btn-date-nav">&laquo;</a>
+                <form method="GET" id="datePickerForm" class="d-inline-block m-0">
+                    {# La URL action se puede omitir si el JS maneja el cambio #}
+                    <input type="date" name="fecha_ejercicio_picker" value="{{ fecha_seleccionada_str }}"
+                           class="form-control form-control-sm"
+                           onchange="if(this.value) { window.location.href = '{% url 'ver_ejercicios_fecha' '0000-00-00' %}'.replace('0000-00-00', this.value); }">
+                </form>
+                {% if not es_hoy %}
+                    <a href="{% url 'ver_ejercicios' %}" class="text-muted ms-1" style="font-size:0.7em;">({% trans "Hoy" %})</a>
+                {% endif %}
+                <a href="{% url 'ver_ejercicios_fecha' fecha_str=dia_siguiente_str %}" class="btn-date-nav">&raquo;</a>
+            </span>
+        </h1>
+        <a href="#" class="btn btn-sm btn-outline-secondary">{% trans "Ver Informe Completo" %}</a>
+    </div>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-dismissible fade show {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+{% endif %}
+
+<div class="exercise-log-container">
+    <div class="exercise-section">
+        <div class="section-header">
+            <h2>{% trans "Cardiovascular" %}</h2>
+            <div class="header-info">
+                <span>{% trans "Minutos" %}</span>
+                <span>{% trans "Calorías Quemadas" %}</span>
+            </div>
+        </div>
+        <div class="section-content">
+            {% for registro_c in registros_cardio %}
+            <div class="exercise-entry">
+    <span class="name">{{ registro_c.ejercicio.nombre }}</span>
+    <span class="details">{{ registro_c.duracion_minutos }} {% trans "min" %}</span>
+    <span class="calories">{{ registro_c.calorias_quemadas_calculadas }} {% trans "kcal" %}</span>
+    <span class="actions ms-2"> {# Añadido ms-2 para un pequeño margen #}
+        <a href="{% url 'editar_registro_ejercicio' registro_c.pk %}" class="text-primary small">{% trans "Editar" %}</a>
+        <a href="{% url 'eliminar_registro_ejercicio' registro_c.pk %}" class="text-danger small" onclick="return confirm('{% trans "Estás seguro?" %}')">{% trans "Borrar" %}</a>
+    </span>
+</div>
+{% empty %}
+    <p class="text-muted small">{% trans "No has registrado ejercicios cardiovasculares para este día." %}</p>
+{% endfor %}
+            <div class="totals-summary">
+                <div><strong>{% trans "Total Diario:" %}</strong> {{ total_minutos_cardio_dia }} {% trans "min" %} / <span>{{ total_calorias_ejercicio_dia }} {% trans "kcal" %}</span></div>
+                <div><strong>{% trans "Objetivo:" %}</strong> {{ objetivo_minutos_diarios_salud }} {% trans "min" %} / <span>{{ objetivo_calorias_ejercicio_dia }} {% trans "kcal" %}</span></div>
+            </div>
+            <div class="mt-3">
+                <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#modalAddCardio">
+                    + {% trans "Añadir Ejercicio Cardiovascular" %}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise-section">
+        <div class="section-header">
+            <h2>{% trans "Entrenamiento de Fuerza" %}</h2>
+            <div class="header-info">
+                <span>{% trans "Series" %}</span>
+                <span>{% trans "Repeticiones/Serie" %}</span>
+                <span>{% trans "Peso/Series" %}</span>
+            </div>
+        </div>
+        <div class="section-content">
+            {% for registro_f in registros_fuerza %}
+           <div class="exercise-entry">
+    <span class="name">{{ registro_f.ejercicio.nombre }}</span>
+    <span class="details">
+        {{ registro_f.series|default_if_none:"-" }}s /
+        {{ registro_f.repeticiones_por_serie|default_if_none:"-" }}r /
+        {{ registro_f.peso_utilizado_kg|default_if_none:"-" }}kg
+    </span>
+    <span class="calories">{{ registro_f.calorias_quemadas_calculadas }} {% trans "kcal" %}</span>
+    <span class="actions ms-2"> {# Añadido ms-2 para un pequeño margen #}
+        <a href="{% url 'editar_registro_ejercicio' registro_f.pk %}" class="text-primary small">{% trans "Editar" %}</a>
+        <a href="{% url 'eliminar_registro_ejercicio' registro_f.pk %}" class="text-danger small" onclick="return confirm('{% trans "Estás seguro?" %}')">{% trans "Borrar" %}</a>
+    </span>
+</div>
+{% empty %}
+    <p class="text-muted small">{% trans "No has registrado ejercicios de fuerza para este día." %}</p>
+{% endfor %}
+            <div class="mt-3">
+                <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#modalAddFuerza">
+                    + {% trans "Añadir Ejercicio de Fuerza" %}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="exercise-section">
+        <div class="section-header"><h2>{% trans "Notas sobre el ejercicio de hoy" %}</h2></div>
+        <div class="section-content">
+            <form method="POST" action="{% url 'ver_ejercicios_fecha' fecha_str=fecha_seleccionada_str %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="save_nota_ejercicio">
+                <div class="form-group">
+                    {% render_field form_nota_ejercicio.texto_nota class+="form-control" %}
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-sm btn-primary">{% trans "Guardar Nota" %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalAddCardio" tabindex="-1" aria-labelledby="modalAddCardioLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title" id="modalAddCardioLabel">{% trans "Añadir Ejercicio Cardiovascular" %}</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'ver_ejercicios_fecha' fecha_str=fecha_seleccionada_str %}" id="formAddCardioModal">
+                    {% csrf_token %} <input type="hidden" name="action" value="add_cardio">
+                    {{ form_add_cardio.fecha }} {{ form_add_cardio.ejercicio_id }}
+                    <div class="form-group mb-3"><label for="{{ form_add_cardio.ejercicio_nombre.id_for_label }}" class="form-label">{{ form_add_cardio.ejercicio_nombre.label }}</label>
+                        {% render_field form_add_cardio.ejercicio_nombre class+="form-control form-control-sm" list="sugerencias_ejercicio_cardio" autocomplete="off" %}
+                        <datalist id="sugerencias_ejercicio_cardio"></datalist>
+                        {% if form_add_cardio.ejercicio_nombre.help_text %}<small class="form-text text-muted">{{form_add_cardio.ejercicio_nombre.help_text|safe}}</small>{% endif %}
+                        {% for error in form_add_cardio.ejercicio_nombre.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="form-group mb-3"><label for="{{ form_add_cardio.duracion_minutos.id_for_label }}" class="form-label">{{ form_add_cardio.duracion_minutos.label }}</label>
+                        {% render_field form_add_cardio.duracion_minutos class+="form-control form-control-sm" %}
+                        {% for error in form_add_cardio.duracion_minutos.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="modal-footer mt-3"><button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">{% trans "Cancelar" %}</button><button type="submit" class="btn btn-primary btn-sm">{% trans "Añadir" %}</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalAddFuerza" tabindex="-1" aria-labelledby="modalAddFuerzaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title" id="modalAddFuerzaLabel">{% trans "Añadir Ejercicio de Fuerza" %}</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'ver_ejercicios_fecha' fecha_str=fecha_seleccionada_str %}" id="formAddFuerzaModal">
+                    {% csrf_token %} <input type="hidden" name="action" value="add_fuerza">
+                    {{ form_add_fuerza.fecha }} {{ form_add_fuerza.ejercicio_id }}
+                    <div class="form-group mb-3"><label for="{{ form_add_fuerza.ejercicio_nombre.id_for_label }}" class="form-label">{{ form_add_fuerza.ejercicio_nombre.label }}</label>
+                        {% render_field form_add_fuerza.ejercicio_nombre class+="form-control form-control-sm" list="sugerencias_ejercicio_fuerza" autocomplete="off" %}
+                        <datalist id="sugerencias_ejercicio_fuerza"></datalist>
+                        {% for error in form_add_fuerza.ejercicio_nombre.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="row gx-2">
+                        <div class="col-md-4 form-group mb-3"><label for="{{ form_add_fuerza.series.id_for_label }}" class="form-label">{{ form_add_fuerza.series.label }}</label>{% render_field form_add_fuerza.series class+="form-control form-control-sm" %} {% for error in form_add_fuerza.series.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}</div>
+                        <div class="col-md-4 form-group mb-3"><label for="{{ form_add_fuerza.repeticiones_por_serie.id_for_label }}" class="form-label">{{ form_add_fuerza.repeticiones_por_serie.label }}</label>{% render_field form_add_fuerza.repeticiones_por_serie class+="form-control form-control-sm" %} {% for error in form_add_fuerza.repeticiones_por_serie.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}</div>
+                        <div class="col-md-4 form-group mb-3"><label for="{{ form_add_fuerza.peso_utilizado_kg.id_for_label }}" class="form-label">{{ form_add_fuerza.peso_utilizado_kg.label }}</label>{% render_field form_add_fuerza.peso_utilizado_kg class+="form-control form-control-sm" %} {% for error in form_add_fuerza.peso_utilizado_kg.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}</div>
+                    </div>
+                    {% if form_add_fuerza.repeticiones_por_serie.help_text %}<small class="form-text text-muted d-block mt-0 mb-2">{{form_add_fuerza.repeticiones_por_serie.help_text|safe}}</small>{% endif %}
+                    {% if form_add_fuerza.peso_utilizado_kg.help_text %}<small class="form-text text-muted d-block mt-0 mb-2">{{form_add_fuerza.peso_utilizado_kg.help_text|safe}}</small>{% endif %}
+                    {% for error in form_add_fuerza.non_field_errors %}<div class="alert alert-danger p-1 mt-2" style="font-size:0.85em;">{{ error }}</div>{% endfor %}
+                    <div class="modal-footer mt-3"><button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">{% trans "Cancelar" %}</button><button type="submit" class="btn btn-primary btn-sm">{% trans "Añadir" %}</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+{{ block.super }}
+{% if not "bootstrap.bundle.min.js" in block.super %}<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>{% endif %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const datePickerEjercicio = document.querySelector('.date-selector-inline input[name="fecha_ejercicio_picker"]');
+    if (datePickerEjercicio) {
+        datePickerEjercicio.addEventListener('change', function() {
+            if (this.value) {
+                let urlBase = "{% url 'ver_ejercicios_fecha' '0000-00-00' %}"; /* Placeholder de fecha */
+                window.location.href = urlBase.replace('0000-00-00', this.value);
+            }
+        });
+    }
+
+    function setupExerciseSuggestions(modalId, inputName, datalistId, exerciseType) {
+        const modalEl = document.getElementById(modalId);
+        if (!modalEl) return;
+
+        const inputEl = modalEl.querySelector(`input[name="${inputName}"]`); // Selector más preciso
+        const datalistEl = modalEl.querySelector(`#${datalistId}`);
+        const hiddenIdEl = modalEl.querySelector('input[name="ejercicio_id"]');
+
+        if (!inputEl || !datalistEl || !hiddenIdEl) {
+            // console.error("Elementos del formulario no encontrados para:", modalId, inputName, datalistId);
+            return;
+        }
+
+        modalEl.addEventListener('show.bs.modal', function() {
+            // Limpiar campos al abrir el modal
+            inputEl.value = '';
+            datalistEl.innerHTML = '';
+            hiddenIdEl.value = '';
+            
+            // Limpiar otros campos específicos del formulario si existen y el form está definido
+            const form = inputEl.form;
+            if(form) {
+                if (form.elements['duracion_minutos']) form.elements['duracion_minutos'].value = '';
+                if (form.elements['series']) form.elements['series'].value = '';
+                if (form.elements['repeticiones_por_serie']) form.elements['repeticiones_por_serie'].value = '';
+                if (form.elements['peso_utilizado_kg']) form.elements['peso_utilizado_kg'].value = '';
+            }
+            
+            // Asegurar que el campo de fecha oculto tenga el valor correcto
+            const fechaInput = modalEl.querySelector('input[name="fecha"]');
+            if (fechaInput) { // fecha_seleccionada_str viene del contexto de la vista ver_ejercicios
+                 fechaInput.value = "{{ fecha_seleccionada_str }}";
+            }
+        });
+        
+        inputEl.addEventListener('input', async function() {
+            const query = encodeURIComponent(this.value);
+            hiddenIdEl.value = ""; // Limpiar ID si el usuario está escribiendo
+            if (query.length < 1) {
+                datalistEl.innerHTML = "";
+                return;
+            }
+            try {
+                const response = await fetch(`{% url 'sugerencias_ejercicios' %}?q=${query}&tipo_ejercicio=${exerciseType}`);
+                if (!response.ok) { console.error("Error sugerencias:", response.status); return; }
+                const datos = await response.json();
+                datalistEl.innerHTML = "";
+                if (Array.isArray(datos)) {
+                    datos.forEach(item => {
+                        const option = document.createElement("option");
+                        option.value = item.nombre;
+                        option.dataset.id = item.id;
+                        datalistEl.appendChild(option);
+                    });
+                }
+            } catch (error) { console.error("Error fetching sugerencias:", error); }
+        });
+
+        inputEl.addEventListener('change', function() {
+            const nombreSeleccionado = this.value;
+            let idSeleccionado = '';
+            for (let i = 0; i < datalistEl.options.length; i++) {
+                if (datalistEl.options[i].value === nombreSeleccionado) {
+                    idSeleccionado = datalistEl.options[i].dataset.id;
+                    break;
+                }
+            }
+            hiddenIdEl.value = idSeleccionado;
+        });
+    }
+
+    // {{ form_add_cardio.ejercicio_nombre.html_name }} es el nombre del campo, ej. "ejercicio_nombre"
+    setupExerciseSuggestions('modalAddCardio', 'ejercicio_nombre', 'sugerencias_ejercicio_cardio', 'cardio');
+    setupExerciseSuggestions('modalAddFuerza', 'ejercicio_nombre', 'sugerencias_ejercicio_fuerza', 'fuerza');
+
+});
+</script>
+{% endblock %}

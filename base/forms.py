@@ -3,7 +3,7 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import gettext_lazy as _
-from .models import Usuario, Alimento, RegistroAlimentacion, MedidaCorporal
+from .models import Usuario, Alimento, RegistroAlimentacion, MedidaCorporal, ConsumoAgua, Ejercicio, RegistroEjercicioRealizado, NotaDiariaEjercicio
 from django.utils import timezone
 
 # --- FORMULARIOS PARA EL ASISTENTE DE REGISTRO MULTIPASOS ---
@@ -48,7 +48,7 @@ class Paso2DetallesFisicosForm(forms.Form):
         label=_("Nivel de actividad física habitual"),
         widget=forms.TextInput(attrs={'placeholder': _('Ej: Sedentario, 3 días gimnasio/sem...')}),
         help_text=_("Describe brevemente tu rutina de ejercicio o actividad."),
-        required=False 
+        required=False
     )
 
 class Paso3CredencialesForm(forms.Form):
@@ -101,19 +101,6 @@ class LoginForm(AuthenticationForm):
     username = forms.CharField(label=_('Usuario o Email'), widget=forms.TextInput(attrs={'placeholder': _('Dirección de email o Nombre de usuario'),'autofocus': True}))
     password = forms.CharField(label=_('Contraseña'), widget=forms.PasswordInput(attrs={'placeholder': _('Contraseña')}))
 
-# --- ANTIGUO FORMULARIO DE REGISTRO DE CONSUMO DE ALIMENTACIÓN (AHORA COMENTADO/REEMPLAZADO) ---
-# class RegistroAlimentacionForm(forms.ModelForm):
-#     alimento_nombre = forms.CharField(label=_("Buscar alimento"), required=True, widget=forms.TextInput(attrs={'placeholder': _('Escribe un alimento...')}))
-#     tipo_comida = forms.ChoiceField(choices=RegistroAlimentacion.TIPO_COMIDA_CHOICES, label=_("Tipo de Comida"), required=False)
-# 
-#     class Meta:
-#         model = RegistroAlimentacion
-#         fields = ['alimento_nombre', 'cantidad', 'tipo_comida'] 
-#         widgets = {
-#             'cantidad': forms.NumberInput(attrs={'placeholder': _('Cantidad en gramos')}),
-#         }
-
-# --- NUEVO FORMULARIO PARA CREAR UN ALIMENTO EN LA BASE DE DATOS ---
 class CrearAlimentoForm(forms.ModelForm):
     class Meta:
         model = Alimento
@@ -140,12 +127,10 @@ class CrearAlimentoForm(forms.ModelForm):
 
     def clean_nombre(self):
         nombre = self.cleaned_data.get('nombre')
-        if Alimento.objects.filter(nombre__iexact=nombre).exists():
-            # Podrías lanzar un ValidationError, o simplemente advertir y permitirlo.
-            # Por ahora, lanzaremos una advertencia si se usa desde una vista que muestre messages.
-            # O podrías querer que los nombres sean únicos, en cuyo caso el modelo ya lo manejaría si 'unique=True'.
-            # El modelo Alimento ya tiene unique=True para 'nombre'.
-            pass # El validador del modelo se encargará si unique=True
+        # El modelo Alimento ya tiene unique=True para 'nombre', por lo que la validación
+        # a nivel de base de datos lo manejará. Si quieres un error más amigable a nivel de form:
+        # if self.instance.pk is None and Alimento.objects.filter(nombre__iexact=nombre).exists():
+        #     raise forms.ValidationError(_("Un alimento con este nombre ya existe."))
         return nombre
 
 # --- FORMULARIO PARA MEDIDAS CORPORALES ---
@@ -165,7 +150,7 @@ class MedidaCorporalForm(forms.ModelForm):
             'cintura': _('Mide alrededor de tu cintura, a la altura del ombligo.'),
             'caderas': _('Mide la parte más ancha de tus caderas.'),
         }
-        labels = { 
+        labels = {
             'peso': _('Peso (kg)'), 'cuello': _('Cuello (cm)'),
             'cintura': _('Cintura (cm)'), 'caderas': _('Caderas (cm)'),
         }
@@ -174,3 +159,163 @@ class MedidaCorporalForm(forms.ModelForm):
         self.fields['cuello'].required = False
         self.fields['cintura'].required = False
         self.fields['caderas'].required = False
+
+# --- NUEVO: FORMULARIO PARA AÑADIR CONSUMO DE ALIMENTO (DESDE EL MODAL DEL DIARIO) ---
+class AnadirConsumoAlimentoForm(forms.Form):
+    alimento_nombre = forms.CharField(
+        label=_("Buscar alimento existente"),
+        widget=forms.TextInput(attrs={
+            'placeholder': _('Escribe el nombre de un alimento...'),
+            'list': 'sugerencias_para_consumo_diario', # ID del datalist que usaremos en la plantilla
+            'autocomplete': 'off' # Para evitar el autocompletado del navegador
+        }),
+        help_text=_("Selecciona un alimento de la lista o escribe su nombre exacto.")
+    )
+    cantidad = forms.FloatField(
+        label=_("Cantidad (gramos)"),
+        min_value=0.1,
+        widget=forms.NumberInput(attrs={'placeholder': _('Ej: 150'), 'step': '0.1'})
+    )
+    # Estos campos serán HiddenInput, prellenados por la vista/JS
+    fecha = forms.DateField(widget=forms.HiddenInput())
+    tipo_comida = forms.CharField(widget=forms.HiddenInput())
+
+    # Campo oculto para almacenar el ID del alimento seleccionado (poblado por JS o validación)
+    alimento_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
+
+    def clean_alimento_nombre(self):
+        nombre = self.cleaned_data.get('alimento_nombre')
+        try:
+            alimento = Alimento.objects.get(nombre__iexact=nombre)
+            # Guardamos el ID en cleaned_data para que la vista pueda usarlo directamente
+            # Esto es útil si no tenemos un campo oculto 'alimento_id' que se pueble con JS
+            self.cleaned_data['alimento_id_validated'] = alimento.id
+            return nombre # Devolvemos el nombre, la vista usará el ID validado
+        except Alimento.DoesNotExist:
+            raise forms.ValidationError(_("Este alimento no se encuentra en la base de datos. Por favor, regístralo primero usando la opción del menú o elige uno existente."))
+        except Alimento.MultipleObjectsReturned:
+             raise forms.ValidationError(_("Se encontraron múltiples alimentos con este nombre exacto (esto no debería ocurrir si 'nombre' es único). Contacte al administrador."))
+        return nombre
+
+    def clean(self):
+        cleaned_data = super().clean()
+        alimento_id_from_hidden = cleaned_data.get('alimento_id') # Del campo oculto opcional
+        alimento_id_from_validation = cleaned_data.get('alimento_id_validated')
+
+        if not alimento_id_from_hidden and not alimento_id_from_validation:
+            # Si no tenemos un ID ni por campo oculto ni por validación del nombre,
+            # y el campo 'alimento_nombre' no tuvo un error previo, es un problema.
+            # Pero la validación de 'alimento_nombre' ya debería haber fallado si no se encontró.
+            pass # La validación de 'alimento_nombre' es la principal fuente del ID aquí.
+
+        return cleaned_data
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Aplicar clases de Bootstrap si se desea para consistencia en el modal
+        self.fields['alimento_nombre'].widget.attrs.update({'class': 'form-control form-control-sm'})
+        self.fields['cantidad'].widget.attrs.update({'class': 'form-control form-control-sm'})
+        
+class RegistrarEjercicioCardioForm(forms.Form):
+    ejercicio_nombre = forms.CharField(
+        label=_("Buscar Ejercicio Cardiovascular"),
+        widget=forms.TextInput(attrs={
+            'placeholder': _('Escribe el nombre del ejercicio cardio...'),
+            'list': 'sugerencias_ejercicio_cardio', # Datalist ID
+            'autocomplete': 'off'
+        }),
+        help_text=_("Selecciona un ejercicio cardiovascular de la lista.")
+    )
+    duracion_minutos = forms.IntegerField(
+        label=_("Duración (minutos)"),
+        min_value=1,
+        widget=forms.NumberInput(attrs={'placeholder': _('Ej: 30')})
+    )
+    # Campos ocultos para pasar datos adicionales a la vista
+    fecha = forms.DateField(widget=forms.HiddenInput())
+    ejercicio_id = forms.IntegerField(widget=forms.HiddenInput(), required=False) # Para el ID del ejercicio seleccionado
+
+    def clean_ejercicio_nombre(self):
+        nombre = self.cleaned_data.get('ejercicio_nombre')
+        try:
+            # Asegurarse que el ejercicio es de tipo cardio
+            ejercicio = Ejercicio.objects.get(nombre__iexact=nombre, tipo='cardio')
+            self.cleaned_data['ejercicio_id_validated'] = ejercicio.id
+            return nombre
+        except Ejercicio.DoesNotExist:
+            raise forms.ValidationError(_("Este ejercicio cardiovascular no existe en la base de datos o no es de tipo cardio."))
+        return nombre
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['ejercicio_nombre'].widget.attrs.update({'class': 'form-control form-control-sm mb-1'})
+        self.fields['duracion_minutos'].widget.attrs.update({'class': 'form-control form-control-sm'})
+
+
+class RegistrarEjercicioFuerzaForm(forms.Form):
+    ejercicio_nombre = forms.CharField(
+        label=_("Buscar Ejercicio de Fuerza"),
+        widget=forms.TextInput(attrs={
+            'placeholder': _('Escribe el nombre del ejercicio de fuerza...'),
+            'list': 'sugerencias_ejercicio_fuerza', # Datalist ID
+            'autocomplete': 'off'
+        })
+    )
+    series = forms.IntegerField(
+        label=_("Series"),
+        min_value=1,
+        required=False, # Puede que solo quieran registrar el ejercicio sin detalles
+        widget=forms.NumberInput(attrs={'placeholder': _('Ej: 3')})
+    )
+    repeticiones_por_serie = forms.CharField(
+        label=_("Repeticiones por Serie"),
+        required=False,
+        widget=forms.TextInput(attrs={'placeholder': _('Ej: 12,10,8 o 3x10')}),
+        help_text=_("Puedes usar comas o 'x' para separar.")
+    )
+    peso_utilizado_kg = forms.CharField(
+        label=_("Peso Utilizado (kg) por Serie"),
+        required=False,
+        widget=forms.TextInput(attrs={'placeholder': _('Ej: 50,55,60 o 3x50kg')}),
+        help_text=_("Opcional. Especifica el peso para cada serie si varía.")
+    )
+    # Campos ocultos
+    fecha = forms.DateField(widget=forms.HiddenInput())
+    ejercicio_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
+
+    def clean_ejercicio_nombre(self):
+        nombre = self.cleaned_data.get('ejercicio_nombre')
+        try:
+            # Asegurarse que el ejercicio es de tipo fuerza
+            ejercicio = Ejercicio.objects.get(nombre__iexact=nombre, tipo='fuerza')
+            self.cleaned_data['ejercicio_id_validated'] = ejercicio.id
+            return nombre
+        except Ejercicio.DoesNotExist:
+            raise forms.ValidationError(_("Este ejercicio de fuerza no existe en la base de datos o no es de tipo fuerza."))
+        return nombre
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['ejercicio_nombre'].widget.attrs.update({'class': 'form-control form-control-sm mb-1'})
+        self.fields['series'].widget.attrs.update({'class': 'form-control form-control-sm'})
+        self.fields['repeticiones_por_serie'].widget.attrs.update({'class': 'form-control form-control-sm'})
+        self.fields['peso_utilizado_kg'].widget.attrs.update({'class': 'form-control form-control-sm'})
+
+
+class NotaDiariaEjercicioForm(forms.ModelForm):
+    class Meta:
+        model = NotaDiariaEjercicio
+        fields = ['texto_nota']
+        widgets = {
+            'texto_nota': forms.Textarea(attrs={
+                'rows': 3,
+                'placeholder': _('Escribe aquí tus notas sobre el entrenamiento de hoy...')
+            }),
+        }
+        labels = {
+            'texto_nota': _("Notas del Ejercicio de Hoy") # Ocultar si es obvio por el contexto de la página
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['texto_nota'].widget.attrs.update({'class': 'form-control'})
