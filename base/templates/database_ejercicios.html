@@ -7,7 +7,6 @@
 {% block ejercicio_dropdown_items %}
     <li><a href="{% url 'ver_ejercicios' %}" class="{% if active_subsection == 'ver_ejercicios' %}active{% endif %}">{% trans "Registro de Ejercicio" %}</a></li>
     <li><a href="{% url 'database_ejercicios' %}" class="{% if active_subsection == 'database_ejercicios' %}active{% endif %}">{% trans "Base de Datos Ejercicios" %}</a></li>
-    {# Aquí podrías añadir más sub-enlaces directos a grupos si quieres, o mantenerlo simple #}
 {% endblock ejercicio_dropdown_items %}
 
 {# --- ITEMS PARA EL MENÚ LATERAL MÓVIL DE EJERCICIO --- #}
@@ -40,26 +39,22 @@
         transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
         text-decoration: none;
         color: inherit;
-        display: flex; /* Para alinear contenido si es necesario */
-        flex-direction: column; /* Opcional, si tienes más elementos dentro */
+        display: flex;
+        flex-direction: column;
     }
     .group-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 6px 16px rgba(0,0,0,0.15);
     }
-    .group-card-image-placeholder { /* Si quieres añadir imágenes a las tarjetas en el futuro */
-        height: 150px;
-        background-color: #007bff; /* Color azul representativo */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        /* background-image: url('tu_imagen.jpg'); background-size: cover; background-position: center; */
+    
+    /* MODIFICADO: Estilo para la imagen de la tarjeta */
+    .group-card-image {
+        height: 180px; /* Ajusta la altura como necesites */
+        width: 100%;
+        object-fit: cover; /* Esto asegura que la imagen cubra el área sin deformarse */
+        display: block;
     }
-    .group-card-image-placeholder .icon-placeholder { /* Para un ícono o texto grande */
-        font-size: 3em;
-        color: rgba(255,255,255,0.8);
-         /* Ejemplo con FontAwesome (necesitarías cargarlo): <i class="fas fa-dumbbell"></i> */
-    }
+
     .group-card-content {
         padding: 20px;
         text-align: center;
@@ -68,10 +63,8 @@
         font-size: 1.4em;
         color: #333;
         margin-top: 0;
-        margin-bottom: 0; /* Ajusta si es necesario */
+        margin-bottom: 0;
     }
-    /* Si en el futuro añades una pequeña descripción a la tarjeta del grupo */
-    /* .group-card-content p { font-size: 0.9em; color: #666; margin-top: 10px; } */
 </style>
 {% endblock %}
 
@@ -83,43 +76,24 @@
 
 <div class="exercise-groups-grid">
     {% for grupo in grupos_ejercicios %}
-        {# Construir la URL para la vista de detalle del grupo muscular #}
-        {# Asumimos que tienes URLs nombradas como 'vista_pecho', 'vista_espalda', 'vista_cardio_general', etc. #}
-        {# O un patrón genérico como 'vista_grupo_ejercicio' que toma la clave del grupo como argumento #}
+        {# Lógica para determinar la URL del grupo (sin cambios) #}
         {% if grupo.clave == 'cardio_general' %}
-            {# Si tienes una URL específica para cardio general #}
-            {# {% url 'vista_cardio_general' as url_grupo %} #}
-            {# Por ahora, vamos a asumir que cada grupo tiene una vista nombrada según su clave #}
-            {# ej. 'vista_pecho', 'vista_espalda'. Para cardio usaremos 'vista_cardio_general' como ejemplo #}
             {% url 'vista_cardio_general' as url_grupo %}
         {% else %}
-            {# Para grupos de fuerza, el nombre de la URL podría ser 'vista_' + grupo.clave #}
-            {# Necesitaremos crear estas URLs o una genérica. Ejemplo: #}
-            {% comment %}
-            Esta es una forma más avanzada, necesitaría un tag personalizado o lógica más compleja
-            para construir dinámicamente el nombre de la URL.
-            {% with url_name="vista_"|add:grupo.clave %}
-                {% url url_name as url_grupo %}
-            {% endwith %}
-            {% endcomment %}
-            {# Solución más simple por ahora: enlazar a una URL genérica si la tienes, o hardcodear como ejemplo #}
-            {# Por ahora, para que compile, usaré un placeholder. DEBES ACTUALIZAR ESTO. #}
-            {# {% url 'vista_grupo_generica' grupo_slug=grupo.clave as url_grupo %} #}
-            {# La forma más directa es tener una URL para cada grupo como las tenías antes #}
             {% if grupo.clave == 'pecho' %}{% url 'vista_pecho' as url_grupo %}{% endif %}
             {% if grupo.clave == 'espalda' %}{% url 'vista_espalda' as url_grupo %}{% endif %}
             {% if grupo.clave == 'piernas' %}{% url 'vista_piernas' as url_grupo %}{% endif %}
             {% if grupo.clave == 'hombros' %}{% url 'vista_hombros' as url_grupo %}{% endif %}
             {% if grupo.clave == 'brazos' %}{% url 'vista_brazos' as url_grupo %}{% endif %}
             {% if grupo.clave == 'abdominales' %}{% url 'vista_abdominales' as url_grupo %}{% endif %}
-            {# Añade aquí otros grupos si los tienes, o considera una URL genérica #}
         {% endif %}
 
         <a href="{{ url_grupo|default:'#' }}" class="group-card">
-            <div class="group-card-image-placeholder">
-                {# Aquí podrías poner un ícono o una imagen representativa del grupo muscular #}
-                <span class="icon-placeholder">💪</span> {# Placeholder simple #}
-            </div>
+            
+            <img src="{% static 'images/group_exercises/'|add:grupo.clave|add:'.jpg' %}" 
+                 alt="{% trans 'Imagen para' %} {{ grupo.nombre_display }}" 
+                 class="group-card-image">
+            
             <div class="group-card-content">
                 <h3>{{ grupo.nombre_display }}</h3>
             </div>
